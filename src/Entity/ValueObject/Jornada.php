@@ -24,11 +24,11 @@ class Jornada
     {
         $parsedTime = DateTimeImmutable::createFromFormat('H:i:s', $time);
         $errors = DateTimeImmutable::getLastErrors();
-
-        if (!$parsedTime || $errors['error_count'] > 0 || $errors['warning_count'] > 0) {
+     
+        if (!$parsedTime && ( $errors['error_count'] > 0 || $errors['warning_count'] > 0)) {
             throw new InvalidArgumentException("Hora inválida: $time");
         }
-
+        
         return $parsedTime->format('H:i:s');
     }
 

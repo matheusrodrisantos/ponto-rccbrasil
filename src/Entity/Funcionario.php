@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Builder\Enum_;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -197,7 +198,7 @@ class Funcionario implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function getRegime(): ?string
+    public function getRegime(): ?Regime
     {
         return $this->regime;
     }

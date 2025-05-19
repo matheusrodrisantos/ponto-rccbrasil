@@ -33,6 +33,15 @@ class FuncionarioRepository extends ServiceEntityRepository implements PasswordU
         $this->getEntityManager()->flush();
     }
 
+    public function create(Funcionario $funcionario): Funcionario
+    {
+        $em = $this->getEntityManager();
+        $em->persist($funcionario);
+        $em->flush();
+
+        return $funcionario;
+    }
+
     //    /**
     //     * @return Funcionario[] Returns an array of Funcionario objects
     //     */

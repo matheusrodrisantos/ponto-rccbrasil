@@ -20,7 +20,7 @@ class FuncionarioFactory{
 
         $funcionario
             ->setNome($func->nome)
-            ->setRegime(Regime::from($func->regime))
+            ->setRegime($func->regime)
             ->setVerificarLocalizacao($func->verificarLocalizacao)
             ->setAtivo($func->ativo)
             ->setRoles($func->roles ?? []) 
@@ -29,4 +29,22 @@ class FuncionarioFactory{
         return $funcionario;
     }
 
+
+
+    public static function createDtoFromEntity(Funcionario $funcionario): FuncionarioDTO
+    {
+        $dto = new FuncionarioDTO();
+        $dto->cpf = (string) $funcionario->getCpf();
+        $dto->email = (string) $funcionario->getEmail();
+        $dto->jornadaDiaria = $funcionario->getJornadaDiaria();
+        $dto->jornadaSemanal = $funcionario->getJornadaSemanal();
+        $dto->nome = $funcionario->getNome();
+        $dto->regime = $funcionario->getRegime();
+        $dto->verificarLocalizacao = $funcionario->isVerificarLocalizacao();
+        $dto->ativo = $funcionario->isAtivo();
+        $dto->roles = $funcionario->getRoles();
+        $dto->password = $funcionario->getPassword();
+
+        return $dto;
+    }
 }
