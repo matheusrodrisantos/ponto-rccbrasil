@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Controller;
+
+use App\Dto\FuncionarioDTO;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+
+final class FuncionarioController extends AbstractController
+{
+    public function __construct(
+        private SerializerInterface $serializer,
+    )
+    {
+        
+    }
+
+
+    #[Route('/funcionario',name:'app_create_funcionario', methods:['POST'])]
+    public function create(Request $request): JsonResponse{
+
+        $inputDto = $this->serializer->deserialize(
+            $request->getContent(),
+             FuncionarioDTO::class,
+            'json'
+        );
+
+        $json = $this->serializer->serialize($inputDto, 'json');
+
+
+        return new JsonResponse($json,201,[],true);
+    }
+
+
+}
