@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\FuncionarioDTO;
+use App\Sevice\FuncionarioService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,25 +15,33 @@ final class FuncionarioController extends AbstractController
 {
     public function __construct(
         private SerializerInterface $serializer,
-    )
-    {
-        
-    }
+    ){}
 
 
     #[Route('/funcionario',name:'app_create_funcionario', methods:['POST'])]
-    public function create(Request $request): JsonResponse{
+    public function create(
+        Request $request, 
+        FuncionarioService $funcionarioService
+    ): JsonResponse{
 
-        $inputDto = $this->serializer->deserialize(
-            $request->getContent(),
-             FuncionarioDTO::class,
-            'json'
-        );
+        try{
+            $inputDto = $this->serializer->deserialize(
+                $request->getContent(),
+                 FuncionarioDTO::class,
+                'json'
+            );
+    
+            
 
-        $json = $this->serializer->serialize($inputDto, 'json');
+            $json = $this->serializer->serialize($inputDto, 'json');
+    
+            return new JsonResponse($json,201,[],true);
 
+        }catch(\Exception $e){
 
-        return new JsonResponse($json,201,[],true);
+            return new JsonResponse(status:500, data: $e->getMessage());
+        }   
+        
     }
 
 
