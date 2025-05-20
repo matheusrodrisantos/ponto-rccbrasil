@@ -10,8 +10,8 @@ class FeriasDto
     public ?int $id = null;
     public ?int $feriasId = null;
     public ?int $funcionarioId = null;
-    public ?DateTime $dataIni = null;
-    public ?DateTime $dataFim = null;
+    public ?DateTimeImmutable $dataIni = null;
+    public ?DateTimeImmutable $dataFim = null;
     public ?int $userInclusaoId = null;
     public ?DateTimeImmutable $createdAt = null;
     public ?DateTimeImmutable $updatedAt = null;
