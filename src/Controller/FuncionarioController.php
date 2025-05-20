@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\FuncionarioDTO;
+use App\Factory\FuncionarioFactory;
 use App\Sevice\FuncionarioService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,10 +31,10 @@ final class FuncionarioController extends AbstractController
                  FuncionarioDTO::class,
                 'json'
             );
-    
             
+            $outputFuncionarioDto=$funcionarioService->createEntity($inputDto);
 
-            $json = $this->serializer->serialize($inputDto, 'json');
+            $json = $this->serializer->serialize($outputFuncionarioDto, 'json');
     
             return new JsonResponse($json,201,[],true);
 
