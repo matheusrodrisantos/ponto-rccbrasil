@@ -2,7 +2,6 @@
 
 namespace App\Factory;
 use App\Dto\FuncionarioDTO;
-use App\Entity\Enum\Regime;
 use App\Entity\Funcionario;
 use App\Entity\ValueObject\Cpf;
 use App\Entity\ValueObject\Email;
@@ -28,8 +27,6 @@ class FuncionarioFactory{
 
         return $funcionario;
     }
-
-
 
     public static function createDtoFromEntity(Funcionario $funcionario): FuncionarioDTO
     {
