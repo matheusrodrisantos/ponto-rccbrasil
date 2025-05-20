@@ -2,45 +2,41 @@
 
 namespace App\Controller;
 
-use App\Dto\FuncionarioDTO;
-use App\Sevice\FuncionarioService;
+use App\Dto\DepartamentoDTO;
+use App\Sevice\DepartamentoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class FuncionarioController extends AbstractController
+final class DepartamentoController extends AbstractController
 {
     public function __construct(
         private SerializerInterface $serializer,
     ){}
 
-
-    #[Route('/funcionario',name:'app_create_funcionario', methods:['POST'])]
+    #[Route('/departamento', name: 'app_create_departamento', methods:['POST'])]
     public function create(
-        Request $request, 
-        FuncionarioService $funcionarioService
-    ): JsonResponse{
-
+        Request $request,
+        DepartamentoService $departamentoService
+    ): JsonResponse
+    {
         try{
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
-                 FuncionarioDTO::class,
+                 DepartamentoDTO::class,
                 'json'
             );
             
-            $outputFuncionarioDto=$funcionarioService->createEntity($inputDto);
+            $outputDepartamentoDto=$departamentoService->createEntity($inputDto);
 
-            $json = $this->serializer->serialize($outputFuncionarioDto, 'json');
+            $json = $this->serializer->serialize($outputDepartamentoDto, 'json');
     
             return new JsonResponse($json,201,[],true);
 
         }catch(\Exception $e){
             return new JsonResponse(status:500, data: $e->getMessage());
-        }   
-        
+        } 
     }
-
-
 }

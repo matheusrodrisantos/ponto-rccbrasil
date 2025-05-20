@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\FeriasRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Entity\ValueObject\DataFerias;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FeriasRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Ferias
 {
     #[ORM\Id]
@@ -14,42 +15,29 @@ class Ferias
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $feriasId = null;
-
     #[ORM\ManyToOne(inversedBy: 'ferias')]
     private ?Funcionario $funcionario = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $dataIni = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $dataFim = null;
-
     #[ORM\ManyToOne]
     private ?Funcionario $userInclusao = null;
+
+    #[ORM\Embedded(DataFerias::class,false)]
+    private ?DataFerias $dataFerias =null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $UpdatedAt = null;
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    public function __construct(DataFerias $dataFerias)
+    {   
+        $this->dataFerias=$dataFerias;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFeriasId(): ?int
-    {
-        return $this->feriasId;
-    }
-
-    public function setFeriasId(int $feriasId): static
-    {
-        $this->feriasId = $feriasId;
-
-        return $this;
     }
 
     public function getFuncionario(): ?Funcionario
@@ -64,28 +52,14 @@ class Ferias
         return $this;
     }
 
-    public function getDataIni(): ?\DateTime
+    public function getDataIni(): ?\DateTimeImmutable
     {
-        return $this->dataIni;
+        return $this->dataFerias->getDataIni();
     }
 
-    public function setDataIni(\DateTime $dataIni): static
+    public function getDataFim(): ?\DateTimeImmutable
     {
-        $this->dataIni = $dataIni;
-
-        return $this;
-    }
-
-    public function getDataFim(): ?\DateTime
-    {
-        return $this->dataFim;
-    }
-
-    public function setDataFim(\DateTime $dataFim): static
-    {
-        $this->dataFim = $dataFim;
-
-        return $this;
+        return $this->dataFerias->getDataFim();
     }
 
     public function getUserInclusao(): ?Funcionario
@@ -99,6 +73,20 @@ class Ferias
 
         return $this;
     }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpadteAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
@@ -114,12 +102,12 @@ class Ferias
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->UpdatedAt;
+        return $this->updatedAt;
     }
 
     public function setUpdatedAt(\DateTimeImmutable $UpdatedAt): static
     {
-        $this->UpdatedAt = $UpdatedAt;
+        $this->updatedAt = $UpdatedAt;
 
         return $this;
     }

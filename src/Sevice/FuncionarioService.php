@@ -11,16 +11,18 @@ class FuncionarioService{
 
     private Funcionario $func;
     
-    public function __construct(private FuncionarioRepository $funcionarioRepository)
-    {}
+    public function __construct(
+        private FuncionarioRepository $funcionarioRepository,
+        private FuncionarioFactory $funcionarioFactory
+    ){}
 
     public function createEntity(FuncionarioDTO $funcDto):FuncionarioDTO{
 
-        $this->func = FuncionarioFactory::createFromDto($funcDto);
+        $this->func = $this->funcionarioFactory->createFromDto($funcDto);
 
         $this->funcionarioRepository->create($this->func);
 
-        return FuncionarioFactory::createDtoFromEntity($this->func);
+        return $this->funcionarioFactory->createDtoFromEntity($this->func);
 
     }
 

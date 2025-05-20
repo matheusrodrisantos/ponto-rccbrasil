@@ -6,10 +6,13 @@ use App\Entity\Funcionario;
 use App\Entity\ValueObject\Cpf;
 use App\Entity\ValueObject\Email;
 use App\Entity\ValueObject\Jornada;
+use App\Repository\DepartamentoRepository;
 
 class FuncionarioFactory{
 
-    public static function createFromDto(FuncionarioDTO $func):Funcionario
+    public function __construct(private DepartamentoRepository $departamentoRepository){}
+
+    public function createFromDto(FuncionarioDTO $func):Funcionario
     {
         $cpf = new Cpf($func->cpf);
         $email = new Email($func->email);
@@ -25,10 +28,15 @@ class FuncionarioFactory{
             ->setRoles($func->roles ?? []) 
             ->setPassword($func->password);  
 
+        if($func->departamentoId!==null){
+            $departamento=$this->departamentoRepository->find($func->departamentoId);
+            $funcionario->setDepartamento($departamento);
+        }
+
         return $funcionario;
     }
 
-    public static function createDtoFromEntity(Funcionario $funcionario): FuncionarioDTO
+    public function createDtoFromEntity(Funcionario $funcionario): FuncionarioDTO
     {
         $dto = new FuncionarioDTO();
         $dto->cpf = (string) $funcionario->getCpf();

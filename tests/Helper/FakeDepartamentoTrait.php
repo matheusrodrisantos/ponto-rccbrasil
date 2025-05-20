@@ -34,7 +34,6 @@ trait FakeDepartamentoTrait
     protected function criarDepartamentoDto():DepartamentoDTO{
      
         $faker = Factory::create('pt_BR');
-        $supervisor = $this->criarFuncionario();
 
         return new DepartamentoDTO(
             id: null, 
@@ -43,7 +42,7 @@ trait FakeDepartamentoTrait
                 'Jurídico', 'Marketing', 'Comercial', 'Logística'
             ]),
             descricao: $faker->sentence(),
-            supervisor: $supervisor,
+            supervisorId: 2,
             ativo: $faker->boolean()
         );
      
@@ -62,13 +61,9 @@ trait FakeDepartamentoTrait
                 'Jurídico', 'Marketing', 'Comercial', 'Logística'
             ]),
             'descricao' => $faker->sentence(),
-            'supervisor' => [
-                'id' => $supervisor->getId(),
-                'nome' => $supervisor->getNome(),
-                'email' => $supervisor->getEmail(),
-                'cpf' => $supervisor->getCpf(),
-            ],
-            'ativo' => $faker->boolean()
+            'supervisorId' => $supervisor->getId(),
+          
+            'ativo' => $faker->boolean(),
         ];
     }
 }

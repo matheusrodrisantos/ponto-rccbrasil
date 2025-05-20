@@ -26,8 +26,13 @@ final class FuncionarioControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(201);
         $this->assertJson($client->getResponse()->getContent());
 
-        $responseData = json_decode($client->getResponse()->getContent(), true);
-        
+        $responseData = json_decode($client->getResponse()->getContent());
+
+        $this->assertNotEmpty($responseData->cpf);
+        $this->assertNotEmpty($responseData->password);
+        $this->assertNotEmpty($responseData->email);
+        $this->assertNotEmpty($responseData->nome);
+        $this->assertNotEmpty($responseData->jornadaDiaria);
 
     }
 }

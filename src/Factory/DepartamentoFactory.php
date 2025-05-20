@@ -1,30 +1,39 @@
 <?php
-
 namespace App\Factory;
 
 use App\Dto\DepartamentoDTO;
 use App\Entity\Departamento;
+use App\Repository\FuncionarioRepository;
 
-class DepartamentoFactory{
+class DepartamentoFactory
+{
+    public function __construct(private FuncionarioRepository $funcionarioRepository){}
 
-    public static function createFromDto(DepartamentoDTO $dpto):Departamento{
-        
+    public function createFromDto(DepartamentoDTO $dpto): Departamento
+    {
         $departamento = new Departamento();
         $departamento->setNome($dpto->nome);
         $departamento->setDescricao($dpto->descricao);
         $departamento->setAtivo($dpto->ativo);
-        $departamento->setSupervisor($dpto->supervisor);
+
+        if ($dpto->supervisorId !== null) {
+            $supervisor = $this->funcionarioRepository->find($dpto->supervisorId);
+            $departamento->setSupervisor($supervisor);
+        }
 
         return $departamento;
     }
 
-    public static function createDtoFromEntity(Departamento $departamento): DepartamentoDTO{
-        
+    public function createDtoFromEntity(Departamento $departamento): DepartamentoDTO
+    {
         $dto = new DepartamentoDTO();
-        $dto->nome=$departamento->getNome();
+        $dto->id = $departamento->getId();
+        $dto->nome = $departamento->getNome();
         $dto->descricao = $departamento->getDescricao();
         $dto->ativo = $departamento->isAtivo();
-        $dto->supervisor = $departamento->getSupervisor();
+
+        $supervisor = $departamento->getSupervisor();
+        $dto->supervisorId = $supervisor ? $supervisor->getId() : null;
 
         return $dto;
     }

@@ -16,6 +16,15 @@ class DepartamentoRepository extends ServiceEntityRepository
         parent::__construct($registry, Departamento::class);
     }
 
+    public function create(Departamento $departamento): Departamento
+    {
+        $em = $this->getEntityManager();
+        $em->persist($departamento);
+        $em->flush();
+
+        return $departamento;
+    }
+
 //    /**
 //     * @return Departamento[] Returns an array of Departamento objects
 //     */
