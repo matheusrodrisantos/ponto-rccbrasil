@@ -58,7 +58,7 @@ trait FakeFuncionarioTrait
 
         return [
             "id" => $faker->randomNumber(2, true),
-            "departamentoId"=> $faker->randomNumber(1, true),
+            "departamentoId"=> 1,
             "cpf" => $faker->cpf(false),
             "roles" => $faker->randomElements(["ROLE_USER", "ROLE_ADMIN", "ROLE_GERENTE"], rand(1, 2)),
             "password" => $faker->password(8, 16),

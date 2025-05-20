@@ -39,6 +39,7 @@ class FuncionarioFactory{
     public function createDtoFromEntity(Funcionario $funcionario): FuncionarioDTO
     {
         $dto = new FuncionarioDTO();
+        $dto->departamentoId = $funcionario->getDepartamentoId();
         $dto->cpf = (string) $funcionario->getCpf();
         $dto->email = (string) $funcionario->getEmail();
         $dto->jornadaDiaria = $funcionario->getJornadaDiaria();

@@ -332,6 +332,11 @@ class Funcionario implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->departamento;
     }
 
+    public function getDepartamentoId():?int
+    {
+        return $this->departamento->getId();
+    }
+
     public function setDepartamento(?Departamento $departamento): static
     {
         $this->departamento = $departamento;

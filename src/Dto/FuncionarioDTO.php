@@ -8,8 +8,8 @@ class FuncionarioDTO
 {
     public ?int $id = null;
     public ?string $cpf = null;
+    public ?int $departamentoId=null;
     public array $roles = [];
-    public ?int $departamentoId = null;
     public ?string $password = null;
     public ?string $email = null;
     public ?string $nome = null;

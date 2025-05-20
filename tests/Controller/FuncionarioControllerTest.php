@@ -33,6 +33,7 @@ final class FuncionarioControllerTest extends WebTestCase
         $this->assertNotEmpty($responseData->email);
         $this->assertNotEmpty($responseData->nome);
         $this->assertNotEmpty($responseData->jornadaDiaria);
+        $this->assertNotEmpty($responseData->departamentoId);
 
     }
 }

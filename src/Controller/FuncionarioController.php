@@ -24,6 +24,8 @@ final class FuncionarioController extends AbstractController
     ): JsonResponse{
 
         try{
+
+            var_dump($request->getContent());
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
                  FuncionarioDTO::class,

@@ -43,6 +43,8 @@ class FuncionarioFactoryTest extends TestCase
     public function testCreateDtoFromEntity(){
 
         $func = $this->criarFuncionario();
+        $func->setDepartamento($this->criarDepartamento());
+
         $funcionarioFactory = new FuncionarioFactory($this->repoMock);
 
         $dto=$funcionarioFactory->createDtoFromEntity($func);
