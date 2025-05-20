@@ -5,13 +5,17 @@ namespace App\Tests\Entity\ValueObject;
 use App\Entity\ValueObject\Cpf;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+use Faker\Factory;
 
 final class CpflTest extends WebTestCase
 {
     public function test_if_cpf_is_valid(): void
     {
-        $cpf = new Cpf('43523797861');
-        $this->assertEquals('43523797861', $cpf);
+        $faker = Factory::create('pt_BR');
+        
+        $cpfFaker=$faker->cpf(false);
+        $cpf = new Cpf($cpfFaker);
+        $this->assertEquals($cpfFaker, $cpf);
     }
 
     public function test_if_cpf_is_invalid(): void
