@@ -8,6 +8,8 @@ use App\Entity\ValueObject\Cpf;
 
 use App\Entity\Enum\Regime;
 use App\Repository\FuncionarioRepository;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
