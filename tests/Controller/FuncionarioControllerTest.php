@@ -28,11 +28,14 @@ final class FuncionarioControllerTest extends WebTestCase
 
         $responseData = json_decode($client->getResponse()->getContent());
 
+        $this->assertNotEmpty($responseData->id);
         $this->assertNotEmpty($responseData->cpf);
         $this->assertNotEmpty($responseData->password);
         $this->assertNotEmpty($responseData->email);
         $this->assertNotEmpty($responseData->nome);
         $this->assertNotEmpty($responseData->jornadaDiaria);
+        $this->assertNotEmpty($responseData->jornadaSemanal);
+        $this->assertNotEmpty($responseData->regime);
         $this->assertNotEmpty($responseData->departamentoId);
 
     }

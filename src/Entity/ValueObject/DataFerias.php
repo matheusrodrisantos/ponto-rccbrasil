@@ -32,6 +32,16 @@ class DataFerias
         return $this->dataFim;
     }
 
+    public function dataInicioFerias(): string
+    {
+        return $this->dataIni->format('Y-m-d');
+    }
+
+    public function dataFimFerias(): string
+    {
+        return $this->dataFim->format('Y-m-d');
+    }
+
     public function getDiasDeFerias(): int
     {
         return $this->dataFim->diff($this->dataIni)->days + 1;

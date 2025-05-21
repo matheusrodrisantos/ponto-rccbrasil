@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250520195638 extends AbstractMigration
+final class Version20250521164719 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -27,7 +27,7 @@ final class Version20250520195638 extends AbstractMigration
             CREATE UNIQUE INDEX UNIQ_40E497EB19E9AC5F ON departamento (supervisor_id)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE ferias (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, funcionario_id INTEGER DEFAULT NULL, user_inclusao_id INTEGER DEFAULT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
+            CREATE TABLE ferias (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, funcionario_id INTEGER NOT NULL, user_inclusao_id INTEGER NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
             , updated_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
             , CONSTRAINT FK_D675701642FEB76 FOREIGN KEY (funcionario_id) REFERENCES funcionario (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_D675701A970C9FB FOREIGN KEY (user_inclusao_id) REFERENCES funcionario (id) NOT DEFERRABLE INITIALLY IMMEDIATE)
         SQL);

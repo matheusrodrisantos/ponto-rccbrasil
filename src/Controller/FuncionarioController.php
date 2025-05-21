@@ -12,10 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class FuncionarioController extends AbstractController
 {
-    public function __construct(
-        private SerializerInterface $serializer,
-    ){}
-
+    public function __construct(private SerializerInterface $serializer){}
 
     #[Route('/funcionario',name:'app_create_funcionario', methods:['POST'])]
     public function create(

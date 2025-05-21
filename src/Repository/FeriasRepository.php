@@ -16,28 +16,13 @@ class FeriasRepository extends ServiceEntityRepository
         parent::__construct($registry, Ferias::class);
     }
 
-    //    /**
-    //     * @return Ferias[] Returns an array of Ferias objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function create(Ferias $ferias): Ferias
+    {
+        $em = $this->getEntityManager();
+        $em->persist($ferias);
+        $em->flush();
 
-    //    public function findOneBySomeField($value): ?Ferias
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return $ferias;
+    }
+
 }

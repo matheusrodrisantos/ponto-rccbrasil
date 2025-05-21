@@ -5,55 +5,45 @@ namespace App\Factory;
 use App\Entity\Ferias;
 use App\Entity\Funcionario;
 use App\Entity\ValueObject\DataFerias;
-use App\Dto\FeriasDto;
+use App\Dto\FeriasDTO;
 
 class FeriasFactory
 {
     /**
-     * @param FeriasDto $dto
-     * @param Funcionario|null $funcionario
-     * @param Funcionario|null $userInclusao
-     * @return Ferias
+     * Cria uma entidade Ferias a partir do DTO.
      */
     public function createEntityFromDto(
-        FeriasDto $dto,
+        FeriasDTO $dto,
         ?Funcionario $funcionario = null,
         ?Funcionario $userInclusao = null
     ): Ferias {
-        $dataFerias = new DataFerias($dto->dataIni, $dto->dataFim);
+        $dataIni = new \DateTimeImmutable($dto->dataInicio);
+        $dataFim = new \DateTimeImmutable($dto->dataFim);
+
+        $dataFerias = new DataFerias($dataIni, $dataFim);
         $ferias = new Ferias($dataFerias);
 
         if ($funcionario) {
-            $ferias->setFuncionario($funcionario);
+            $ferias->definirFuncionario($funcionario);
         }
         if ($userInclusao) {
-            $ferias->setUserInclusao($userInclusao);
-        }
-        if ($dto->createdAt) {
-            $ferias->setCreatedAt($dto->createdAt);
-        }
-        if ($dto->updatedAt) {
-            $ferias->setUpdatedAt($dto->updatedAt);
+            $ferias->definirResponsavelPelaInclusao($userInclusao);
         }
 
         return $ferias;
     }
 
     /**
-     * @param Ferias $entity
-     * @return FeriasDto
+     * Cria o DTO a partir da entidade Ferias.
      */
-    public function createDtoFromEntity(Ferias $entity): FeriasDto
+    public function createDtoFromEntity(Ferias $ferias): FeriasDTO
     {
-        $dto = new FeriasDto();
-        $dto->id = $entity->getId();
-        $dto->funcionarioId = $entity->getFuncionario()?->getId();
-        $dto->userInclusaoId = $entity->getUserInclusao()?->getId();
-        $dto->dataIni = $entity->getDataIni();
-        $dto->dataFim = $entity->getDataFim();
-        $dto->createdAt = $entity->getCreatedAt();
-        $dto->updatedAt = $entity->getUpdatedAt();
-
-        return $dto;
+        return new FeriasDTO(
+            id: $ferias->getId(),
+            funcionarioId: $ferias->funcionario()?->getId(),
+            userInclusaoId: $ferias->responsavelPelaInclusao()?->getId(),
+            dataInicio: $ferias->dataDeInicio(),
+            dataFim: $ferias->dataDeFim(),
+        );
     }
 }

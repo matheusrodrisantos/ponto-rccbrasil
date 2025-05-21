@@ -249,18 +249,18 @@ class Funcionario implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->ferias->contains($feria)) {
             $this->ferias->add($feria);
-            $feria->setFuncionario($this);
+            $feria->definirFuncionario($this);
         }
 
         return $this;
     }
-
+    
     public function removeFeria(Ferias $feria): static
     {
         if ($this->ferias->removeElement($feria)) {
             // set the owning side to null (unless already changed)
-            if ($feria->getFuncionario() === $this) {
-                $feria->setFuncionario(null);
+            if ($feria->funcionario() === $this) {
+                $feria->definirFuncionario(null);
             }
         }
 
@@ -334,7 +334,7 @@ class Funcionario implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getDepartamentoId():?int
     {
-        return $this->departamento->getId();
+        return $this->departamento?->getId();
     }
 
     public function setDepartamento(?Departamento $departamento): static

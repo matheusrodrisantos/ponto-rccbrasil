@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\FeriasRepository;
 use App\Entity\ValueObject\DataFerias;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 #[ORM\Entity(repositoryClass: FeriasRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -16,10 +17,12 @@ class Ferias
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'ferias')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Funcionario $funcionario = null;
 
     #[ORM\ManyToOne]
-    private ?Funcionario $userInclusao = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Funcionario $responsavelPelaInclusao = null;
 
     #[ORM\Embedded(DataFerias::class,false)]
     private ?DataFerias $dataFerias =null;
@@ -40,39 +43,44 @@ class Ferias
         return $this->id;
     }
 
-    public function getFuncionario(): ?Funcionario
+    public function funcionario(): ?Funcionario
     {
         return $this->funcionario;
     }
 
-    public function setFuncionario(?Funcionario $funcionario): static
+    public function definirFuncionario(?Funcionario $funcionario): static
     {
         $this->funcionario = $funcionario;
 
         return $this;
     }
 
-    public function getDataIni(): ?\DateTimeImmutable
+    public function responsavelPelaInclusao(): ?Funcionario
     {
-        return $this->dataFerias->getDataIni();
+        return $this->responsavelPelaInclusao;
     }
 
-    public function getDataFim(): ?\DateTimeImmutable
+    public function definirResponsavelPelaInclusao(?Funcionario $usuario): static
     {
-        return $this->dataFerias->getDataFim();
-    }
-
-    public function getUserInclusao(): ?Funcionario
-    {
-        return $this->userInclusao;
-    }
-
-    public function setUserInclusao(?Funcionario $userInclusao): static
-    {
-        $this->userInclusao = $userInclusao;
+        if($this->funcionario===$usuario){
+            throw new \InvalidArgumentException("O funcionário não pode registrar sua própria solicitação de férias.");
+        }
+        
+        $this->responsavelPelaInclusao = $usuario;
 
         return $this;
     }
+
+    public function dataDeInicio(): ?string
+    {
+        return $this->dataFerias->dataInicioFerias();
+    }
+
+    public function dataDeFim(): ?string
+    {
+        return $this->dataFerias->dataFimFerias();
+    }
+
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
@@ -85,30 +93,5 @@ class Ferias
     public function setUpadteAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
-    }
-
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $UpdatedAt): static
-    {
-        $this->updatedAt = $UpdatedAt;
-
-        return $this;
     }
 }

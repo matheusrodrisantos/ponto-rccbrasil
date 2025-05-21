@@ -7,17 +7,20 @@ use App\Factory\FeriasFactory;
 use App\Entity\Ferias;
 use App\Entity\Funcionario;
 use App\Entity\ValueObject\DataFerias;
-use App\Dto\FeriasDto;
+use App\Dto\FeriasDTO;
+use DateTimeImmutable;
 
 class FeriasFactoryTest extends TestCase
 {
     public function testCreateEntityFromDto()
     {
-        $dto = new FeriasDto();
-        $dto->dataIni = new \DateTimeImmutable('2024-01-01');
-        $dto->dataFim = new \DateTimeImmutable('2024-01-10');
-        $dto->createdAt = new \DateTimeImmutable('2024-01-01 10:00:00');
-        $dto->updatedAt = new \DateTimeImmutable('2024-01-02 12:00:00');
+        $dto = new FeriasDTO(
+            id: null,
+            funcionarioId: 1,
+            userInclusaoId: 2,
+            dataInicio: new DateTimeImmutable('2024-01-01')->format('Y-m-d'),
+            dataFim: new DateTimeImmutable('2024-01-10')->format('Y-m-d'),
+        );
 
         $funcionario = $this->createMock(Funcionario::class);
         $userInclusao = $this->createMock(Funcionario::class);
@@ -26,53 +29,44 @@ class FeriasFactoryTest extends TestCase
         $ferias = $factory->createEntityFromDto($dto, $funcionario, $userInclusao);
 
         $this->assertInstanceOf(Ferias::class, $ferias);
-        $this->assertEquals($dto->dataIni, $ferias->getDataIni());
-        $this->assertEquals($dto->dataFim, $ferias->getDataFim());
-        $this->assertSame($funcionario, $ferias->getFuncionario());
-        $this->assertSame($userInclusao, $ferias->getUserInclusao());
-        $this->assertEquals($dto->createdAt, $ferias->getCreatedAt());
-        $this->assertEquals($dto->updatedAt, $ferias->getUpdatedAt());
+        $this->assertEquals('2024-01-01', $ferias->dataDeInicio());
+        $this->assertEquals('2024-01-10', $ferias->dataDeFim());
+        $this->assertSame($funcionario, $ferias->funcionario());
+        $this->assertSame($userInclusao, $ferias->responsavelPelaInclusao());
     }
 
     public function testCreateDtoFromEntity()
     {
         $funcionario = $this->createMock(Funcionario::class);
         $funcionario->method('getId')->willReturn(1);
-        $funcionario->method('getDepartamentoId')->willReturn(100); // necessário
 
         $userInclusao = $this->createMock(Funcionario::class);
         $userInclusao->method('getId')->willReturn(2);
-        $userInclusao->method('getDepartamentoId')->willReturn(200); // necessário, se usado
 
         $dataIni = new \DateTimeImmutable('2024-01-01');
         $dataFim = new \DateTimeImmutable('2024-01-10');
-        $createdAt = new \DateTimeImmutable('2024-01-01 10:00:00');
-        $updatedAt = new \DateTimeImmutable('2024-01-02 12:00:00');
 
         $dataFerias = new DataFerias($dataIni, $dataFim);
         $ferias = $this->getMockBuilder(Ferias::class)
             ->setConstructorArgs([$dataFerias])
-            ->onlyMethods(['getId', 'getFuncionario', 'getUserInclusao', 'getDataIni', 'getDataFim', 'getCreatedAt', 'getUpdatedAt'])
+            ->onlyMethods(['getId', 'funcionario', 'responsavelPelaInclusao', 'dataDeInicio', 'dataDeFim'])
             ->getMock();
 
+        
         $ferias->method('getId')->willReturn(10);
-        $ferias->method('getFuncionario')->willReturn($funcionario);
-        $ferias->method('getUserInclusao')->willReturn($userInclusao);
-        $ferias->method('getDataIni')->willReturn($dataIni);
-        $ferias->method('getDataFim')->willReturn($dataFim);
-        $ferias->method('getCreatedAt')->willReturn($createdAt);
-        $ferias->method('getUpdatedAt')->willReturn($updatedAt);
+        $ferias->method('funcionario')->willReturn($funcionario);
+        $ferias->method('responsavelPelaInclusao')->willReturn($userInclusao);
+        $ferias->method('dataDeInicio')->willReturn('2024-01-01');
+        $ferias->method('dataDeFim')->willReturn('2024-01-10');
 
         $factory = new FeriasFactory();
         $dto = $factory->createDtoFromEntity($ferias);
 
-        $this->assertInstanceOf(FeriasDto::class, $dto);
+        $this->assertInstanceOf(FeriasDTO::class, $dto);
         $this->assertEquals(10, $dto->id);
         $this->assertEquals(1, $dto->funcionarioId);
         $this->assertEquals(2, $dto->userInclusaoId);
-        $this->assertEquals($dataIni, $dto->dataIni);
-        $this->assertEquals($dataFim, $dto->dataFim);
-        $this->assertEquals($createdAt, $dto->createdAt);
-        $this->assertEquals($updatedAt, $dto->updatedAt);
+        $this->assertEquals('2024-01-01', $dto->dataInicio);
+        $this->assertEquals('2024-01-10', $dto->dataFim);
     }
 }
