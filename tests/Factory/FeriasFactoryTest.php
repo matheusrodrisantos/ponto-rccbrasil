@@ -1,72 +1,105 @@
 <?php
 
-namespace Tests\Factory;
+namespace App\Tests\Factory;
 
 use PHPUnit\Framework\TestCase;
 use App\Factory\FeriasFactory;
+use App\Repository\FeriasRepository;
+use App\Repository\FuncionarioRepository;
+use App\Dto\FeriasDTO;
 use App\Entity\Ferias;
 use App\Entity\Funcionario;
 use App\Entity\ValueObject\DataFerias;
-use App\Dto\FeriasDTO;
-use DateTimeImmutable;
 
 class FeriasFactoryTest extends TestCase
 {
-    public function testCreateEntityFromDto()
+    private FeriasRepository $feriasRepository;
+    private FuncionarioRepository $funcionarioRepository;
+    private FeriasFactory $factory;
+
+    protected function setUp(): void
+    {
+        $this->feriasRepository = $this->createMock(FeriasRepository::class);
+        $this->funcionarioRepository = $this->createMock(FuncionarioRepository::class);
+
+        $this->factory = new FeriasFactory(
+            $this->feriasRepository,
+            $this->funcionarioRepository
+        );
+    }
+
+    public function testCreateEntityFromDto(): void
     {
         $dto = new FeriasDTO(
             id: null,
             funcionarioId: 1,
             userInclusaoId: 2,
-            dataInicio: new DateTimeImmutable('2024-01-01')->format('Y-m-d'),
-            dataFim: new DateTimeImmutable('2024-01-10')->format('Y-m-d'),
+            dataInicio: '2025-01-01',
+            dataFim: '2025-01-15'
         );
 
         $funcionario = $this->createMock(Funcionario::class);
-        $userInclusao = $this->createMock(Funcionario::class);
+        $responsavel = $this->createMock(Funcionario::class);
 
-        $factory = new FeriasFactory();
-        $ferias = $factory->createEntityFromDto($dto, $funcionario, $userInclusao);
+        $this->feriasRepository
+            ->method('find')
+            ->willReturnCallback(function ($id) use ($funcionario, $responsavel) {
+                return match ($id) {
+                    1 => $funcionario,
+                    2 => $responsavel,
+                    default => null,
+                };
+            });
+
+        $ferias = $this->factory->createEntityFromDto($dto);
 
         $this->assertInstanceOf(Ferias::class, $ferias);
-        $this->assertEquals('2024-01-01', $ferias->dataDeInicio());
-        $this->assertEquals('2024-01-10', $ferias->dataDeFim());
-        $this->assertSame($funcionario, $ferias->funcionario());
-        $this->assertSame($userInclusao, $ferias->responsavelPelaInclusao());
+        $this->assertEquals(
+            '2025-01-01',
+            $ferias->dataDeInicio(),
+            'Data de início incorreta'
+        );
+        $this->assertEquals(
+            '2025-01-15',
+            $ferias->dataDeFim(),
+            'Data de fim incorreta'
+        );
+        $this->assertNotNull($ferias->funcionario(), 'Funcionario não foi definido');
+        $this->assertSame($funcionario, $ferias->funcionario(), 'Funcionario não corresponde');
+        $this->assertNotNull($ferias->responsavelPelaInclusao(), 'Responsável não foi definido');
+        $this->assertSame($responsavel, $ferias->responsavelPelaInclusao(), 'Responsável não corresponde');
     }
 
-    public function testCreateDtoFromEntity()
+    public function testCreateDtoFromEntity(): void
     {
         $funcionario = $this->createMock(Funcionario::class);
+        $responsavel = $this->createMock(Funcionario::class);
+
         $funcionario->method('getId')->willReturn(1);
+        $responsavel->method('getId')->willReturn(2);
 
-        $userInclusao = $this->createMock(Funcionario::class);
-        $userInclusao->method('getId')->willReturn(2);
+        $dataFerias = new DataFerias(
+            new \DateTimeImmutable('2025-01-01'),
+            new \DateTimeImmutable('2025-01-15')
+        );
 
-        $dataIni = new \DateTimeImmutable('2024-01-01');
-        $dataFim = new \DateTimeImmutable('2024-01-10');
+        $ferias = new Ferias($dataFerias);
 
-        $dataFerias = new DataFerias($dataIni, $dataFim);
-        $ferias = $this->getMockBuilder(Ferias::class)
-            ->setConstructorArgs([$dataFerias])
-            ->onlyMethods(['getId', 'funcionario', 'responsavelPelaInclusao', 'dataDeInicio', 'dataDeFim'])
-            ->getMock();
+        // Setando ID via reflexão
+        $refId = new \ReflectionProperty(Ferias::class, 'id');
+        $refId->setAccessible(true);
+        $refId->setValue($ferias, 99);
 
-        
-        $ferias->method('getId')->willReturn(10);
-        $ferias->method('funcionario')->willReturn($funcionario);
-        $ferias->method('responsavelPelaInclusao')->willReturn($userInclusao);
-        $ferias->method('dataDeInicio')->willReturn('2024-01-01');
-        $ferias->method('dataDeFim')->willReturn('2024-01-10');
+        $ferias->definirFuncionario($funcionario);
+        $ferias->definirResponsavelPelaInclusao($responsavel);
 
-        $factory = new FeriasFactory();
-        $dto = $factory->createDtoFromEntity($ferias);
+        $dto = $this->factory->createDtoFromEntity($ferias);
 
         $this->assertInstanceOf(FeriasDTO::class, $dto);
-        $this->assertEquals(10, $dto->id);
+        $this->assertEquals(99, $dto->id);
         $this->assertEquals(1, $dto->funcionarioId);
         $this->assertEquals(2, $dto->userInclusaoId);
-        $this->assertEquals('2024-01-01', $dto->dataInicio);
-        $this->assertEquals('2024-01-10', $dto->dataFim);
+        $this->assertEquals('2025-01-01', $dto->dataInicio);
+        $this->assertEquals('2025-01-15', $dto->dataFim);
     }
 }

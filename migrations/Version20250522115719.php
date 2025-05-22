@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250521164719 extends AbstractMigration
+final class Version20250522115719 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -27,15 +27,15 @@ final class Version20250521164719 extends AbstractMigration
             CREATE UNIQUE INDEX UNIQ_40E497EB19E9AC5F ON departamento (supervisor_id)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE ferias (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, funcionario_id INTEGER NOT NULL, user_inclusao_id INTEGER NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
+            CREATE TABLE ferias (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, funcionario_id INTEGER NOT NULL, responsavel_pela_inclusao_id INTEGER NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
             , updated_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
-            , CONSTRAINT FK_D675701642FEB76 FOREIGN KEY (funcionario_id) REFERENCES funcionario (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_D675701A970C9FB FOREIGN KEY (user_inclusao_id) REFERENCES funcionario (id) NOT DEFERRABLE INITIALLY IMMEDIATE)
+            , CONSTRAINT FK_D675701642FEB76 FOREIGN KEY (funcionario_id) REFERENCES funcionario (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_D675701FA22BE7D FOREIGN KEY (responsavel_pela_inclusao_id) REFERENCES funcionario (id) NOT DEFERRABLE INITIALLY IMMEDIATE)
         SQL);
         $this->addSql(<<<'SQL'
             CREATE INDEX IDX_D675701642FEB76 ON ferias (funcionario_id)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_D675701A970C9FB ON ferias (user_inclusao_id)
+            CREATE INDEX IDX_D675701FA22BE7D ON ferias (responsavel_pela_inclusao_id)
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE funcionario (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, departamento_id INTEGER DEFAULT NULL, roles CLOB NOT NULL --(DC2Type:json)

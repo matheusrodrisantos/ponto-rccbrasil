@@ -43,9 +43,9 @@ class Ferias
         return $this->id;
     }
 
-    public function funcionario(): ?Funcionario
+    public function funcionario(): ?Int
     {
-        return $this->funcionario;
+        return $this->funcionario->getId();
     }
 
     public function definirFuncionario(?Funcionario $funcionario): static
@@ -55,14 +55,14 @@ class Ferias
         return $this;
     }
 
-    public function responsavelPelaInclusao(): ?Funcionario
+    public function responsavelPelaInclusao(): ?Int
     {
-        return $this->responsavelPelaInclusao;
+        return $this->responsavelPelaInclusao->getId();
     }
 
     public function definirResponsavelPelaInclusao(?Funcionario $usuario): static
     {
-        if($this->funcionario===$usuario){
+       if($this->funcionario===$usuario){
             throw new \InvalidArgumentException("O funcionário não pode registrar sua própria solicitação de férias.");
         }
         

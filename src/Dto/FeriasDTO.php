@@ -2,28 +2,25 @@
 
 namespace App\Dto;
 
-use DateTimeImmutable;
-use DateTimeInterface;
-
 final readonly class FeriasDTO
 {
     public ?int $id;
-    public int $funcionarioId;
-    public int $userInclusaoId;
-    public string $dataInicio;
-    public string $dataFim;
+    public ?int $funcionarioId;
+    public ?int $userInclusaoId;
+    public ?string $dataInicio;
+    public ?string $dataFim;
 
     public function __construct(
-        ?int $id,
-        int $funcionarioId,
-        int $userInclusaoId,
-        string $dataInicio,
-        string $dataFim,
+        ?int $funcionarioId=null,
+        ?int $userInclusaoId=null,
+        ?string $dataInicio=null,
+        ?string $dataFim=null,
+        ?int $id=null
     ) {
-        $this->id = $id;
         $this->funcionarioId = $funcionarioId;
         $this->userInclusaoId = $userInclusaoId;
         $this->dataInicio = $dataInicio;
         $this->dataFim = $dataFim;
+        $this->id = $id;
     }
 }
