@@ -53,23 +53,13 @@ final class FeriasController extends AbstractController
     public function update(
         Request $request,
         FeriasService $feriasService
-    ): JsonResponse
+    )//: JsonResponse
     {
        try{
-            $inputDto = $this->serializer->deserialize(
-                $request->getContent(),
-                FeriasDTO::class,
-                'json'
-            );
-            
-            $outputFeriasDto = $feriasService->createEntity($inputDto);
-        
-            $dtoArray=$this->normalizer->normalize($outputFeriasDto);
 
-            return $this->responseService->createSuccessResponse(
-                $dtoArray,
-                Response::HTTP_OK
-            );
+            print_r($request->getContent());
+
+ 
 
         } catch (\Exception $e) {
             return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);

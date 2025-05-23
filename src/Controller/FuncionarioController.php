@@ -38,7 +38,7 @@ final class FuncionarioController extends AbstractController
 
             return $this->responseService->createSuccessResponse(
                 $dtoArray,
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
 
         }catch(\Exception $e){
@@ -82,4 +82,13 @@ final class FuncionarioController extends AbstractController
         }  */ 
     }
 
+    #[Route('api/funcionario/{id}/perfil-completo', name:"app_detalhes_funcionario", methods:['GET'])]
+    public function detalheFuncionario(int $id):JsonResponse{
+
+        $detalheFuncionarioDto=$this->funcionarioService->detalhe($id);
+        
+        $dtoArray=$this->normalizer->normalize($detalheFuncionarioDto);
+
+        return $this->responseService->createSuccessResponse($dtoArray);
+    }
 }

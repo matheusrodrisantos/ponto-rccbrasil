@@ -6,6 +6,7 @@ use App\Repository\FeriasRepository;
 use App\Entity\ValueObject\DataFerias;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: FeriasRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -18,10 +19,12 @@ class Ferias
 
     #[ORM\ManyToOne(inversedBy: 'ferias')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?Funcionario $funcionario = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?Funcionario $responsavelPelaInclusao = null;
 
     #[ORM\Embedded(DataFerias::class,false)]

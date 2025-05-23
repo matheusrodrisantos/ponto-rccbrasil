@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250522115719 extends AbstractMigration
+final class Version20250523032124 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -29,6 +29,8 @@ final class Version20250522115719 extends AbstractMigration
         $this->addSql(<<<'SQL'
             CREATE TABLE ferias (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, funcionario_id INTEGER NOT NULL, responsavel_pela_inclusao_id INTEGER NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
             , updated_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
+            , data_inicio DATETIME NOT NULL --(DC2Type:datetime_immutable)
+            , data_fim DATETIME NOT NULL --(DC2Type:datetime_immutable)
             , CONSTRAINT FK_D675701642FEB76 FOREIGN KEY (funcionario_id) REFERENCES funcionario (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_D675701FA22BE7D FOREIGN KEY (responsavel_pela_inclusao_id) REFERENCES funcionario (id) NOT DEFERRABLE INITIALLY IMMEDIATE)
         SQL);
         $this->addSql(<<<'SQL'

@@ -32,33 +32,46 @@ class FuncionarioService{
         $this->func = $this->funcionarioRepository->find($id);
     }
 
-    public function detalhe(int $id) {
+    public function detalhe(int $id):?FuncionarioDTO {
 
+        
         $this->func = $this->funcionarioRepository->find($id);
-
+        
         $feriasFuncionario=$this->func->getFerias();
+        //print_r($this->func);
+       /* 
         $registroPontoFuncionario=$this->func->getRegistroPontos();
         $saldoHorasFuncionario=$this->func->getSaldoHoras();
+        $saldoHorasFuncionario=$this->func->getSaldoHoras();
+*/
 
+       //$feriasFuncionario=$this->func->getFerias();
+        echo json_encode($feriasFuncionario);
+        $ferias = [];
 
-        $feriasDTOs = [];
-
-        foreach ($feriasFuncionario as $ferias) {
-            $feriasDTOs[] = [
-                'id' => $ferias->getId(),
-                'dataInicio' => $ferias->dataDeInicio(),
-                'dataFim' => $ferias->dataDeFim(),
-                'funcionarioId'=>$ferias->funcionario(),
-                'userInclusaoId'=>$ferias->responsavelPelaInclusao()
+        foreach ($feriasFuncionario as $feria) {
+            $ferias[] = [
+                'id' => $feria->getId(),
+                'dataInicio' => $feria->dataDeInicio(),
+                'dataFim' => $feria->dataDeFim(),
+                'funcionarioId'=>$feria->funcionario(),
+                'userInclusaoId'=>$feria->responsavelPelaInclusao()
             ];
         }
 
-
-        $dto = new FuncionarioDTO(
+        return new FuncionarioDTO(
             id:$this->func->getId(),
             cpf:$this->func->getCpf(),
-            departamentoId:$this->func->getDepartamentoId()
-
+            //departamento:$this->func->getDepartamento(),
+            roles: $this->func->getRoles(),
+            email: $this->func->getEmail(),
+            nome:$this->func->getNome(),
+            jornadaDiaria:$this->func->getJornadaDiaria(), 
+            jornadaSemanal:$this->func->getJornadaSemanal(),
+            regime:$this->func->getRegime(),
+            verificarLocalizacao:$this->func->isVerificarLocalizacao(),
+            ativo:$this->func->isAtivo(),
+            ferias:$ferias
         );
 
     }

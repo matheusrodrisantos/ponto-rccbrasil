@@ -12,6 +12,7 @@ final class FeriasControllerTest extends WebTestCase
 
     public function test_create_ferias(){
         
+        try{
         $faker=Factory::create('pt_BR');
 
         $dataIni = new DateTimeImmutable('+1 day')->format('Y-m-d');
@@ -36,7 +37,7 @@ final class FeriasControllerTest extends WebTestCase
             content:json_encode($payload)
         );
 
-        try{
+        
             $response=$client->getResponse()->getContent();
             $responseData=json_decode($response);
 

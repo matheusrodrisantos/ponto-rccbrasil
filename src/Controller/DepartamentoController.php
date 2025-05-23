@@ -40,7 +40,7 @@ final class DepartamentoController extends AbstractController
 
             return $this->responseService->createSuccessResponse(
                 $dtoArray,
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
 
         }catch(\Exception $e){

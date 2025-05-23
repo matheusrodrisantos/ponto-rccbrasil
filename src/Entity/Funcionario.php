@@ -8,13 +8,12 @@ use App\Entity\ValueObject\Cpf;
 
 use App\Entity\Enum\Regime;
 use App\Repository\FuncionarioRepository;
-use DateTime;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Doctrine\ORM\Mapping as ORM;
-use PhpParser\Builder\Enum_;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -64,6 +63,7 @@ class Funcionario implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Ferias>
      */
+    #[Ignore]
     #[ORM\OneToMany(targetEntity: Ferias::class, mappedBy: 'funcionario')]
     private Collection $ferias;
 
@@ -244,6 +244,10 @@ class Funcionario implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->ferias;
     }
+
+    
+
+
 
     public function addFeria(Ferias $feria): static
     {
