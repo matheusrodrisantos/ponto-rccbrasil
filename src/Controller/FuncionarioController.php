@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -47,48 +48,19 @@ final class FuncionarioController extends AbstractController
         
     }
 
-    #[Route('api/funcionario/{id}/ferias',name:'app_ferias_funcionario', methods:['GET'])]
-    public function listarFeriasFuncionario(
-        int $id
-    )//: JsonResponse
-    {
-        try{
-            
-            $this->funcionarioService->listarFeriasFuncionario($id);
-
-        }
-        catch(\Exception $e){
-
-        }
-
-        /*
-        try{
-            $inputDto = $this->serializer->deserialize(
-                $request->getContent(),
-                 FuncionarioDTO::class,
-                'json');
-            
-            $outputFuncionarioDto=$funcionarioService->createEntity($inputDto);
-
-            $dtoArray=$this->normalizer->normalize($outputFuncionarioDto);
-
-            return $this->responseService->createSuccessResponse(
-                $dtoArray,
-                Response::HTTP_OK
-            );
-
-        }catch(\Exception $e){
-            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        }  */ 
-    }
-
     #[Route('api/funcionario/{id}/perfil-completo', name:"app_detalhes_funcionario", methods:['GET'])]
     public function detalheFuncionario(int $id):JsonResponse{
 
-        $detalheFuncionarioDto=$this->funcionarioService->detalhe($id);
+        try{
+            $detalheFuncionarioDto=$this->funcionarioService->detalhe($id);
         
-        $dtoArray=$this->normalizer->normalize($detalheFuncionarioDto);
+            $dtoArray=$this->normalizer->normalize($detalheFuncionarioDto);
 
-        return $this->responseService->createSuccessResponse($dtoArray);
+            return $this->responseService->createSuccessResponse($dtoArray);
+
+        }catch(NotFoundHttpException $n){
+            return $this->responseService->createErrorResponse($n->getMessage(), Response::HTTP_BAD_REQUEST);
+        }   
+        
     }
 }

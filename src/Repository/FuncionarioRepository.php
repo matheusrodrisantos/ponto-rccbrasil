@@ -12,26 +12,13 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 /**
  * @extends ServiceEntityRepository<Funcionario>
  */
-class FuncionarioRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class FuncionarioRepository extends ServiceEntityRepository 
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Funcionario::class);
     }
 
-    /**
-     * Used to upgrade (rehash) the user's password automatically over time.
-     */
-    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
-    {
-        if (!$user instanceof Funcionario) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
-        }
-
-        $user->setPassword($newHashedPassword);
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
-    }
 
     public function create(Funcionario $funcionario): Funcionario
     {
@@ -42,28 +29,24 @@ class FuncionarioRepository extends ServiceEntityRepository implements PasswordU
         return $funcionario;
     }
 
-    //    /**
-    //     * @return Funcionario[] Returns an array of Funcionario objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function listarFuncionariosAtivos():?Funcionario{
 
-    //    public function findOneBySomeField($value): ?Funcionario
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.ativo = :ativo')
+            ->setParameter('ativo', true)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function buscarFuncionarioAtivoPorId(int $id):?Funcionario{
+        
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.ativo = :ativo')
+            ->andWhere('f.id=:id')
+            ->setParameter('id', $id)
+            ->setParameter('ativo', true)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }

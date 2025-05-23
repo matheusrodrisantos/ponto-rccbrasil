@@ -7,10 +7,11 @@ use App\Dto\FuncionarioDTO;
 use App\Entity\Funcionario;
 use App\Factory\FuncionarioFactory;
 use App\Repository\FuncionarioRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FuncionarioService{
 
-    private Funcionario $func;
+    private ?Funcionario $func;
     
     public function __construct(
         private FuncionarioRepository $funcionarioRepository,
@@ -35,17 +36,19 @@ class FuncionarioService{
     public function detalhe(int $id):?FuncionarioDTO {
 
         
-        $this->func = $this->funcionarioRepository->find($id);
+        $this->func = $this->funcionarioRepository->buscarFuncionarioAtivoPorId($id);
+
+        if (!$this->func) {
+            throw new NotFoundHttpException("Funcionário não encontrado ou inativo.");
+        }
         
         $feriasFuncionario=$this->func->getFerias();
-        //print_r($this->func);
-       /* 
+        
+        
         $registroPontoFuncionario=$this->func->getRegistroPontos();
         $saldoHorasFuncionario=$this->func->getSaldoHoras();
         $saldoHorasFuncionario=$this->func->getSaldoHoras();
-*/
 
-       //$feriasFuncionario=$this->func->getFerias();
         echo json_encode($feriasFuncionario);
         $ferias = [];
 
@@ -63,7 +66,6 @@ class FuncionarioService{
             id:$this->func->getId(),
             cpf:$this->func->getCpf(),
             //departamento:$this->func->getDepartamento(),
-            roles: $this->func->getRoles(),
             email: $this->func->getEmail(),
             nome:$this->func->getNome(),
             jornadaDiaria:$this->func->getJornadaDiaria(), 

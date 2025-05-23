@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250523032124 extends AbstractMigration
+final class Version20250523120230 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -40,8 +40,7 @@ final class Version20250523032124 extends AbstractMigration
             CREATE INDEX IDX_D675701FA22BE7D ON ferias (responsavel_pela_inclusao_id)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE funcionario (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, departamento_id INTEGER DEFAULT NULL, roles CLOB NOT NULL --(DC2Type:json)
-            , password VARCHAR(255) NOT NULL, nome VARCHAR(255) NOT NULL, regime VARCHAR(255) NOT NULL, verificar_localizacao BOOLEAN NOT NULL, ativo BOOLEAN NOT NULL, cpf VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, jornada_diaria INTEGER NOT NULL, jornada_semanal INTEGER NOT NULL, CONSTRAINT FK_7510A3CF5A91C08D FOREIGN KEY (departamento_id) REFERENCES departamento (id) NOT DEFERRABLE INITIALLY IMMEDIATE)
+            CREATE TABLE funcionario (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, departamento_id INTEGER DEFAULT NULL, nome VARCHAR(255) NOT NULL, regime VARCHAR(255) NOT NULL, verificar_localizacao BOOLEAN NOT NULL, ativo BOOLEAN NOT NULL, cpf VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, jornada_diaria INTEGER NOT NULL, jornada_semanal INTEGER NOT NULL, CONSTRAINT FK_7510A3CF5A91C08D FOREIGN KEY (departamento_id) REFERENCES departamento (id) NOT DEFERRABLE INITIALLY IMMEDIATE)
         SQL);
         $this->addSql(<<<'SQL'
             CREATE INDEX IDX_7510A3CF5A91C08D ON funcionario (departamento_id)
@@ -60,6 +59,13 @@ final class Version20250523032124 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             CREATE INDEX IDX_742AAD08642FEB76 ON saldo_horas (funcionario_id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE TABLE usuario (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles CLOB NOT NULL --(DC2Type:json)
+            , password VARCHAR(255) NOT NULL)
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON usuario (email)
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE messenger_messages (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, body CLOB NOT NULL, headers CLOB NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
@@ -95,6 +101,9 @@ final class Version20250523032124 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE saldo_horas
+        SQL);
+        $this->addSql(<<<'SQL'
+            DROP TABLE usuario
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE messenger_messages

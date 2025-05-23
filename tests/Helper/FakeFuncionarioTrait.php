@@ -25,7 +25,6 @@ trait FakeFuncionarioTrait
         );
 
         $func->setAtivo($faker->boolean());
-        $func->setPassword($faker->password());
         $func->setNome($faker->name());
         $func->setRegime(Regime::HOME_OFFICE);
         $func->setVerificarLocalizacao($faker->boolean());
@@ -40,7 +39,6 @@ trait FakeFuncionarioTrait
 
         $funcDto->cpf = $faker->cpf(false);
         $funcDto->roles = ["ROLE_USER", "ROLE_ADMIN"];
-        $funcDto->password = $faker->password();
         $funcDto->email = $faker->email();
         $funcDto->nome = $faker->name();
         $funcDto->jornadaDiaria = "08:00:00";
@@ -60,8 +58,6 @@ trait FakeFuncionarioTrait
             "id" => $faker->randomNumber(2, true),
             "departamentoId"=> 1,
             "cpf" => $faker->cpf(false),
-            "roles" => $faker->randomElements(["ROLE_USER", "ROLE_ADMIN", "ROLE_GERENTE"], rand(1, 2)),
-            "password" => $faker->password(8, 16),
             "email" => $faker->unique()->safeEmail(),
             "nome" => $faker->name(),
             "jornadaDiaria" => "08:00:00",

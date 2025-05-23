@@ -24,9 +24,7 @@ class FuncionarioFactory{
             ->setNome($func->nome)
             ->setRegime($func->regime)
             ->setVerificarLocalizacao($func->verificarLocalizacao)
-            ->setAtivo($func->ativo)
-            ->setRoles($func->roles ?? []) 
-            ->setPassword($func->password);  
+            ->setAtivo($func->ativo);
 
         if($func->departamentoId!==null){
             $departamento=$this->departamentoRepository->find($func->departamentoId);
@@ -49,9 +47,7 @@ class FuncionarioFactory{
         $dto->regime = $funcionario->getRegime();
         $dto->verificarLocalizacao = $funcionario->isVerificarLocalizacao();
         $dto->ativo = $funcionario->isAtivo();
-        $dto->roles = $funcionario->getRoles();
-        $dto->password = $funcionario->getPassword();
-
+    
         return $dto;
     }
 }

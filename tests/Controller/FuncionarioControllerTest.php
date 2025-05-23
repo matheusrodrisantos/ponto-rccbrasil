@@ -4,6 +4,8 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Tests\Helper\FakeFuncionarioTrait;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class FuncionarioControllerTest extends WebTestCase
 {
@@ -35,7 +37,6 @@ final class FuncionarioControllerTest extends WebTestCase
 
         $this->assertNotEmpty($responseData->data->id);
         $this->assertNotEmpty($responseData->data->cpf);
-        $this->assertNotEmpty($responseData->data->password);
         $this->assertNotEmpty($responseData->data->email);
         $this->assertNotEmpty($responseData->data->nome);
         $this->assertNotEmpty($responseData->data->jornadaDiaria);
@@ -47,20 +48,26 @@ final class FuncionarioControllerTest extends WebTestCase
 
     public function test_list_detalhes_funcionario(){
         
-        $id = 1;//rand(1);
+        $id = 1;// sei que esse login está ativado no banco
 
         $this->client->request(
             method:'GET',
             uri: "api/funcionario/{$id}/perfil-completo"
         );
 
-
-        print_r(        $responseData = json_decode($this->client->getResponse()->getContent()));
         $this->assertResponseIsSuccessful(); 
+    }
 
+    public function test_erro_listar_detalhes_funcionario(){
+        
+        $id = 2;// sei que esse login está desativado no banco
 
+        $this->client->request(
+            method:'GET',
+            uri: "api/funcionario/{$id}/perfil-completo"
+        );
 
-
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
     }
 }
