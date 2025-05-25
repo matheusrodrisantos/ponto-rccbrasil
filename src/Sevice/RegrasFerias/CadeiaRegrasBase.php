@@ -10,20 +10,15 @@ abstract class CadeiaRegrasBase implements RegrasFeriasInterface{
     private ?RegrasFeriasInterface $proximo = null;
 
     public function validar(FeriasDTO $ferias){
-        
+        if($this->proximo){
 
-
+        }
     }
 
     public function proximo(RegrasFeriasInterface $regra){
 
     }
 
-    public function handle(string $request): void {
-        if ($this->proximo) {
-            $this->proximo->handle($request);
-        }
-    }
 
     
 

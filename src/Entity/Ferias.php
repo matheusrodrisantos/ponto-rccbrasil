@@ -66,7 +66,7 @@ class Ferias
     public function definirResponsavelPelaInclusao(?Funcionario $usuario): static
     {
        if($this->funcionario===$usuario){
-            throw new \InvalidArgumentException("O funcionário não pode registrar sua própria solicitação de férias.");
+            throw new InvalidArgumentException("O funcionário não pode registrar sua própria solicitação de férias.");
         }
         
         $this->responsavelPelaInclusao = $usuario;
