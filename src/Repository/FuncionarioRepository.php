@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use App\Entity\Departamento;
 
 /**
  * @extends ServiceEntityRepository<Funcionario>
@@ -48,5 +49,39 @@ class FuncionarioRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function buscarSupervisorAtivo(int $id): ?Funcionario
+    {
+        $query = $this->createQueryBuilder('f')
+            ->select('f', 'd')
+            ->join('f.departamentoSupervisionado', 'd') // <-- ajuste o nome do relacionamento aqui
+            ->andWhere('f.funcao = :funcao')
+            ->andWhere('f.id = :id')
+            ->andWhere('f.departamento = d')
+            ->andWhere('f.ativo = :ativo')
+            ->setParameter('funcao', 'SUPERVISOR')
+            ->setParameter('id', $id)
+            ->setParameter('ativo', true)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+    public function buscarGerenteOuRhAtivo(int $id):?Funcionario{
+        
+        $query=$this->createQueryBuilder('f')
+            ->andWhere('f.funcao IN (:funcoes)')
+            ->andWhere('f.id = :id')
+            ->andWhere('f.ativo=:ativo')
+            ->setParameter('funcoes', ['GERENTE', 'RH'])
+            ->setParameter('id', $id)
+            ->setParameter('ativo',true)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+            
+
+
+        return $query;
+    } 
 
 }

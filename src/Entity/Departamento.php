@@ -21,7 +21,8 @@ class Departamento
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $descricao = null;
 
-    #[ORM\OneToOne(inversedBy: 'departamentoId', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Funcionario::class, inversedBy: 'departamentoSupervisionado')]
+    #[ORM\JoinColumn(name: 'supervisor_id', referencedColumnName: 'id', nullable: true)]
     private ?Funcionario $supervisor = null;
 
     #[ORM\Column]

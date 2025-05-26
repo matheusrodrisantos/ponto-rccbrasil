@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Ferias;
+use App\Entity\Funcionario;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,6 +24,24 @@ class FeriasRepository extends ServiceEntityRepository
         $em->flush();
 
         return $ferias;
+    }
+
+    public function buscarPorPeriodo(
+        \DateTime $inicio, 
+        \DateTime $fim,
+        int $idFuncionario
+    ): array
+    {
+        return $this->createQueryBuilder('f')
+            ->innerJoin('f.funcionario','func')
+            ->andWhere('f.dataFerias.dataIni <= :fim')
+            ->andWhere('func.id = :idFuncionario') 
+            ->andWhere('f.dataFerias.dataFim >= :inicio')
+            ->setParameter('inicio', $inicio)
+            ->setParameter('fim', $fim)
+            ->setParameter('idFuncionario', $idFuncionario)
+            ->getQuery()
+            ->getResult();
     }
 
 }

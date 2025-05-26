@@ -7,7 +7,4 @@ interface RegrasFeriasInterface{
 
     public function validar(FeriasDTO $ferias);
 
-    public function proximo(RegrasFeriasInterface $regra);
-
-    
 }

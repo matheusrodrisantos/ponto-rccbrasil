@@ -71,6 +71,9 @@ class Funcionario
     #[ORM\ManyToOne(targetEntity:Departamento::class, inversedBy: 'funcionarios')]
     private ?Departamento $departamento = null;
 
+    #[ORM\OneToOne(mappedBy: 'supervisor', targetEntity: Departamento::class)]
+    private ?Departamento $departamentoSupervisionado = null;
+
     public function __construct(
         Jornada $jornada,
         Cpf $cpf, 
@@ -277,7 +280,7 @@ class Funcionario
         return $this;
     }
 
-    public function getFuncao(): ?string
+    public function getFuncao(): ?Funcao
     {
         return $this->funcao;
     }
@@ -289,5 +292,35 @@ class Funcionario
         return $this;
     }
 
+    /**
+     * Get the value of departamentoSupervisionado
+     */ 
+    public function getDepartamentoSupervisionado():Departamento
+    {
+        return $this->departamentoSupervisionado;
+    }
 
+    
+    public function getDepartamentoSupervisionadoId():int
+    {
+        return $this->departamentoSupervisionado->getId();
+    }
+
+
+
+    public function getDepartamentoSupervisionadoNome():string
+    {
+        return $this->departamentoSupervisionado->getNome();
+    }
+    /**
+     * Set the value of departamentoSupervisionado
+     *
+     * @return  self
+     */ 
+    public function setDepartamentoSupervisionado(Departamento $departamentoSupervisionado)
+    {
+        $this->departamentoSupervisionado = $departamentoSupervisionado;
+
+        return $this;
+    }
 }

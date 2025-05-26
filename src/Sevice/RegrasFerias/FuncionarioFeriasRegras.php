@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use App\Repository\FuncionarioRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class FuncionarioFeriasRegras extends CadeiaRegrasBase{
+class FuncionarioFeriasRegras implements RegrasFeriasInterface{
 
     public function __construct(private FuncionarioRepository $funcionarioRepository){}
 
