@@ -3,6 +3,7 @@
 namespace App\Tests\Helper;
 
 use App\Dto\FuncionarioDTO;
+use App\Entity\Enum\Funcao;
 use Faker\Factory;
 
 use App\Entity\Funcionario;
@@ -27,6 +28,7 @@ trait FakeFuncionarioTrait
         $func->setAtivo($faker->boolean());
         $func->setNome($faker->name());
         $func->setRegime(Regime::HOME_OFFICE);
+        $func->setFuncao(Funcao::COLABORADOR);
         $func->setVerificarLocalizacao($faker->boolean());
 
         return $func;
@@ -38,12 +40,12 @@ trait FakeFuncionarioTrait
         $funcDto = new FuncionarioDTO();
 
         $funcDto->cpf = $faker->cpf(false);
-        $funcDto->roles = ["ROLE_USER", "ROLE_ADMIN"];
         $funcDto->email = $faker->email();
         $funcDto->nome = $faker->name();
         $funcDto->jornadaDiaria = "08:00:00";
         $funcDto->jornadaSemanal = "44:00:00";
         $funcDto->regime = Regime::PRESENCIAL;
+        $funcDto->funcao = Funcao::RH;
         $funcDto->verificarLocalizacao = $faker->boolean();
         $funcDto->ativo = $faker->boolean();
 
@@ -63,6 +65,7 @@ trait FakeFuncionarioTrait
             "jornadaDiaria" => "08:00:00",
             "jornadaSemanal" => "40:00:00",
             "regime" => $faker->randomElement(["PRESENCIAL", "HOME OFFICE", "HIBRIDO"]),
+            "funcao" => $faker->randomElement(["SUPERVISOR", "RH", "COLABORADOR","GERENTE"]),
             "verificarLocalizacao" => $faker->boolean(),
             "ativo" => $faker->boolean(),
         ];

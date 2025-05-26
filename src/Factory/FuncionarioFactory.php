@@ -19,13 +19,14 @@ class FuncionarioFactory{
         $jornada = new Jornada($func->jornadaDiaria, $func->jornadaSemanal);
 
         $funcionario = new Funcionario($jornada, $cpf, $email);
-
+        
         $funcionario
             ->setNome($func->nome)
             ->setRegime($func->regime)
+            ->setFuncao($func->funcao)
             ->setVerificarLocalizacao($func->verificarLocalizacao)
             ->setAtivo($func->ativo);
-
+        
         if($func->departamentoId!==null){
             $departamento=$this->departamentoRepository->find($func->departamentoId);
             $funcionario->setDepartamento($departamento);

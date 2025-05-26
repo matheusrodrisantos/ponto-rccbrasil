@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Enum\Regime;
+use App\Entity\Enum\Funcao;
 use App\Entity\ValueObject\Jornada;
 use App\Entity\ValueObject\Email;
 use App\Entity\ValueObject\Cpf;
 
-use App\Entity\Enum\Regime;
 use App\Repository\FuncionarioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -39,6 +40,9 @@ class Funcionario
     #[ORM\Column(enumType: Regime::class)]
     private ?Regime $regime = null;
 
+    #[ORM\Column(enumType: Funcao::class)]
+    private ?Funcao $funcao = null;
+
     #[ORM\Column]
     private ?bool $verificar_localizacao = null;
 
@@ -66,7 +70,6 @@ class Funcionario
 
     #[ORM\ManyToOne(targetEntity:Departamento::class, inversedBy: 'funcionarios')]
     private ?Departamento $departamento = null;
-
 
     public function __construct(
         Jornada $jornada,
@@ -270,6 +273,18 @@ class Funcionario
     public function setDepartamento(?Departamento $departamento): static
     {
         $this->departamento = $departamento;
+
+        return $this;
+    }
+
+    public function getFuncao(): ?string
+    {
+        return $this->funcao;
+    }
+
+    public function setFuncao(Funcao $funcao): static
+    {
+        $this->funcao = $funcao;
 
         return $this;
     }
