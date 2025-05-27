@@ -12,8 +12,11 @@ final class FeriasControllerTest extends WebTestCase
 
     public function test_falha_criar_ferias_menos_cinco_dias(){
         
-        $dataIni = new DateTimeImmutable('+5 day')->format('Y-m-d');
-        $dataFim = new DateTimeImmutable('+8 day')->format('Y-m-d');
+        $dataIni = new DateTimeImmutable('+5 day');
+        $dataFim = new DateTimeImmutable('+8 day');
+        
+        $dataIni=$dataIni->format('Y-m-d');
+        $dataFim=$dataFim->format('Y-m-d');
 
         $funcionarioId=1;
         $userInclusaoId=2;
@@ -44,8 +47,12 @@ final class FeriasControllerTest extends WebTestCase
     public function test_supervisor_diferente()  {
 
                 
-        $dataIni = new DateTimeImmutable('+93 day')->format('Y-m-d');
-        $dataFim = new DateTimeImmutable('+97 day')->format('Y-m-d');
+        $dataIni = new DateTimeImmutable('+5 day');
+        $dataFim = new DateTimeImmutable('+8 day');
+        
+        $dataIni=$dataIni->format('Y-m-d');
+        $dataFim=$dataFim->format('Y-m-d');
+
 
         $funcionarioId=5;
         $userInclusaoId=12;

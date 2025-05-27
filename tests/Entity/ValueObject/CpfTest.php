@@ -1,13 +1,14 @@
 <?php
-
 namespace App\Tests\Entity\ValueObject;
+
+
 
 use App\Entity\ValueObject\Cpf;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Faker\Factory;
 
-final class CpflTest extends WebTestCase
+final class CpfTest extends WebTestCase
 {
     public function test_if_cpf_is_valid(): void
     {
