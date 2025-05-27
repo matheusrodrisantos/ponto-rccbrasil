@@ -44,7 +44,7 @@ final class DepartamentoController extends AbstractController
             );
 
         }catch(\Exception $e){
-            return new JsonResponse(status:500, data: $e->getMessage());
+            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         } 
     }
 }

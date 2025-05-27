@@ -21,6 +21,8 @@ final class FuncionarioControllerTest extends WebTestCase
     public function test_create_funcionario(){
 
         $payload=$this->gerarPayloadFuncionario();
+        
+        dump($payload);
 
         $this->client->request(
             method:'POST',

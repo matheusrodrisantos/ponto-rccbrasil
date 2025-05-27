@@ -10,10 +10,10 @@ use Faker\Factory;
 final class FeriasControllerTest extends WebTestCase
 {
 
-    public function test_create_ferias(){
+    public function test_falha_criar_ferias_menos_cinco_dias(){
         
-        $dataIni = new DateTimeImmutable('+100 day')->format('Y-m-d');
-        $dataFim = new DateTimeImmutable('+120 day')->format('Y-m-d');
+        $dataIni = new DateTimeImmutable('+5 day')->format('Y-m-d');
+        $dataFim = new DateTimeImmutable('+8 day')->format('Y-m-d');
 
         $funcionarioId=1;
         $userInclusaoId=2;
@@ -36,18 +36,16 @@ final class FeriasControllerTest extends WebTestCase
 
         
         $response=$client->getResponse()->getContent();
-        $responseData=json_decode($response);
-
-        $this->assertResponseIsSuccessful(); 
-        $this->assertResponseStatusCodeSame(201);
+    
+        $this->assertResponseStatusCodeSame(400);
         $this->assertJson($response);
     }
 
     public function test_supervisor_diferente()  {
 
                 
-        $dataIni = new DateTimeImmutable('+61 day')->format('Y-m-d');
-        $dataFim = new DateTimeImmutable('+90 day')->format('Y-m-d');
+        $dataIni = new DateTimeImmutable('+93 day')->format('Y-m-d');
+        $dataFim = new DateTimeImmutable('+97 day')->format('Y-m-d');
 
         $funcionarioId=5;
         $userInclusaoId=12;
@@ -68,9 +66,7 @@ final class FeriasControllerTest extends WebTestCase
             content:json_encode($payload)
         );
 
-        
         $response=$client->getResponse()->getContent();
-        var_dump($response);
         $this->assertResponseStatusCodeSame(400);
         $this->assertJson($response);
         

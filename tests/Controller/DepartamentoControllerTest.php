@@ -9,7 +9,7 @@ final class DepartamentoControllerTest extends WebTestCase
 {
     use FakeDepartamentoTrait;
 
-    public function test_create_departamento(): void
+    public function test_falhar_criar_departamento_mesmo_supervisor(): void
     {
         $payload=$this->gerarPayloadDepartamento();
 
@@ -21,8 +21,7 @@ final class DepartamentoControllerTest extends WebTestCase
             content:json_encode($payload)
         );
 
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseStatusCodeSame(400);
         $this->assertJson($client->getResponse()->getContent());
     }
 }

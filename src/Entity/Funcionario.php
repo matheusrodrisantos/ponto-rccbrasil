@@ -273,6 +273,18 @@ class Funcionario
         return $this->departamento?->getId();
     }
 
+
+    public function getDepartamentoNome():?string
+    {
+        return $this->departamento?->getNome();
+    }
+
+
+    public function getDepartamentoDescricao():?string
+    {
+        return $this->departamento?->getDescricao();
+    }
+
     public function setDepartamento(?Departamento $departamento): static
     {
         $this->departamento = $departamento;
@@ -295,22 +307,27 @@ class Funcionario
     /**
      * Get the value of departamentoSupervisionado
      */ 
-    public function getDepartamentoSupervisionado():Departamento
+    public function getDepartamentoSupervisionado():?Departamento
     {
-        return $this->departamentoSupervisionado;
+        return $this?->departamentoSupervisionado;
     }
 
     
-    public function getDepartamentoSupervisionadoId():int
+    public function getDepartamentoSupervisionadoId():?int
     {
-        return $this->departamentoSupervisionado->getId();
+        return $this->departamentoSupervisionado?->getId();
+    }
+
+    public function temDepartamentoSupervisionado(): bool
+    {
+        return $this->departamentoSupervisionado !== null;
     }
 
 
 
-    public function getDepartamentoSupervisionadoNome():string
+    public function getDepartamentoSupervisionadoNome():?string
     {
-        return $this->departamentoSupervisionado->getNome();
+        return $this->departamentoSupervisionado?->getNome();
     }
     /**
      * Set the value of departamentoSupervisionado

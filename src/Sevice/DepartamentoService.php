@@ -6,7 +6,10 @@ use App\Dto\DepartamentoDTO;
 use App\Entity\Departamento;
 use App\Factory\DepartamentoFactory;
 use App\Repository\DepartamentoRepository;
-
+use App\Sevice\RegrasDepartamento\DepartamentoRegraNomeUnico;
+use App\Sevice\RegrasDepartamento\DepartamentoRegra;
+use App\Sevice\RegrasDepartamento\DepartamentoRegraSupervisorUnico;
+use App\Sevice\RegrasDepartamento\ExecutorCadeiaRegrasDepartamento;
 
 class DepartamentoService{
 
@@ -18,6 +21,14 @@ class DepartamentoService{
     ){}
 
     public function createEntity(DepartamentoDTO $dptoDto):DepartamentoDTO{
+
+        $executorValidar = new ExecutorCadeiaRegrasDepartamento([
+            (new DepartamentoRegraNomeUnico($this->departamentoRepository)),
+            (new DepartamentoRegraSupervisorUnico($this->departamentoRepository))
+
+        ]);
+
+        $executorValidar->validar($dptoDto);
 
         $this->dpto = $this->departamentoFactory->createFromDto($dptoDto);
 

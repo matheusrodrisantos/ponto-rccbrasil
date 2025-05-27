@@ -2,6 +2,7 @@
 
 namespace App\Sevice;
 
+use App\Dto\DepartamentoDTO;
 use App\Dto\FeriasDTO;
 use App\Dto\FuncionarioDTO;
 use App\Entity\Funcionario;
@@ -45,6 +46,12 @@ class FuncionarioService{
         $feriasFuncionario=$this->func->getFerias();
         
         
+        $departamentoDto = new DepartamentoDTO(
+            nome: $this->func->getDepartamentoNome(),
+            descricao: $this->func->getDepartamentoDescricao()
+        );
+        
+        
         $registroPontoFuncionario=$this->func->getRegistroPontos();
         $saldoHorasFuncionario=$this->func->getSaldoHoras();
         $saldoHorasFuncionario=$this->func->getSaldoHoras();
@@ -62,10 +69,10 @@ class FuncionarioService{
             ];
         }
 
-        return new FuncionarioDTO(
+        $funcDtoOut = new FuncionarioDTO(
             id:$this->func->getId(),
             cpf:$this->func->getCpf(),
-            //departamento:$this->func->getDepartamento(),
+            departamento:$departamentoDto,
             email: $this->func->getEmail(),
             nome:$this->func->getNome(),
             jornadaDiaria:$this->func->getJornadaDiaria(), 
@@ -76,5 +83,8 @@ class FuncionarioService{
             ferias:$ferias
         );
 
+        dump($funcDtoOut);
+
+        return $funcDtoOut;
     }
 }

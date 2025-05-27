@@ -32,14 +32,18 @@ class SupervisorFeriasRegras implements RegrasFeriasInterface
 
         $supervisor = $this->funcionarioRepository->buscarSupervisorAtivo($userId);
         
-        $departamentoSupervisor=$supervisor->getDepartamentoSupervisionado();
-        $idDpto=$departamentoSupervisor->getId();
-        
+        if ($supervisor===null) {
+            throw new InvalidArgumentException(
+                'Apenas supervisores do mesmo departamento, gerentes ou membros do RH podem incluir férias.'
+            );
+        }
+        $departamentoSupervisorId = $supervisor->getDepartamentoSupervisionadoId();
+       
         $funcionario = $this->funcionarioRepository->buscarFuncionarioAtivoPorId($funcionarioId);
 
         if (
-            !$idDpto ||
-            $idDpto !== $funcionario->getDepartamentoId()
+            !$departamentoSupervisorId ||
+            $departamentoSupervisorId !== $funcionario->getDepartamentoId()
         ) {
 
             throw new InvalidArgumentException(
