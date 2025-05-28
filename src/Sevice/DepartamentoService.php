@@ -20,12 +20,11 @@ class DepartamentoService{
         private DepartamentoFactory $departamentoFactory
     ){}
 
-    public function createEntity(DepartamentoDTO $dptoDto):DepartamentoDTO{
+    public function createEntity(DepartamentoDTO $dptoDto):DepartamentoDTO {
 
         $executorValidar = new ExecutorCadeiaRegrasDepartamento([
             (new DepartamentoRegraNomeUnico($this->departamentoRepository)),
             (new DepartamentoRegraSupervisorUnico($this->departamentoRepository))
-
         ]);
 
         $executorValidar->validar($dptoDto);

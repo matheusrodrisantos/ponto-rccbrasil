@@ -6,8 +6,11 @@ use App\Dto\DepartamentoDTO;
 use App\Dto\FeriasDTO;
 use App\Dto\FuncionarioDTO;
 use App\Entity\Funcionario;
+use App\Exception\RegraDeNegocioFuncionarioException;
 use App\Factory\FuncionarioFactory;
 use App\Repository\FuncionarioRepository;
+use App\Sevice\RegrasFuncionario\ExecutorRegrasFuncionario;
+use App\Sevice\RegrasFuncionario\FuncionarioCpfUnico;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FuncionarioService{
@@ -21,6 +24,12 @@ class FuncionarioService{
 
     public function createEntity(FuncionarioDTO $funcDto):FuncionarioDTO{
 
+        $executorRegrasFuncionario = new ExecutorRegrasFuncionario(regras: [
+            new FuncionarioCpfUnico($this->funcionarioRepository)
+        ]);
+
+        $executorRegrasFuncionario->validar($funcDto);
+        
         $this->func = $this->funcionarioFactory->createFromDto($funcDto);
 
         $this->funcionarioRepository->create($this->func);

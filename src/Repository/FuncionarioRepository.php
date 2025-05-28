@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use App\Entity\Departamento;
-
+use \Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 /**
  * @extends ServiceEntityRepository<Funcionario>
  */
@@ -23,11 +23,16 @@ class FuncionarioRepository extends ServiceEntityRepository
 
     public function create(Funcionario $funcionario): Funcionario
     {
-        $em = $this->getEntityManager();
-        $em->persist($funcionario);
-        $em->flush();
+        try {
+            $em = $this->getEntityManager();
+            $em->persist($funcionario);
+            $em->flush();
 
-        return $funcionario;
+            return $funcionario;
+
+        } catch (UniqueConstraintViolationException $e) {
+            throw new \Exception('Erro ao criar funcionário: ' . $e->getMessage());
+        }
     }
 
     public function listarFuncionariosAtivos():?Funcionario{
@@ -66,6 +71,7 @@ class FuncionarioRepository extends ServiceEntityRepository
 
         return $query->getOneOrNullResult();
     }
+
     public function buscarGerenteOuRhAtivo(int $id):?Funcionario{
         
         $query=$this->createQueryBuilder('f')
@@ -78,10 +84,19 @@ class FuncionarioRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-            
-
-
         return $query;
     } 
+
+    public function buscarCpf(string $cpf):?Funcionario{
+
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.cpf.cpf = :cpf')
+            ->setParameter('cpf', $cpf)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+    }
+
+
 
 }
