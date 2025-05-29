@@ -5,10 +5,18 @@ namespace App\Entity;
 use App\Repository\RegistroPontoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Enum\StatusRegistroPonto;
+use App\Entity\trait\TimestampableTrait;
+use App\Entity\ValueObject\BatidaPonto;
+use DateTime;
+use DateTimeImmutable;
 
 #[ORM\Entity(repositoryClass: RegistroPontoRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class RegistroPonto
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -18,79 +26,67 @@ class RegistroPonto
     #[ORM\JoinColumn(nullable: false)]
     private ?Funcionario $funcionario = null;
 
-    #[ORM\Column]
-    private ?\DateTime $horaEntrada = null;
-
-    #[ORM\Column]
-    private ?\DateTime $horaSaida = null;
+    #[ORM\Embedded(BatidaPonto::class, false)]
+    private ?BatidaPonto $batidaPonto = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $data = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    public function __construct(BatidaPonto $batidaPonto)
+    {
+        $this->batidaPonto = $batidaPonto;
+    }
 
-    public function getId(): ?int
+    public function id(): ?int
     {
         return $this->id;
     }
 
-    public function getFuncionario(): ?Funcionario
+    public function funcionario(): ?Funcionario
     {
         return $this->funcionario;
     }
 
-    public function setFuncionario(?Funcionario $funcionario): static
+    public function baterPonto(DateTimeImmutable $hora): void
     {
+        $this->batidaPonto = $this->batidaPonto->registrar($hora);
+    }
+
+    public function pontoCompleto(): bool
+    {
+        return $this->batidaPonto->completo();
+    }
+
+    public function entrada(): ?string
+    {
+
+        return $this->batidaPonto?->entrada();
+    }
+
+    public function saida(): ?string
+    {
+        return $this->batidaPonto?->saida();
+    }
+
+    public function atribuirFuncionario(?Funcionario $funcionario): static
+    {
+        if ($funcionario === null) {
+            throw new \InvalidArgumentException('Funcionário não pode ser nulo');
+        }
+
         $this->funcionario = $funcionario;
 
         return $this;
     }
 
-    public function getHoraEntrada(): ?\DateTime
-    {
-        return $this->horaEntrada;
-    }
-
-    public function setHoraEntrada(\DateTime $horaEntrada): static
-    {
-        $this->horaEntrada = $horaEntrada;
-
-        return $this;
-    }
-
-    public function getHoraSaida(): ?\DateTime
-    {
-        return $this->horaSaida;
-    }
-
-    public function setHoraSaida(\DateTime $horaSaida): static
-    {
-        $this->horaSaida = $horaSaida;
-
-        return $this;
-    }
-
-    public function getData(): ?\DateTime
+    public function data(): ?\DateTime
     {
         return $this->data;
     }
 
-    public function setData(\DateTime $data): static
+    public function ajustarDataPonto(\DateTime $data): static
     {
         $this->data = $data;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
 
         return $this;
     }
