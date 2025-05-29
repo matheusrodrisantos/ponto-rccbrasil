@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity\ValueObject;
 
 use InvalidArgumentException;
@@ -8,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Jornada
 {
     #[ORM\Column(name: 'jornada_diaria', type: 'integer')]
-    private int $jornadaDiaria; 
+    private int $jornadaDiaria;
 
     #[ORM\Column(name: 'jornada_semanal', type: 'integer')]
     private int $jornadaSemanal;

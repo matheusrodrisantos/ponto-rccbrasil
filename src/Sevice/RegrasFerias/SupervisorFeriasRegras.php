@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service\RegrasFerias;
 
 use App\Dto\FeriasDTO;
@@ -17,9 +18,8 @@ class SupervisorFeriasRegras implements RegrasFeriasInterface
         if ($ferias->userInclusaoId === null) {
             throw new InvalidArgumentException('Precisa de um supervisor que adicione');
         }
-        
+
         $this->verificarPermissaoParaIncluirFerias($ferias->userInclusaoId, $ferias->funcionarioId);
-        
     }
 
     private function verificarPermissaoParaIncluirFerias(int $userId, int $funcionarioId): void
@@ -31,14 +31,14 @@ class SupervisorFeriasRegras implements RegrasFeriasInterface
         }
 
         $supervisor = $this->funcionarioRepository->buscarSupervisorAtivo($userId);
-        
-        if ($supervisor===null) {
+
+        if ($supervisor === null) {
             throw new InvalidArgumentException(
                 'Apenas supervisores do mesmo departamento, gerentes ou membros do RH podem incluir férias.'
             );
         }
         $departamentoSupervisorId = $supervisor->getDepartamentoSupervisionadoId();
-       
+
         $funcionario = $this->funcionarioRepository->buscarFuncionarioAtivoPorId($funcionarioId);
 
         if (
@@ -51,5 +51,4 @@ class SupervisorFeriasRegras implements RegrasFeriasInterface
             );
         }
     }
-
 }

@@ -11,27 +11,28 @@ use App\Entity\ValueObject\Email;
 use App\Entity\ValueObject\Jornada;
 use App\Repository\DepartamentoRepository;
 
-class FuncionarioFactory{
+class FuncionarioFactory
+{
 
-    public function __construct(private DepartamentoRepository $departamentoRepository){}
+    public function __construct(private DepartamentoRepository $departamentoRepository) {}
 
-    public function createFromDto(FuncionarioDTO $func):Funcionario
+    public function createFromDto(FuncionarioDTO $func): Funcionario
     {
         $cpf = new Cpf($func->cpf);
         $email = new Email($func->email);
         $jornada = new Jornada($func->jornadaDiaria, $func->jornadaSemanal);
 
         $funcionario = new Funcionario($jornada, $cpf, $email);
-        
+
         $funcionario
             ->setNome($func->nome)
             ->setRegime($func->regime)
             ->setFuncao($func->funcao)
             ->setVerificarLocalizacao($func->verificarLocalizacao)
             ->setAtivo($func->ativo);
-        
-        if($func->departamentoId!==null){
-            $departamento=$this->departamentoRepository->find($func->departamentoId);
+
+        if ($func->departamentoId !== null) {
+            $departamento = $this->departamentoRepository->find($func->departamentoId);
             $funcionario->setDepartamento($departamento);
         }
 
@@ -41,7 +42,7 @@ class FuncionarioFactory{
     public function createDtoFromEntity(Funcionario $funcionario): FuncionarioDTO
     {
         $dto = new FuncionarioDTO();
-        $dto->id=$funcionario->getId();
+        $dto->id = $funcionario->getId();
         $dto->departamentoId = $funcionario->getDepartamentoId();
         $dto->cpf = (string) $funcionario->getCpf();
         $dto->email = (string) $funcionario->getEmail();
@@ -51,10 +52,10 @@ class FuncionarioFactory{
         $dto->regime = $funcionario->getRegime();
         $dto->verificarLocalizacao = $funcionario->isVerificarLocalizacao();
         $dto->ativo = $funcionario->isAtivo();
-    
-        $listaFerias=$funcionario->getFerias();
 
-        foreach($listaFerias as $ferias){
+        $listaFerias = $funcionario->getFerias();
+
+        foreach ($listaFerias as $ferias) {
             $dto->ferias[] = new FeriasDTO(
                 dataInicio: $ferias->dataDeInicio(),
                 dataFim: $ferias->dataDeFim(),
@@ -64,13 +65,13 @@ class FuncionarioFactory{
             );
         }
 
-        $dto->departamento= new DepartamentoDTO(
+        $dto->departamento = new DepartamentoDTO(
             nome: $funcionario->getDepartamentoNome(),
             descricao: $funcionario->getDepartamentoDescricao()
         );
 
 
-        
+
         return $dto;
     }
 }

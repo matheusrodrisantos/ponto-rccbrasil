@@ -13,23 +13,25 @@ final class FuncionarioControllerTest extends WebTestCase
 
     private $client;
 
-    public function setUp() :void{
+    public function setUp(): void
+    {
         $this->client = static::createClient();
     }
-    
 
-    public function test_create_funcionario(){
 
-        $payload=$this->gerarPayloadFuncionario();
-        
+    public function test_create_funcionario()
+    {
+
+        $payload = $this->gerarPayloadFuncionario();
+
         $this->client->request(
-            method:'POST',
+            method: 'POST',
             uri: 'api/funcionario',
             server: ['CONTENT_TYPE' => 'application/json'],
             content: json_encode($payload)
         );
 
-        $this->assertResponseIsSuccessful(); 
+        $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
         $this->assertJson($this->client->getResponse()->getContent());
 
@@ -43,54 +45,52 @@ final class FuncionarioControllerTest extends WebTestCase
         $this->assertNotEmpty($responseData->data->jornadaSemanal);
         $this->assertNotEmpty($responseData->data->regime);
         $this->assertNotEmpty($responseData->data->departamentoId);
-
     }
 
-    public function test_list_detalhes_funcionario(){
-        
-        $id = 1;// sei que esse login está ativado no banco
+    public function test_list_detalhes_funcionario()
+    {
+
+        $id = 1; // sei que esse login está ativado no banco
 
         $this->client->request(
-            method:'GET',
+            method: 'GET',
             uri: "api/funcionario/{$id}/perfil-completo"
         );
 
-        $this->assertResponseIsSuccessful(); 
+        $this->assertResponseIsSuccessful();
     }
 
-    public function test_erro_listar_detalhes_funcionario(){
-        
-        $id = 3;// sei que esse login está desativado no banco
+    public function test_erro_listar_detalhes_funcionario()
+    {
+
+        $id = 3; // sei que esse login está desativado no banco
 
         $this->client->request(
-            method:'GET',
+            method: 'GET',
             uri: "api/funcionario/{$id}/perfil-completo"
         );
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
-
     }
 
-    public function test_se_permite_cadastrar_mesmo_cpf(){
+    public function test_se_permite_cadastrar_mesmo_cpf()
+    {
 
-        $payload=$this->gerarPayloadFuncionario();
-        $payload["cpf"]="43523797861";
-        
+        $payload = $this->gerarPayloadFuncionario();
+        $payload["cpf"] = "43523797861";
+
         $this->client->request(
-            method:'POST',
+            method: 'POST',
             uri: 'api/funcionario',
             server: ['CONTENT_TYPE' => 'application/json'],
             content: json_encode($payload)
         );
 
         dump($this->client->getResponse()->getContent());
-        
+
         $this->assertResponseStatusCodeSame(400);
         $this->assertJson($this->client->getResponse()->getContent());
 
         $responseData = json_decode($this->client->getResponse()->getContent());
-
-   
-
     }
 }

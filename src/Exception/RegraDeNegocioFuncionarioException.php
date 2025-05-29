@@ -3,4 +3,4 @@
 namespace App\Exception;
 
 
-class  RegraDeNegocioFuncionarioException extends \DomainException{}
+class  RegraDeNegocioFuncionarioException extends \DomainException {}

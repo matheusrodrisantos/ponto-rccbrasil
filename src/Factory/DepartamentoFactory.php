@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Factory;
 
 use App\Dto\DepartamentoDTO;
@@ -7,7 +8,7 @@ use App\Repository\FuncionarioRepository;
 
 class DepartamentoFactory
 {
-    public function __construct(private FuncionarioRepository $funcionarioRepository){}
+    public function __construct(private FuncionarioRepository $funcionarioRepository) {}
 
     public function createFromDto(DepartamentoDTO $dpto): Departamento
     {

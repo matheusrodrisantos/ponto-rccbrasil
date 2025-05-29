@@ -2,6 +2,7 @@
 
 namespace App\Dto;
 
-interface DtoInteface{
-    public function toArray():array;
+interface DtoInteface
+{
+    public function toArray(): array;
 }

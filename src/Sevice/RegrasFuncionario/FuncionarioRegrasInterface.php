@@ -1,10 +1,11 @@
-<?php 
+<?php
+
 namespace App\Sevice\RegrasFuncionario;
 
 use App\Dto\FuncionarioDTO;
 
-interface FuncionarioRegrasInterface {
+interface FuncionarioRegrasInterface
+{
 
-    public function validar(FuncionarioDTO $funcionarioDTO):void;
-    
+    public function validar(FuncionarioDTO $funcionarioDTO): void;
 }

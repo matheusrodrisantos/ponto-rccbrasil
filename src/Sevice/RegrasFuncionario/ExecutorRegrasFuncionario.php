@@ -1,11 +1,13 @@
 <?php
+
 namespace App\Sevice\RegrasFuncionario;
 
 use App\Dto\FuncionarioDTO;
 
-class ExecutorRegrasFuncionario{
- 
-        /**
+class ExecutorRegrasFuncionario
+{
+
+    /**
      * @var FuncionarioRegrasInterface[]
      */
     private array $regras = [];

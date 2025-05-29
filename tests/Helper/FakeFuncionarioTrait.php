@@ -34,7 +34,8 @@ trait FakeFuncionarioTrait
         return $func;
     }
 
-    protected function criarFuncionarioDto():FuncionarioDTO{
+    protected function criarFuncionarioDto(): FuncionarioDTO
+    {
         $faker = Factory::create('pt_BR');
 
         $funcDto = new FuncionarioDTO();
@@ -58,14 +59,14 @@ trait FakeFuncionarioTrait
 
         return [
             "id" => $faker->randomNumber(2, true),
-            "departamentoId"=> 1,
+            "departamentoId" => 1,
             "cpf" => $faker->cpf(false),
             "email" => $faker->unique()->safeEmail(),
             "nome" => $faker->name(),
             "jornadaDiaria" => "08:00:00",
             "jornadaSemanal" => "40:00:00",
             "regime" => $faker->randomElement(["PRESENCIAL", "HOME OFFICE", "HIBRIDO"]),
-            "funcao" => $faker->randomElement(["SUPERVISOR", "RH", "COLABORADOR","GERENTE"]),
+            "funcao" => $faker->randomElement(["SUPERVISOR", "RH", "COLABORADOR", "GERENTE"]),
             "verificarLocalizacao" => $faker->boolean(),
             "ativo" => $faker->boolean(),
         ];

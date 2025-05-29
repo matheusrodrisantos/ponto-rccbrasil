@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Sevice;
+
 use App\Dto\FeriasDTO;
 use App\Entity\Ferias;
 use App\Entity\ValueObject\DataFerias;
@@ -20,27 +21,28 @@ class FeriasService
         private FeriasFactory $feriasFactory,
         private FeriasRepository $feriasRepository,
         private FuncionarioRepository $funcionarioRepository
-    ){}
+    ) {}
 
-    public function createEntity(FeriasDTO $feriasInputDto)  {
+    public function createEntity(FeriasDTO $feriasInputDto): FeriasDTO
+    {
 
-        $dataInicio= new DateTimeImmutable($feriasInputDto->dataInicio);
-        $dataFim= new DateTimeImmutable($feriasInputDto->dataFim);
-        
+        $dataInicio = new DateTimeImmutable($feriasInputDto->dataInicio);
+        $dataFim = new DateTimeImmutable($feriasInputDto->dataFim);
+
         $dataFerias = new DataFerias($dataInicio, $dataFim);
 
         $cadeiaRegras = new CadeiaRegras([
-            new FuncionarioFeriasRegras($this->funcionarioRepository), 
-            new PeriodoFeriasRegras($this->feriasRepository), 
+            new FuncionarioFeriasRegras($this->funcionarioRepository),
+            new PeriodoFeriasRegras($this->feriasRepository),
             new SupervisorFeriasRegras($this->funcionarioRepository)
         ]);
 
         $cadeiaRegras->validar($feriasInputDto);
 
         $ferias = new Ferias($dataFerias);
-    
-        $funcionario=$this->funcionarioRepository->find($feriasInputDto->funcionarioId);
-        $responsavel=$this->funcionarioRepository->find($feriasInputDto->userInclusaoId);
+
+        $funcionario = $this->funcionarioRepository->find($feriasInputDto->funcionarioId);
+        $responsavel = $this->funcionarioRepository->find($feriasInputDto->userInclusaoId);
 
         $ferias->definirFuncionario($funcionario);
         $ferias->definirResponsavelPelaInclusao($responsavel);
@@ -50,13 +52,10 @@ class FeriasService
 
         return new FeriasDTO(
             $ferias->funcionario(),
-            $ferias->responsavelPelaInclusao(), 
+            $ferias->responsavelPelaInclusao(),
             $ferias->dataDeInicio(),
-            $ferias->dataDeFim(), 
+            $ferias->dataDeFim(),
             $ferias->getId()
         );
-
     }
-
-
 }

@@ -11,10 +11,6 @@ use App\Repository\FuncionarioRepository;
 class FeriasFactory
 {
     public function __construct(
-        private FuncionarioRepository $funcionarioRepository    
-    ){}
-
-    
-
-
+        private FuncionarioRepository $funcionarioRepository
+    ) {}
 }

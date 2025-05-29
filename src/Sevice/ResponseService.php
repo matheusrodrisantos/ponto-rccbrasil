@@ -4,7 +4,8 @@ namespace App\Sevice;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class ResponseService{
+class ResponseService extends JsonResponse
+{
 
     public function createErrorResponse(string $message, int $statusCode): JsonResponse
     {
@@ -20,6 +21,5 @@ class ResponseService{
             'status' => 'success',
             'data' => $data,
         ], $statusCode);
-    }   
-
+    }
 }

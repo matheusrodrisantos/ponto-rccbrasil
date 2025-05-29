@@ -17,8 +17,9 @@ class DepartamentoFactoryTest extends TestCase
     /** @var \App\Repository\FuncionarioRepository&\PHPUnit\Framework\MockObject\MockObject */
     public $repoMock;
 
-    public function setUp():void{
-        
+    public function setUp(): void
+    {
+
         $this->repoMock = $this->createMock(FuncionarioRepository::class);
     }
 
@@ -38,7 +39,7 @@ class DepartamentoFactoryTest extends TestCase
     {
         $departamento = $this->criarDepartamento();
 
-        $factory= new DepartamentoFactory($this->repoMock); 
+        $factory = new DepartamentoFactory($this->repoMock);
 
         $departamentoDto = $factory->createDtoFromEntity($departamento);
 

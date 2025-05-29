@@ -10,37 +10,40 @@ use App\Sevice\RegrasFuncionario\ExecutorRegrasFuncionario;
 use App\Sevice\RegrasFuncionario\FuncionarioCpfUnico;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class FuncionarioService{
+class FuncionarioService
+{
 
     private ?Funcionario $funcionario;
-    
+
     public function __construct(
         private FuncionarioRepository $funcionarioRepository,
         private FuncionarioFactory $funcionarioFactory
-    ){}
+    ) {}
 
-    public function createEntity(FuncionarioDTO $funcDto):FuncionarioDTO{
+    public function createEntity(FuncionarioDTO $funcDto): FuncionarioDTO
+    {
 
         $executorRegrasFuncionario = new ExecutorRegrasFuncionario(regras: [
             new FuncionarioCpfUnico($this->funcionarioRepository)
         ]);
 
         $executorRegrasFuncionario->validar($funcDto);
-        
+
         $this->funcionario = $this->funcionarioFactory->createFromDto($funcDto);
 
         $this->funcionarioRepository->create($this->funcionario);
 
         return $this->funcionarioFactory->createDtoFromEntity($this->funcionario);
-
     }
 
-    public function listarFeriasFuncionario(int $id){
+    public function listarFeriasFuncionario(int $id)
+    {
 
         $this->funcionario = $this->funcionarioRepository->find($id);
     }
 
-    public function detalhe(int $id):?FuncionarioDTO {
+    public function detalhe(int $id): ?FuncionarioDTO
+    {
 
         $this->funcionario = $this->funcionarioRepository->buscarFuncionarioAtivoPorId($id);
 

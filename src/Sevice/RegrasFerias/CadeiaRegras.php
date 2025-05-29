@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Sevice\RegrasFerias;
 
 use App\Dto\FeriasDTO;
 
-class CadeiaRegras{
+class CadeiaRegras
+{
 
     private array $regras;
 

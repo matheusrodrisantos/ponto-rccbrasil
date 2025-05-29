@@ -11,41 +11,51 @@ trait FakeDepartamentoTrait
 {
     use FakeFuncionarioTrait;
 
-    
+
     protected function criarDepartamento(): Departamento
     {
         $faker = Factory::create('pt_BR');
 
         $departamento = new Departamento();
         $departamento->setNome($faker->randomElement([
-            'Recursos Humanos', 'Financeiro', 'Tecnologia da Informação',
-            'Jurídico', 'Marketing', 'Comercial', 'Logística'
+            'Recursos Humanos',
+            'Financeiro',
+            'Tecnologia da Informação',
+            'Jurídico',
+            'Marketing',
+            'Comercial',
+            'Logística'
         ]));
         $departamento->setDescricao($faker->sentence());
         $departamento->setAtivo($faker->boolean());
 
-        $supervisor= $this->criarFuncionario();  
+        $supervisor = $this->criarFuncionario();
 
         $departamento->setSupervisor($supervisor);
 
         return $departamento;
     }
 
-    protected function criarDepartamentoDto():DepartamentoDTO{
-     
+    protected function criarDepartamentoDto(): DepartamentoDTO
+    {
+
         $faker = Factory::create('pt_BR');
 
         return new DepartamentoDTO(
-            id: null, 
+            id: null,
             nome: $faker->randomElement([
-                'Recursos Humanos', 'Financeiro', 'Tecnologia da Informação',
-                'Jurídico', 'Marketing', 'Comercial', 'Logística'
+                'Recursos Humanos',
+                'Financeiro',
+                'Tecnologia da Informação',
+                'Jurídico',
+                'Marketing',
+                'Comercial',
+                'Logística'
             ]),
             descricao: $faker->sentence(),
             supervisorId: 2,
             ativo: $faker->boolean()
         );
-     
     }
 
     protected function gerarPayloadDepartamento(): array
@@ -57,12 +67,17 @@ trait FakeDepartamentoTrait
         return [
             'id' => null,
             'nome' => $faker->randomElement([
-                'Recursos Humanos', 'Financeiro', 'Tecnologia da Informação',
-                'Jurídico', 'Marketing', 'Comercial', 'Logística'
+                'Recursos Humanos',
+                'Financeiro',
+                'Tecnologia da Informação',
+                'Jurídico',
+                'Marketing',
+                'Comercial',
+                'Logística'
             ]),
             'descricao' => $faker->sentence(),
             'supervisorId' => $supervisor->getId(),
-          
+
             'ativo' => $faker->boolean(),
         ];
     }

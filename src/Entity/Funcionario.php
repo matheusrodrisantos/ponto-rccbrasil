@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FuncionarioRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_FUNCIONARIO_CPF', columns: ['cpf'])]
 #[ORM\HasLifecycleCallbacks]
-class Funcionario 
+class Funcionario
 {
     use TimestampableTrait;
 
@@ -28,16 +28,16 @@ class Funcionario
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Embedded(class: Cpf::class, columnPrefix:false)]
+    #[ORM\Embedded(class: Cpf::class, columnPrefix: false)]
     private ?Cpf $cpf = null;
 
-    #[ORM\Embedded(class: Email::class, columnPrefix:false)]
+    #[ORM\Embedded(class: Email::class, columnPrefix: false)]
     private ?Email $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nome = null;
 
-    #[ORM\Embedded(class: Jornada::class, columnPrefix:false)]
+    #[ORM\Embedded(class: Jornada::class, columnPrefix: false)]
     private ?Jornada $jornada = null;
 
     #[ORM\Column(enumType: Regime::class)]
@@ -71,7 +71,7 @@ class Funcionario
     #[ORM\OneToMany(targetEntity: SaldoHoras::class, mappedBy: 'funcionario')]
     private Collection $saldoHoras;
 
-    #[ORM\ManyToOne(targetEntity:Departamento::class, inversedBy: 'funcionarios')]
+    #[ORM\ManyToOne(targetEntity: Departamento::class, inversedBy: 'funcionarios')]
     private ?Departamento $departamento = null;
 
     #[ORM\OneToOne(mappedBy: 'supervisor', targetEntity: Departamento::class)]
@@ -79,18 +79,16 @@ class Funcionario
 
     public function __construct(
         Jornada $jornada,
-        Cpf $cpf, 
+        Cpf $cpf,
         Email $email
-    )
-    {
+    ) {
         $this->ferias = new ArrayCollection();
         $this->registroPontos = new ArrayCollection();
         $this->saldoHoras = new ArrayCollection();
 
-        $this->jornada=$jornada;
-        $this->cpf=$cpf;
-        $this->email=$email;
-        
+        $this->jornada = $jornada;
+        $this->cpf = $cpf;
+        $this->email = $email;
     }
 
     public function getId(): ?int
@@ -119,7 +117,6 @@ class Funcionario
         $this->nome = $nome;
 
         return $this;
-    
     }
 
     public function getJornada(): Jornada
@@ -193,7 +190,7 @@ class Funcionario
 
         return $this;
     }
-    
+
     public function removeFeria(Ferias $feria): static
     {
         if ($this->ferias->removeElement($feria)) {
@@ -271,19 +268,19 @@ class Funcionario
         return $this->departamento;
     }
 
-    public function getDepartamentoId():?int
+    public function getDepartamentoId(): ?int
     {
         return $this->departamento?->getId();
     }
 
 
-    public function getDepartamentoNome():?string
+    public function getDepartamentoNome(): ?string
     {
         return $this->departamento?->getNome();
     }
 
 
-    public function getDepartamentoDescricao():?string
+    public function getDepartamentoDescricao(): ?string
     {
         return $this->departamento?->getDescricao();
     }
@@ -309,14 +306,14 @@ class Funcionario
 
     /**
      * Get the value of departamentoSupervisionado
-     */ 
-    public function getDepartamentoSupervisionado():?Departamento
+     */
+    public function getDepartamentoSupervisionado(): ?Departamento
     {
         return $this?->departamentoSupervisionado;
     }
 
-    
-    public function getDepartamentoSupervisionadoId():?int
+
+    public function getDepartamentoSupervisionadoId(): ?int
     {
         return $this->departamentoSupervisionado?->getId();
     }
@@ -328,7 +325,7 @@ class Funcionario
 
 
 
-    public function getDepartamentoSupervisionadoNome():?string
+    public function getDepartamentoSupervisionadoNome(): ?string
     {
         return $this->departamentoSupervisionado?->getNome();
     }
@@ -336,7 +333,7 @@ class Funcionario
      * Set the value of departamentoSupervisionado
      *
      * @return  self
-     */ 
+     */
     public function setDepartamentoSupervisionado(Departamento $departamentoSupervisionado)
     {
         $this->departamentoSupervisionado = $departamentoSupervisionado;

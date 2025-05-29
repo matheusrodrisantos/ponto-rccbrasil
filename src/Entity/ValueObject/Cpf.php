@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity\ValueObject;
+
 use InvalidArgumentException;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -40,5 +41,4 @@ class Cpf
     {
         return $this->cpf;
     }
-
 }

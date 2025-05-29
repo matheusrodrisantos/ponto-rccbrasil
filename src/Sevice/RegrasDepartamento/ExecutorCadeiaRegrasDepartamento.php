@@ -1,11 +1,12 @@
-<?php 
+<?php
 
 namespace App\Sevice\RegrasDepartamento;
 
 use App\Dto\DepartamentoDTO;
 
-class ExecutorCadeiaRegrasDepartamento{
-    
+class ExecutorCadeiaRegrasDepartamento
+{
+
     /**
      * @var RegrasDepartamentoInterface[]
      */
@@ -29,5 +30,4 @@ class ExecutorCadeiaRegrasDepartamento{
             $regra->validar($dto);
         }
     }
-
 }

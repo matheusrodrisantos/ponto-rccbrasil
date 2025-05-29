@@ -10,10 +10,11 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use App\Entity\Departamento;
 use \Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+
 /**
  * @extends ServiceEntityRepository<Funcionario>
  */
-class FuncionarioRepository extends ServiceEntityRepository 
+class FuncionarioRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -29,13 +30,13 @@ class FuncionarioRepository extends ServiceEntityRepository
             $em->flush();
 
             return $funcionario;
-
         } catch (UniqueConstraintViolationException $e) {
             throw new \Exception('Erro ao criar funcionário: ' . $e->getMessage());
         }
     }
 
-    public function listarFuncionariosAtivos():?Funcionario{
+    public function listarFuncionariosAtivos(): ?Funcionario
+    {
 
         return $this->createQueryBuilder('f')
             ->andWhere('f.ativo = :ativo')
@@ -44,8 +45,9 @@ class FuncionarioRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function buscarFuncionarioAtivoPorId(int $id):?Funcionario{
-        
+    public function buscarFuncionarioAtivoPorId(int $id): ?Funcionario
+    {
+
         return $this->createQueryBuilder('f')
             ->andWhere('f.ativo = :ativo')
             ->andWhere('f.id=:id')
@@ -72,31 +74,29 @@ class FuncionarioRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function buscarGerenteOuRhAtivo(int $id):?Funcionario{
-        
-        $query=$this->createQueryBuilder('f')
+    public function buscarGerenteOuRhAtivo(int $id): ?Funcionario
+    {
+
+        $query = $this->createQueryBuilder('f')
             ->andWhere('f.funcao IN (:funcoes)')
             ->andWhere('f.id = :id')
             ->andWhere('f.ativo=:ativo')
             ->setParameter('funcoes', ['GERENTE', 'RH'])
             ->setParameter('id', $id)
-            ->setParameter('ativo',true)
+            ->setParameter('ativo', true)
             ->getQuery()
             ->getOneOrNullResult();
 
         return $query;
-    } 
+    }
 
-    public function buscarCpf(string $cpf):?Funcionario{
+    public function buscarCpf(string $cpf): ?Funcionario
+    {
 
         return $this->createQueryBuilder('f')
             ->andWhere('f.cpf.cpf = :cpf')
             ->setParameter('cpf', $cpf)
             ->getQuery()
             ->getOneOrNullResult();
-
     }
-
-
-
 }

@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Entity\trait;
 
 use Doctrine\ORM\Mapping as ORM;
 
 trait TimestampableTrait
 {
- 
+
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 

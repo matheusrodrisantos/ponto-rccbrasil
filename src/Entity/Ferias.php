@@ -30,12 +30,12 @@ class Ferias
     #[Ignore]
     private ?Funcionario $responsavelPelaInclusao = null;
 
-    #[ORM\Embedded(DataFerias::class,false)]
-    private ?DataFerias $dataFerias =null;
+    #[ORM\Embedded(DataFerias::class, false)]
+    private ?DataFerias $dataFerias = null;
 
     public function __construct(DataFerias $dataFerias)
-    {   
-        $this->dataFerias=$dataFerias;
+    {
+        $this->dataFerias = $dataFerias;
     }
 
     public function getId(): ?int
@@ -62,10 +62,10 @@ class Ferias
 
     public function definirResponsavelPelaInclusao(?Funcionario $usuario): static
     {
-       if($this->funcionario===$usuario){
+        if ($this->funcionario === $usuario) {
             throw new InvalidArgumentException("O funcionário não pode registrar sua própria solicitação de férias.");
         }
-        
+
         $this->responsavelPelaInclusao = $usuario;
 
         return $this;
@@ -80,5 +80,4 @@ class Ferias
     {
         return $this->dataFerias->dataFimFerias();
     }
-
 }
