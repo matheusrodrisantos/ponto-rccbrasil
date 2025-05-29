@@ -27,15 +27,14 @@ class FeriasRepository extends ServiceEntityRepository
     }
 
     public function buscarPorPeriodo(
-        \DateTime $inicio, 
+        \DateTime $inicio,
         \DateTime $fim,
         int $idFuncionario
-    ): array
-    {
+    ): array {
         return $this->createQueryBuilder('f')
-            ->innerJoin('f.funcionario','func')
+            ->innerJoin('f.funcionario', 'func')
             ->andWhere('f.dataFerias.dataIni <= :fim')
-            ->andWhere('func.id = :idFuncionario') 
+            ->andWhere('func.id = :idFuncionario')
             ->andWhere('f.dataFerias.dataFim >= :inicio')
             ->setParameter('inicio', $inicio)
             ->setParameter('fim', $fim)
@@ -43,5 +42,4 @@ class FeriasRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
 }
