@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Factory;
+
+use App\Dto\DepartamentoDTO;
+use App\Dto\FeriasDTO;
 use App\Dto\FuncionarioDTO;
 use App\Entity\Funcionario;
 use App\Entity\ValueObject\Cpf;
@@ -49,6 +52,25 @@ class FuncionarioFactory{
         $dto->verificarLocalizacao = $funcionario->isVerificarLocalizacao();
         $dto->ativo = $funcionario->isAtivo();
     
+        $listaFerias=$funcionario->getFerias();
+
+        foreach($listaFerias as $ferias){
+            $dto->ferias[] = new FeriasDTO(
+                dataInicio: $ferias->dataDeInicio(),
+                dataFim: $ferias->dataDeFim(),
+                funcionarioId: $ferias->funcionario(),
+                userInclusaoId: $ferias->responsavelPelaInclusao(),
+                id: $ferias->getId()
+            );
+        }
+
+        $dto->departamento= new DepartamentoDTO(
+            nome: $funcionario->getDepartamentoNome(),
+            descricao: $funcionario->getDepartamentoDescricao()
+        );
+
+
+        
         return $dto;
     }
 }

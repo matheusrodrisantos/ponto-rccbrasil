@@ -19,6 +19,10 @@ class FuncionarioDTO
        public ?Funcao $funcao = null,
        public ?bool $verificarLocalizacao = null,
        public ?bool $ativo = null, 
+       
+       /**
+        * @var FeriasDTO[]|null
+        */
        public ?array $ferias = null,
        public ?array $registrosPonto = null,
        public ?array $saldoHoras=null,
