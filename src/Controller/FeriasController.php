@@ -26,7 +26,7 @@ final class FeriasController extends AbstractController
     public function create(
         Request $request,
         FeriasService $feriasService
-    ): JsonResponse
+    ): ResponseService
     {
        try{
             $inputDto = $this->serializer->deserialize(
@@ -70,7 +70,7 @@ final class FeriasController extends AbstractController
     public function delete(
         Request $request,
         FeriasService $feriasService
-    ): JsonResponse
+    ): ResponseService
     {
        try{
             $inputDto = $this->serializer->deserialize(
@@ -97,7 +97,7 @@ final class FeriasController extends AbstractController
     public function list(
         Request $request,
         FeriasService $feriasService
-    ): JsonResponse
+    ): ResponseService
     {
        try{
             $inputDto = $this->serializer->deserialize(
