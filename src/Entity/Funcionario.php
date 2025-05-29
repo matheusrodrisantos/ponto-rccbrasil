@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Enum\Regime;
 use App\Entity\Enum\Funcao;
+use App\Entity\trait\TimestampableTrait;
 use App\Entity\ValueObject\Jornada;
 use App\Entity\ValueObject\Email;
 use App\Entity\ValueObject\Cpf;
@@ -17,8 +18,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FuncionarioRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_FUNCIONARIO_CPF', columns: ['cpf'])]
+#[ORM\HasLifecycleCallbacks]
 class Funcionario 
 {
+    use TimestampableTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -215,7 +218,7 @@ class Funcionario
     {
         if (!$this->registroPontos->contains($registroPonto)) {
             $this->registroPontos->add($registroPonto);
-            $registroPonto->setFuncionario($this);
+            $registroPonto->atribuirFuncionario($this);
         }
 
         return $this;
@@ -225,8 +228,8 @@ class Funcionario
     {
         if ($this->registroPontos->removeElement($registroPonto)) {
             // set the owning side to null (unless already changed)
-            if ($registroPonto->getFuncionario() === $this) {
-                $registroPonto->setFuncionario(null);
+            if ($registroPonto->funcionario() === $this) {
+                $registroPonto->atribuirFuncionario(null);
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\trait\TimestampableTrait;
 use App\Repository\SaldoHorasRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SaldoHorasRepository::class)]
 class SaldoHoras
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

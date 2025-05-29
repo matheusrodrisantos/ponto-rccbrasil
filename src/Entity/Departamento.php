@@ -2,14 +2,18 @@
 
 namespace App\Entity;
 
+use App\Entity\trait\TimestampableTrait;
 use App\Repository\DepartamentoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DepartamentoRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Departamento
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

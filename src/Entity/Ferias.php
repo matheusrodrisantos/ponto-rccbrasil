@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\trait\TimestampableTrait;
 use App\Repository\FeriasRepository;
 use App\Entity\ValueObject\DataFerias;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +13,8 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 #[ORM\HasLifecycleCallbacks]
 class Ferias
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,12 +32,6 @@ class Ferias
 
     #[ORM\Embedded(DataFerias::class,false)]
     private ?DataFerias $dataFerias =null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct(DataFerias $dataFerias)
     {   
@@ -84,17 +81,4 @@ class Ferias
         return $this->dataFerias->dataFimFerias();
     }
 
-
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
-    {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
-    }
-
-    #[ORM\PreUpdate]
-    public function setUpadteAtValue(): void
-    {
-        $this->updatedAt = new \DateTimeImmutable();
-    }
 }
