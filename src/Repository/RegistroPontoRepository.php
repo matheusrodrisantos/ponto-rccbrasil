@@ -16,6 +16,15 @@ class RegistroPontoRepository extends ServiceEntityRepository
         parent::__construct($registry, RegistroPonto::class);
     }
 
+    public function create(RegistroPonto $registroPonto): RegistroPonto
+    {
+        $em = $this->getEntityManager();
+        $em->persist(object: $registroPonto);
+        $em->flush();
+
+        return $registroPonto;
+    }
+
     //    /**
     //     * @return RegistroPonto[] Returns an array of RegistroPonto objects
     //     */

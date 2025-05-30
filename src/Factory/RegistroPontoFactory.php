@@ -5,7 +5,6 @@ namespace App\Factory;
 use App\Dto\RegistroPontoDTO;
 use App\Entity\RegistroPonto;
 use App\Entity\ValueObject\BatidaPonto;
-use App\Repository\FuncionarioRepository;
 use App\Repository\RegistroPontoRepository;
 use DateTimeImmutable;
 
@@ -18,7 +17,7 @@ class RegistroPontoFactory
     public function createFromDto(RegistroPontoDTO $dto): RegistroPonto
     {
 
-        $batida = DateTimeImmutable::createFromFormat('H:i:s', $dto->batidaPonto);
+        $batida = DateTimeImmutable::createFromFormat('H:i:s', $dto->horaBatida);
 
         $registroPonto = new RegistroPonto(new BatidaPonto($batida));
 

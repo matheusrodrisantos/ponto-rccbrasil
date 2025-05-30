@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\RegistroPontoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Enum\StatusRegistroPonto;
 use App\Entity\trait\TimestampableTrait;
 use App\Entity\ValueObject\BatidaPonto;
 use DateTime;
@@ -29,8 +28,8 @@ class RegistroPonto
     #[ORM\Embedded(BatidaPonto::class, false)]
     private ?BatidaPonto $batidaPonto = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $data = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?DateTimeImmutable $data = null;
 
     public function __construct(BatidaPonto $batidaPonto)
     {
@@ -47,9 +46,10 @@ class RegistroPonto
         return $this->funcionario;
     }
 
-    public function baterPonto(DateTimeImmutable $hora): void
+    public function baterPonto(DateTimeImmutable $dataHora): void
     {
-        $this->batidaPonto = $this->batidaPonto->registrar($hora);
+        $this->batidaPonto = $this->batidaPonto->registrar($dataHora);
+        $this->data=$dataHora;
     }
 
     public function pontoCompleto(): bool
@@ -79,12 +79,12 @@ class RegistroPonto
         return $this;
     }
 
-    public function data(): ?\DateTime
+    public function data(): ?DateTimeImmutable
     {
         return $this->data;
     }
 
-    public function ajustarDataPonto(\DateTime $data): static
+    public function ajustarDataPonto(DateTimeImmutable $data): static
     {
         $this->data = $data;
 

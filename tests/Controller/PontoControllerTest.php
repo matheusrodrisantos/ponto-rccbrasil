@@ -19,8 +19,6 @@ final class PontoControllerTest extends WebTestCase
 
         $payload = [
             "funcionarioId" => 1,
-            "hora" => "10:00:00",
-            "data" => "2025-05-29"
         ];
 
         $client = static::createClient();
@@ -31,6 +29,8 @@ final class PontoControllerTest extends WebTestCase
             server: ['CONTENT_TYPE' => 'application/json'],
             content: json_encode($payload)
         );
+
+        dump($client->getResponse()->getContent());
 
         self::assertResponseIsSuccessful();
     }

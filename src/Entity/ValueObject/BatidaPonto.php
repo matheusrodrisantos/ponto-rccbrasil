@@ -15,14 +15,14 @@ use Doctrine\DBAL\Types\Types;
 class BatidaPonto
 {
 
-    #[ORM\Column(name: 'entrada', type: Types::TIME_IMMUTABLE)]
-    private DateTimeInterface $entrada;
+    #[ORM\Column(name: 'entrada', type: Types::TIME_IMMUTABLE, nullable:true)]
+    private ?DateTimeInterface $entrada;
 
-    #[ORM\Column(name: 'saida', type: Types::TIME_IMMUTABLE)]
-    private DateTimeInterface $saida;
+    #[ORM\Column(name: 'saida', type: Types::TIME_IMMUTABLE, nullable:true)]
+    private ?DateTimeInterface $saida;
 
 
-    public function __construct(?\DateTimeImmutable $entrada = null, ?\DateTimeImmutable $saida = null)
+    public function __construct(?DateTimeImmutable $entrada = null, ?DateTimeImmutable $saida = null)
     {
         if ($entrada && $saida && $entrada > $saida) {
             throw new RegraDeNegocioRegistroPontoException('A hora de entrada deve ser anterior à de saída.');
