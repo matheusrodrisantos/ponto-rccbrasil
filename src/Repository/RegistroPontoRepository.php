@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Funcionario;
 use App\Entity\RegistroPonto;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,6 +25,15 @@ class RegistroPontoRepository extends ServiceEntityRepository
         $em->flush();
 
         return $registroPonto;
+    }
+
+    public function procurarPorPontoAberto(DateTimeImmutable $data, Funcionario $funcionario):? RegistroPonto{
+        
+        return $this->findOneBy([
+            'data' => $data,
+            'funcionario' => $funcionario,
+            'batidaPonto.saida'=>null
+        ]);
     }
 
     //    /**
