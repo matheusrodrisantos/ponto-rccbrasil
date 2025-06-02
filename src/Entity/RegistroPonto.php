@@ -7,6 +7,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\trait\TimestampableTrait;
 use App\Entity\ValueObject\BatidaPonto;
+use App\Event\EventInterface;
+use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 
@@ -31,6 +33,10 @@ class RegistroPonto
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?DateTimeImmutable $data = null;
 
+
+    /** @var EventInterface[] */
+    private array $domainEvents = [];
+
     public function __construct(BatidaPonto $batidaPonto)
     {
         $this->batidaPonto = $batidaPonto;
@@ -49,7 +55,7 @@ class RegistroPonto
     public function baterPonto(DateTimeImmutable $dataHora): void
     {
         $this->batidaPonto = $this->batidaPonto->registrar($dataHora);
-        $this->data=$dataHora;
+        $this->data = $dataHora;
     }
 
     public function pontoCompleto(): bool
@@ -89,5 +95,25 @@ class RegistroPonto
         $this->data = $data;
 
         return $this;
+    }
+
+    public function saldoPeriodo(): ?DateInterval
+    {
+        return $this->batidaPonto->calcularSaldo();
+    }
+
+    public function adicionarEventoDeDominio(EventInterface $event): void
+    {
+        $this->domainEvents[] = $event;
+    }
+
+    /**
+     * @return EventInterface[]
+     */
+    public function releaseEvents(): array
+    {
+        $events = $this->domainEvents;
+        $this->domainEvents = [];
+        return $events;
     }
 }

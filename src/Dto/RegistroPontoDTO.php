@@ -18,4 +18,12 @@ class RegistroPontoDTO
 
     public ?string $entrada = null;
     public ?string $saida = null;
+
+
+    public ?string $entrada1 = null;
+    public ?string $saida1 = null;
+    public ?string $entrada2 = null;
+    public ?string $saida2 = null;
+    public ?string $entrada3 = null;
+    public ?string $saida3 = null;
 }

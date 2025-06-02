@@ -4,7 +4,7 @@ namespace App\Entity\ValueObject;
 
 use App\Exception\RegraDeNegocioFuncionarioException;
 use App\Exception\RegraDeNegocioRegistroPontoException;
-
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 
@@ -15,12 +15,13 @@ use Doctrine\DBAL\Types\Types;
 class BatidaPonto
 {
 
-    #[ORM\Column(name: 'entrada', type: Types::TIME_IMMUTABLE, nullable:true)]
+    #[ORM\Column(name: 'entrada', type: Types::TIME_IMMUTABLE, nullable: true)]
     private ?DateTimeInterface $entrada;
 
-    #[ORM\Column(name: 'saida', type: Types::TIME_IMMUTABLE, nullable:true)]
+    #[ORM\Column(name: 'saida', type: Types::TIME_IMMUTABLE, nullable: true)]
     private ?DateTimeInterface $saida;
 
+    private ?DateInterval $saldo = null;
 
     public function __construct(?DateTimeImmutable $entrada = null, ?DateTimeImmutable $saida = null)
     {
@@ -63,4 +64,15 @@ class BatidaPonto
     {
         return $this->entrada !== null && $this->saida !== null;
     }
+
+    public function calcularSaldo(): ?DateInterval
+    {
+
+        if ($this->entrada !== null && $this->saida !== null) {
+            $this->saldo = $this->entrada->diff($this->saida);
+        }
+
+        return $this->saldo;
+    }
+    
 }

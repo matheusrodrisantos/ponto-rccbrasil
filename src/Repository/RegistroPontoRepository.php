@@ -29,11 +29,12 @@ class RegistroPontoRepository extends ServiceEntityRepository
 
     public function procurarPorPontoAberto(DateTimeImmutable $data, Funcionario $funcionario):? RegistroPonto{
         
-        return $this->findOneBy([
+        return $this->findOneBy(criteria:[
             'data' => $data,
-            'funcionario' => $funcionario,
-            'batidaPonto.saida'=>null
-        ]);
+            'funcionario' => $funcionario
+        ],orderBy:[
+            'id'=>'desc']
+        );
     }
 
     //    /**

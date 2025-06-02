@@ -17,66 +17,77 @@ class SaldoHoras
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTime $horasTrabalhadas = null;
+    #[ORM\Column(type: Types::TIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $horasTrabalhadas = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTime $saldo = null;
+    #[ORM\Column(type: Types::TIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $saldo = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $data = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?\DateTimeImmutable $data = null;
 
     #[ORM\ManyToOne(inversedBy: 'saldoHoras')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Funcionario $funcionario = null;
 
-    public function getId(): ?int
+    public function id(): ?int
     {
         return $this->id;
     }
 
-    public function getHorasTrabalhadas(): ?\DateTime
+    public function horasTrabalhadas(): ?\DateTimeImmutable
     {
         return $this->horasTrabalhadas;
     }
 
-    public function setHorasTrabalhadas(?\DateTime $horasTrabalhadas): static
+    public function ajustarHorasTrabalhadas(?\DateTimeImmutable $horasTrabalhadas): static
     {
         $this->horasTrabalhadas = $horasTrabalhadas;
 
         return $this;
     }
 
-    public function getSaldo(): ?\DateTime
+    public function saldoDiario(): ?\DateTimeImmutable
     {
         return $this->saldo;
     }
 
-    public function setSaldo(?\DateTime $saldo): static
+    public function ajustarSaldo(?\DateTimeImmutable $saldo): static
     {
         $this->saldo = $saldo;
 
         return $this;
     }
 
-    public function getData(): ?\DateTime
+    public function adicionarSaldo(?\DateInterval $saldo): static
+    {
+        if ($this->saldo === null) {
+            $this->saldo = new \DateTimeImmutable();
+        }
+
+        $this->saldo = $this->saldo->add($saldo);
+
+        return $this;
+    }
+
+    public function saldoData(): ?\DateTimeImmutable
     {
         return $this->data;
     }
 
-    public function setData(\DateTime $data): static
+    public function ajustarData(\DateTimeImmutable $data): static
     {
         $this->data = $data;
 
         return $this;
     }
 
-    public function getFuncionario(): ?Funcionario
+    public function funcionario(): ?Funcionario
     {
         return $this->funcionario;
     }
 
-    public function setFuncionario(?Funcionario $funcionario): static
+    public function atribuirFuncionario(?Funcionario $funcionario): static
     {
         $this->funcionario = $funcionario;
 
