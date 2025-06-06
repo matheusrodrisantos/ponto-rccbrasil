@@ -30,6 +30,7 @@ class PontoCompletoListener
         $saldoHoras->adicionarHorasTrabalhadas($registroPonto->saldoPeriodo());
         $saldoHoras->ajustarData($registroPonto->data());
         $saldoHoras->atribuirFuncionario($registroPonto->funcionario());
+        
 
         $jornadaDiariaSegundos = $saldoHoras->funcionario()->jornadaDiariaSegundos();
         
