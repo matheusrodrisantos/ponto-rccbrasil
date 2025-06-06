@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sevice\RegrasDepartamento;
+namespace App\Service\RegrasDepartamento;
 
 use App\Dto\DepartamentoDTO;
 

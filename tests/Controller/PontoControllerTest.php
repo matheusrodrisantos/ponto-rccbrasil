@@ -6,10 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class PontoControllerTest extends WebTestCase
 {
-    public function testIndex(): void
+    public function tesDtIndex(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/ponto');
+        $client->request(method:'GET', uri:'/ponto',
+        server: ['CONTENT_TYPE' => 'application/json', 'accept' => 'application/json']
+    );
 
         self::assertResponseIsSuccessful();
     }
@@ -26,7 +28,7 @@ final class PontoControllerTest extends WebTestCase
         $client->request(
             method: 'POST',
             uri: 'api/ponto',
-            server: ['CONTENT_TYPE' => 'application/json'],
+            server: ['CONTENT_TYPE' => 'application/json', 'accept' => 'application/json'],
             content: json_encode($payload)
         );
 

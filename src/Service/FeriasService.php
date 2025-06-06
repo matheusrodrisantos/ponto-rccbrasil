@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sevice;
+namespace App\Service;
 
 use App\Dto\FeriasDTO;
 use App\Entity\Ferias;
@@ -9,9 +9,9 @@ use App\Factory\FeriasFactory;
 use App\Repository\FeriasRepository;
 use App\Repository\FuncionarioRepository;
 use App\Service\RegrasFerias\SupervisorFeriasRegras;
-use App\Sevice\RegrasFerias\CadeiaRegras;
-use App\Sevice\RegrasFerias\FuncionarioFeriasRegras;
-use App\Sevice\RegrasFerias\PeriodoFeriasRegras;
+use App\Service\RegrasFerias\CadeiaRegras;
+use App\Service\RegrasFerias\FuncionarioFeriasRegras;
+use App\Service\RegrasFerias\PeriodoFeriasRegras;
 use DateTimeImmutable;
 
 

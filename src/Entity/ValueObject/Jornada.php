@@ -8,10 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Embeddable]
 class Jornada
 {
-    #[ORM\Column(name: 'jornada_diaria', type: 'integer')]
+    #[ORM\Column(name: 'jornada_diaria_segundos', type: 'integer')]
     private int $jornadaDiaria;
 
-    #[ORM\Column(name: 'jornada_semanal', type: 'integer')]
+    #[ORM\Column(name: 'jornada_semanal_segundos', type: 'integer')]
     private int $jornadaSemanal;
 
     public function __construct(string $jornadaDiaria, string $jornadaSemanal)

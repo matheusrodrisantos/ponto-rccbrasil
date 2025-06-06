@@ -107,6 +107,11 @@ class RegistroPonto
         $this->domainEvents[] = $event;
     }
 
+    public function getBatidaPonto(): BatidaPonto
+    {
+        return $this->batidaPonto;
+    }
+
     /**
      * @return EventInterface[]
      */

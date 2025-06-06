@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sevice\RegrasFuncionario;
+namespace App\Service\RegrasFuncionario;
 
 use App\Dto\FuncionarioDTO;
 use App\Exception\RegraDeNegocioFuncionarioException;

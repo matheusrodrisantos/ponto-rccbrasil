@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Sevice\RegrasFuncionario;
+namespace App\Service\RegrasDepartamento;
 
-use App\Dto\FuncionarioDTO;
+use App\Dto\DepartamentoDTO;
 
-class ExecutorRegrasFuncionario
+class ExecutorCadeiaRegrasDepartamento
 {
 
     /**
-     * @var FuncionarioRegrasInterface[]
+     * @var RegrasDepartamentoInterface[]
      */
     private array $regras = [];
 
@@ -19,12 +19,12 @@ class ExecutorRegrasFuncionario
         }
     }
 
-    public function adicionarRegra(FuncionarioRegrasInterface $regra): void
+    public function adicionarRegra(RegrasDepartamentoInterface $regra): void
     {
         $this->regras[] = $regra;
     }
 
-    public function validar(FuncionarioDTO $dto): void
+    public function validar(DepartamentoDTO $dto): void
     {
         foreach ($this->regras as $regra) {
             $regra->validar($dto);

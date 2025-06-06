@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Entity\trait\TimestampableTrait;
+use App\Entity\ValueObject\TempoTrabalhado;
 use App\Repository\SaldoHorasRepository;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,11 +20,11 @@ class SaldoHoras
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $horasTrabalhadas = null;
+    #[ORM\Embedded(class: TempoTrabalhado::class, columnPrefix: 'horas_trabalhadas_')]
+    private TempoTrabalhado $horasTrabalhadas;
 
-    #[ORM\Column(type: Types::TIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $saldo = null;
+    #[ORM\Embedded(class: TempoTrabalhado::class, columnPrefix: 'saldo_')]
+    private TempoTrabalhado $saldo;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $data = null;
@@ -30,58 +33,79 @@ class SaldoHoras
     #[ORM\JoinColumn(nullable: false)]
     private ?Funcionario $funcionario = null;
 
+    public function __construct()
+    {
+        $this->horasTrabalhadas = new TempoTrabalhado();
+        $this->saldo = new TempoTrabalhado();
+    }
+
     public function id(): ?int
     {
         return $this->id;
     }
 
-    public function horasTrabalhadas(): ?\DateTimeImmutable
+
+    public function adicionarHorasTrabalhadas(DateInterval $horasTrabalhadas): static
+    {
+        $this->horasTrabalhadas = $this->horasTrabalhadas->adicionar($horasTrabalhadas);
+        return $this;
+    }
+
+    public function getHorasTrabalhadasSegundos(): int
+    {
+        return $this->horasTrabalhadas->getSegundos();
+    }
+
+    public function getHorasTrabalhadas(): TempoTrabalhado
     {
         return $this->horasTrabalhadas;
     }
 
-    public function ajustarHorasTrabalhadas(?\DateTimeImmutable $horasTrabalhadas): static
+    public function horasTrabalhadasFormatado(): string
     {
-        $this->horasTrabalhadas = $horasTrabalhadas;
-
-        return $this;
+        return $this->horasTrabalhadas->formatado();
     }
 
-    public function saldoDiario(): ?\DateTimeImmutable
+
+
+    public function saldoFormatado(): string
+    {
+        return $this->saldo->formatado();
+    }
+
+    public function saldo(): TempoTrabalhado
     {
         return $this->saldo;
     }
 
-    public function ajustarSaldo(?\DateTimeImmutable $saldo): static
+    public function saldoFormatadoSegundos(): int
     {
-        $this->saldo = $saldo;
+        return $this->saldo->getSegundos();
+    }
 
+    public function recalcularSaldo(int $valor): static
+    {
+        $diferenca = $this->getHorasTrabalhadasSegundos() - $valor ;
+        $this->saldo = $this->saldo->alterar($diferenca);
         return $this;
     }
 
-    public function adicionarSaldo(?\DateInterval $saldo): static
-    {
-        if ($this->saldo === null) {
-            $this->saldo = new \DateTimeImmutable();
-        }
-
-        $this->saldo = $this->saldo->add($saldo);
-
-        return $this;
-    }
-
-    public function saldoData(): ?\DateTimeImmutable
+    /** data do saldo  */
+    public function data(): ?DateTimeImmutable
     {
         return $this->data;
     }
 
-    public function ajustarData(\DateTimeImmutable $data): static
+    public function ajustarData(DateTimeImmutable $data): static
     {
         $this->data = $data;
 
         return $this;
     }
 
+    /**
+     * funcionario  
+     */
     public function funcionario(): ?Funcionario
     {
         return $this->funcionario;

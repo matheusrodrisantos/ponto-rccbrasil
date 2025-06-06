@@ -16,6 +16,15 @@ class SaldoHorasRepository extends ServiceEntityRepository
         parent::__construct($registry, SaldoHoras::class);
     }
 
+    public function create(SaldoHoras $saldoHoras): SaldoHoras
+    {
+        $em = $this->getEntityManager();
+        $em->persist(object: $saldoHoras);
+        $em->flush();
+
+        return $saldoHoras;
+    }
+
     //    /**
     //     * @return SaldoHoras[] Returns an array of SaldoHoras objects
     //     */

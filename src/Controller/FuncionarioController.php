@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Dto\FuncionarioDTO;
-use App\Sevice\FuncionarioService;
-use App\Sevice\ResponseService;
+use App\Service\FuncionarioService;
+use App\Service\ResponseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;

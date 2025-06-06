@@ -4,7 +4,7 @@ namespace App\Service\RegrasFerias;
 
 use App\Dto\FeriasDTO;
 use App\Repository\FuncionarioRepository;
-use App\Sevice\RegrasFerias\RegrasFeriasInterface;
+use App\Service\RegrasFerias\RegrasFeriasInterface;
 use InvalidArgumentException;
 
 class SupervisorFeriasRegras implements RegrasFeriasInterface

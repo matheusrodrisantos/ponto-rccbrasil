@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Sevice;
+namespace App\Service;
 
 use App\Dto\RegistroPontoDTO;
+use App\Entity\Funcionario;
 use App\Entity\RegistroPonto;
 use App\Entity\ValueObject\BatidaPonto;
-use App\Event\EventPublisher;
-use App\Event\PontoCompletoEvent;
+use App\Event\{EventPublisher, PontoCompletoEvent};
 use App\Exception\RegraDeNegocioFuncionarioException;
 use App\Factory\RegistroPontoFactory;
 use App\Repository\FuncionarioRepository;
@@ -34,30 +34,54 @@ class RegistroPontoService
             throw new RegraDeNegocioFuncionarioException("Funcionario não encontrado");
         }
 
-        $dataHora = new DateTimeImmutable(
-            timezone: new DateTimeZone("America/Sao_Paulo")
-        );
+        $dataHora = BatidaPonto::agora();
 
         $registroPonto = $this->registroPontoRepository->procurarPorPontoAberto($dataHora, $funcionario);
-        
-        if ($registroPonto == null || $registroPonto->pontoCompleto()) {
-            if ($registroPonto->pontoCompleto() !== null) {
-                $registroPonto->adicionarEventoDeDominio(new PontoCompletoEvent($registroPonto));
-                $this->eventPublisher->publish($registroPonto);
-            }
 
-            $batidaHora = new BatidaPonto();
-            $registroPonto = new RegistroPonto(batidaPonto: $batidaHora);
-            $registroPonto->atribuirFuncionario($funcionario);
+        if ($this->primeiroRegistroPontoDoDia($registroPonto)) {
+            $registroPonto = $this->inicializarPonto($funcionario);
         }
 
-        //uma regra é que o funcionario não pode bater mais de 10:00:00
+        if ($this->periodoCompleto($registroPonto)) {
+            $registroPonto = $this->inicializarPonto($funcionario);
+        }
+
+        $batidaAnterior = $registroPonto->getBatidaPonto();
+
         $registroPonto->baterPonto(dataHora: $dataHora);
 
         $this->registroPontoRepository->create($registroPonto);
 
+        if ($batidaAnterior->estavaAberto() && $registroPonto->pontoCompleto()) {
+            $this->publicarEventoDePontoCompleto($registroPonto);
+        }
+
         $dto = $this->registroPontoFactory->createDto($registroPonto);
 
         return $dto;
+    }
+
+    private function primeiroRegistroPontoDoDia(?RegistroPonto $registroPonto): bool
+    {
+        return $registroPonto == null;
+    }
+
+    private function periodoCompleto(?RegistroPonto $registroPonto): bool
+    {
+        return $registroPonto?->pontoCompleto();
+    }
+
+    private function inicializarPonto(Funcionario $funcionario): RegistroPonto
+    {
+        $batidaPonto = new BatidaPonto();
+        $registroPonto = new RegistroPonto(batidaPonto: $batidaPonto);
+        $registroPonto->atribuirFuncionario($funcionario);
+        return $registroPonto;
+    }
+
+    private function publicarEventoDePontoCompleto(RegistroPonto $registroPonto): void
+    {
+        $registroPonto->adicionarEventoDeDominio(new PontoCompletoEvent($registroPonto));
+        $this->eventPublisher->publish($registroPonto);
     }
 }

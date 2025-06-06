@@ -130,6 +130,11 @@ class Funcionario
         return $this->jornada->getJornadaDiaria();
     }
 
+    public function jornadaDiariaSegundos(): int
+    {
+        return $this->jornada->getJornadaDiariaSegundos();
+    }
+
     public function getJornadaSemanal(): string
     {
         return $this->jornada->getJornadaSemanal();
@@ -245,7 +250,7 @@ class Funcionario
     {
         if (!$this->saldoHoras->contains($saldoHora)) {
             $this->saldoHoras->add($saldoHora);
-            $saldoHora->setFuncionario($this);
+            $saldoHora->atribuirFuncionario($this);
         }
 
         return $this;
@@ -255,8 +260,8 @@ class Funcionario
     {
         if ($this->saldoHoras->removeElement($saldoHora)) {
             // set the owning side to null (unless already changed)
-            if ($saldoHora->getFuncionario() === $this) {
-                $saldoHora->setFuncionario(null);
+            if ($saldoHora->funcionario() === $this) {
+                $saldoHora->atribuirFuncionario(null);
             }
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sevice\RegrasFerias;
+namespace App\Service\RegrasFerias;
 
 use App\Dto\FeriasDTO;
 

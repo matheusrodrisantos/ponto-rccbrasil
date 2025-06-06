@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Dto\RegistroPontoDTO;
-use App\Sevice\RegistroPontoService;
-use App\Sevice\ResponseService;
+use App\Service\RegistroPontoService;
+use App\Service\ResponseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Dto\FeriasDTO;
 
-use App\Sevice\FeriasService;
-use App\Sevice\ResponseService;
+use App\Service\FeriasService;
+use App\Service\ResponseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

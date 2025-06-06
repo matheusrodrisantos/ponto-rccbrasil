@@ -7,7 +7,7 @@ use App\Exception\RegraDeNegocioRegistroPontoException;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
-
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 
@@ -16,10 +16,10 @@ class BatidaPonto
 {
 
     #[ORM\Column(name: 'entrada', type: Types::TIME_IMMUTABLE, nullable: true)]
-    private ?DateTimeInterface $entrada;
+    private ?DateTimeImmutable $entrada;
 
     #[ORM\Column(name: 'saida', type: Types::TIME_IMMUTABLE, nullable: true)]
-    private ?DateTimeInterface $saida;
+    private ?DateTimeImmutable $saida;
 
     private ?DateInterval $saldo = null;
 
@@ -44,6 +44,7 @@ class BatidaPonto
             if ($hora < $this->entrada) {
                 throw new RegraDeNegocioRegistroPontoException('Saída não pode ser antes da entrada.');
             }
+            dump($this->entrada);
             return new self($this->entrada, $hora);
         }
 
@@ -52,12 +53,17 @@ class BatidaPonto
 
     public function entrada(): ?string
     {
-        return $this->entrada->format('H:i:s');
+        return $this->entrada?->format('H:i:s');
     }
 
     public function saida(): ?string
     {
-        return $this->entrada->format('H:i:s');
+        return $this->saida?->format('H:i:s');
+    }
+
+    public function estavaAberto(): bool
+    {
+        return $this->entrada !== null && $this->saida === null;
     }
 
     public function completo(): bool
@@ -74,5 +80,10 @@ class BatidaPonto
 
         return $this->saldo;
     }
-    
+
+    public static function agora(): DateTimeImmutable
+    {
+        $agora = new DateTimeImmutable('now');
+        return new DateTimeImmutable('1970-01-01 ' . $agora->format('H:i:s'));
+    }
 }

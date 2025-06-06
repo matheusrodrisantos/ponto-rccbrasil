@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 trait TimestampableTrait
 {
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'datetime_immutable', nullable:true)]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'datetime_immutable', nullable:true)]
     private \DateTimeImmutable $updatedAt;
 
     #[ORM\PrePersist]

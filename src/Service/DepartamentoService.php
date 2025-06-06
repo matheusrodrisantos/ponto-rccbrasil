@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Sevice;
+namespace App\Service;
 
 use App\Dto\DepartamentoDTO;
 use App\Entity\Departamento;
 use App\Factory\DepartamentoFactory;
 use App\Repository\DepartamentoRepository;
-use App\Sevice\RegrasDepartamento\DepartamentoRegraNomeUnico;
-use App\Sevice\RegrasDepartamento\DepartamentoRegra;
-use App\Sevice\RegrasDepartamento\DepartamentoRegraSupervisorUnico;
-use App\Sevice\RegrasDepartamento\ExecutorCadeiaRegrasDepartamento;
+use App\Service\RegrasDepartamento\DepartamentoRegraNomeUnico;
+use App\Service\RegrasDepartamento\DepartamentoRegra;
+use App\Service\RegrasDepartamento\DepartamentoRegraSupervisorUnico;
+use App\Service\RegrasDepartamento\ExecutorCadeiaRegrasDepartamento;
 
 class DepartamentoService
 {

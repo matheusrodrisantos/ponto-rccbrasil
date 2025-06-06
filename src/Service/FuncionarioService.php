@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Sevice;
+namespace App\Service;
 
 use App\Dto\FuncionarioDTO;
 use App\Entity\Funcionario;
 use App\Factory\FuncionarioFactory;
 use App\Repository\FuncionarioRepository;
-use App\Sevice\RegrasFuncionario\ExecutorRegrasFuncionario;
-use App\Sevice\RegrasFuncionario\FuncionarioCpfUnico;
+use App\Service\RegrasFuncionario\ExecutorRegrasFuncionario;
+use App\Service\RegrasFuncionario\FuncionarioCpfUnico;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FuncionarioService
