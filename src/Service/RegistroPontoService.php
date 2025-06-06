@@ -12,7 +12,6 @@ use App\Factory\RegistroPontoFactory;
 use App\Repository\FuncionarioRepository;
 use App\Repository\RegistroPontoRepository;
 use DateTimeImmutable;
-use DateTimeZone;
 
 class RegistroPontoService
 {
@@ -25,8 +24,7 @@ class RegistroPontoService
     ) {}
 
     public function registrar(int $funcionarioID): RegistroPontoDTO
-    {
-        // TODO: Substituir busca por ID direto por busca baseada no usuário autenticado.
+    {    // TODO: Substituir busca por ID direto por busca baseada no usuário autenticado.
         //uma regra tem que ter um funcionario e ele deve estar ativo
         $funcionario = $this->funcionarioRepository->buscarFuncionarioAtivoPorId(id: $funcionarioID);
 
@@ -34,7 +32,7 @@ class RegistroPontoService
             throw new RegraDeNegocioFuncionarioException("Funcionario não encontrado");
         }
 
-        $dataHora = BatidaPonto::agora();
+        $dataHora = new DateTimeImmutable();
 
         $registroPonto = $this->registroPontoRepository->procurarPorPontoAberto($dataHora, $funcionario);
 

@@ -6,8 +6,6 @@ use App\Exception\RegraDeNegocioFuncionarioException;
 use App\Exception\RegraDeNegocioRegistroPontoException;
 use DateInterval;
 use DateTimeImmutable;
-use DateTimeInterface;
-use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 
@@ -81,8 +79,4 @@ class BatidaPonto
         return $this->saldo;
     }
 
-    public static function agora(): DateTimeImmutable
-    {
-        return new DateTimeImmutable(datetime: 'now', timezone:new DateTimeZone("America/Sao_Paulo"));
-    }
 }
