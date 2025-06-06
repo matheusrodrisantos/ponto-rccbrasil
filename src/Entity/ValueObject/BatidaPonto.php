@@ -15,10 +15,10 @@ use Doctrine\DBAL\Types\Types;
 class BatidaPonto
 {
 
-    #[ORM\Column(name: 'entrada', type: Types::TIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(name: 'entrada', type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $entrada;
 
-    #[ORM\Column(name: 'saida', type: Types::TIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(name: 'saida', type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $saida;
 
     private ?DateInterval $saldo = null;
@@ -83,7 +83,6 @@ class BatidaPonto
 
     public static function agora(): DateTimeImmutable
     {
-        $agora = new DateTimeImmutable('now');
-        return new DateTimeImmutable('1970-01-01 ' . $agora->format('H:i:s'));
+        return new DateTimeImmutable(datetime: 'now', timezone:new DateTimeZone("America/Sao_Paulo"));
     }
 }
