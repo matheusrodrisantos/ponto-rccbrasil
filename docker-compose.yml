@@ -1,0 +1,32 @@
+services:
+  ponto_rccbrasil:
+    container_name: symfony_ponto_rccbrasil
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www/
+    cpus: 1
+    mem_limit: 512M
+    networks:
+      - ponto_rccbrasil
+    volumes:
+      - ./:/var/www
+
+  ponto_rccbrasil-nginx:
+    container_name: nginx_ponto_rccbrasil
+    image: nginx:alpine
+    restart: unless-stopped
+    cpus: 1
+    mem_limit: 128M
+    ports:
+        - 80:80
+    volumes:
+        - ./:/var/www
+        - ./docker/nginx/:/etc/nginx/conf.d/
+    networks:
+        - ponto_rccbrasil
+    
+networks:
+  ponto_rccbrasil:
+    driver: bridge
