@@ -1,6 +1,8 @@
 <?php
 namespace App\Service\RegrasCalculaSaldo;
 
-class ExecutorRegrasRegistroPonto{
+use Monolog\Handler\Handler;
+
+class ExecutorRegrasRegistroPonto extends Handler{
     
 }

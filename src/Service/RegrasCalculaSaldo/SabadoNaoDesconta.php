@@ -5,7 +5,7 @@ namespace App\Service\RegrasCalculaSaldo;
 use App\Dto\FuncionarioDTO;
 use DateTimeImmutable;
 
-class RegrasFinalSemana implements RegistroPontoInterface
+class SabadoNaoDesconta 
 {
-    public function validar(FuncionarioDTO $funcionarioDTO): void {}
+    
 }
