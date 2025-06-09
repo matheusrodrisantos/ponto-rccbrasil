@@ -3,6 +3,6 @@
 namespace App\Service\RegrasCalculaSaldo;
 
 
-class SabadoNaoDesconta extends BaseHandler{
+class SabadoNaoDesconta extends BaseRegrasCalculoSaldo{
     
 }

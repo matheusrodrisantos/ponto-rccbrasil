@@ -1,40 +1,76 @@
-<?php 
+<?php
 namespace App\Entity\ValueObject;
 
-class DiaSemana
+use DateTimeInterface;
+use InvalidArgumentException;
+
+final class DiaSemana
 {
-    private int $diaSemana;
+    public const DIAS = [
+        0 => 'domingo',
+        1 => 'segunda',
+        2 => 'terça',
+        3 => 'quarta',
+        4 => 'quinta',
+        5 => 'sexta',
+        6 => 'sábado',
+    ];
 
-    public function __construct(int $diaSemana)
+    private readonly string $nome;
+
+    public function __construct(DateTimeInterface $data)
     {
-        if ($diaSemana < 0 || $diaSemana > 6) {
-            throw new \InvalidArgumentException('Dia da semana deve ser entre 0 (Domingo) e 6 (Sábado).');
+        $indice = (int) $data->format('w');
+
+        if (! array_key_exists($indice, self::DIAS)) {
+            throw new InvalidArgumentException("Dia da semana inválido: $indice");
         }
-        $this->diaSemana = $diaSemana;
+
+        $this->nome = self::DIAS[$indice];
     }
 
-    public function getDiaSemana(): int
+    public function nome(): string
     {
-        return $this->diaSemana;
+        return $this->nome;
     }
 
-    public function isDomingo(): bool
+    /**
+     * ehFimDeSemana
+     *
+     * @return bool
+     */
+    public function ehFimDeSemana(): bool
     {
-        return $this->diaSemana === 0;
+        return in_array($this->nome, ['sábado', 'domingo'], true);
     }
 
-    public function isSabado(): bool
+    public function ehSabado(): bool
     {
-        return $this->diaSemana === 6;
+        return $this->nome == "sábado";
     }
 
-    public static function hojeEhDomingo(): bool
+    /**
+     * ehDomingo
+     *
+     * @return bool
+     */
+    public function ehDomingo(): bool
     {
-        return (new self((int) date('w')))->isDomingo();
+        return $this->nome == "domingo";
     }
 
-    public static function hojeEhSabado(): bool
+    public function ehDiaUtil(): bool
     {
-        return (new self((int) date('w')))->isSabado();
+        return ! $this->ehFimDeSemana();
+    }
+
+    public function igualA(DiaSemana $outro): bool
+    {
+        return $this->nome === $outro->nome;
+    }
+
+    public function __toString(): string
+    {
+        return $this->nome;
     }
 }

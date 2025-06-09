@@ -4,7 +4,7 @@ namespace App\Service\RegrasCalculaSaldo;
 
 use App\Entity\Funcionario;
 
-abstract class BaseRegrasCalculoSaldoInterface implements RegrasCalculoSaldoInterface
+abstract class BaseRegrasCalculoSaldo implements RegrasCalculoSaldoInterface
 {
 
     protected $proximo;
