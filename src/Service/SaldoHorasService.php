@@ -31,6 +31,7 @@ class SaldoHorasService
         
         $jornadaDiariaSegundos = $saldoHoras->funcionario()->jornadaDiariaSegundos();
         
+        //TODO implementar regra de calculo de saldo de horas chain of responsibility
         $saldoHoras->recalcularSaldo($jornadaDiariaSegundos);
 
         $this->saldoHorasRepository->create($saldoHoras);
