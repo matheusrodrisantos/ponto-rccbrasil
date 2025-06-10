@@ -4,13 +4,13 @@ namespace App\Service\RegrasCalculaSaldo;
 
 use App\Entity\SaldoHoras;
 use App\Entity\ValueObject\DiaSemana;
+use DateTimeImmutable;
 
-class DomingoDobraSaldoENaoDesconta extends BaseRegrasCalculoSaldo
+class FeriadoSabadoSextaMeioPeriodo extends BaseRegrasCalculoSaldo
 {
     public function calcular(SaldoHoras $saldoHoras): ?SaldoHoras
     {
         if ($this->podeCalcular()) {
-
             $saldoHoras->adicionarHorasTrabalhadasSegundos(
                 $saldoHoras->getHorasTrabalhadasSegundos()
             );
@@ -21,9 +21,14 @@ class DomingoDobraSaldoENaoDesconta extends BaseRegrasCalculoSaldo
         }
         return parent::calcular($saldoHoras);
     }
+
     private function podeCalcular(): bool
     {
-        $diaSemana = new DiaSemana($this->data);
-        return $diaSemana->ehDomingo();
+        //TODO implementar dominios feriados
+        $diaSemana = new DiaSemana(new DateTimeImmutable());
+        if ($diaSemana->ehSexta()) {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,14 +1,11 @@
 <?php
 namespace App\Service\RegrasCalculaSaldo;
 
-use App\Dto\FuncionarioDTO;
-use App\Entity\Funcionario;
+use App\Entity\SaldoHoras;
 
 interface RegrasCalculoSaldoInterface
 {
-    //public function podeCalcular():bool;
-
     public function proximo(RegrasCalculoSaldoInterface $handler):RegrasCalculoSaldoInterface;
 
-    public function calcular(Funcionario $funcionario);
+    public function calcular(SaldoHoras $saldoHoras): ?SaldoHoras;
 }

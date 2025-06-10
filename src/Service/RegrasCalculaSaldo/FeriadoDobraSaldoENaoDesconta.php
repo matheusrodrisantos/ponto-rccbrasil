@@ -1,26 +1,32 @@
 <?php
 namespace App\Service\RegrasCalculaSaldo;
 
-use App\Entity\Funcionario;
+use App\Entity\SaldoHoras;
 use App\Entity\ValueObject\DiaSemana;
-use DateTimeImmutable;
 
 class FeriadoDobraSaldoENaoDesconta extends BaseRegrasCalculoSaldo
 {
-    public function calcular(Funcionario $funcionario)
+    public function calcular(SaldoHoras $saldoHoras): ?SaldoHoras
     {
+        if ($this->podeCalcular()) {
 
-        if($this->podeCalcular()){
-            //TODO calcula saldo para o domingo
+            $saldoHoras->adicionarHorasTrabalhadasSegundos(
+                $saldoHoras->getHorasTrabalhadasSegundos()
+            );
+
+            $saldoHoras->recalcularSaldo(jornadaDiariaObrigatoria: 0);
+
+            return $saldoHoras;
         }
-        // Chama o próximo manipulador na cadeia, se existir
-        return parent::calcular($funcionario);
+        return parent::calcular($saldoHoras);
     }
-    public function podeCalcular(): bool
+    private function podeCalcular(): bool
     {
-       
-
-        return false; 
+        //TODO implementar lógica para verificar se a data é um feriado
+        // Por enquanto, vamos assumir que a data é um feriado se for um domingo
+        // Isso deve ser substituído por uma verificação real de feriados
+        // Exemplo: verificar se a data está em uma lista de feriados
+        $diaSemana = new DiaSemana($this->data);
+        return $diaSemana->ehDomingo();
     }
-
 }

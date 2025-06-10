@@ -89,9 +89,9 @@ class SaldoHoras
         return $this->saldo->getSegundos();
     }
 
-    public function recalcularSaldo(int $valor): static
+    public function recalcularSaldo(int $jornadaDiariaObrigatoria): static
     {
-        $diferenca = $this->getHorasTrabalhadasSegundos() - $valor ;
+        $diferenca = $this->getHorasTrabalhadasSegundos() - $jornadaDiariaObrigatoria ;
         $this->saldo = $this->saldo->alterar($diferenca);
         return $this;
     }

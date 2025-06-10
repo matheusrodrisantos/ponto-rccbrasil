@@ -73,4 +73,29 @@ final class DiaSemana
     {
         return $this->nome;
     }
+
+    public function ehSexta(): bool
+    {
+        return $this->nome === 'sexta';
+    }
+
+    public function ehSegunda(): bool
+    {
+        return $this->nome === 'segunda';
+    }
+
+    public function ehTerca(): bool
+    {
+        return $this->nome === 'terça';
+    }
+
+    public function ehQuarta(): bool
+    {
+        return $this->nome === 'quarta';
+    }
+
+    public function ehQuinta(): bool
+    {
+        return $this->nome === 'quinta';
+    }
 }
