@@ -24,6 +24,11 @@ class TempoTrabalhado{
         return new self($this->segundos + $segundos);
     }
 
+    public function adicionarSegundos(int $segundos): self
+    {
+        return new self($this->segundos + $segundos);
+    }
+
     public function alterar(int $valor):self {        
         return new self($valor);
     }

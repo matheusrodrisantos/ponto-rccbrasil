@@ -28,7 +28,7 @@ class SaldoHoras
     private TempoTrabalhado $saldo;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $data = null;
+    private ?DateTimeImmutable $data = null;
 
     #[ORM\ManyToOne(inversedBy: 'saldoHoras')]
     #[ORM\JoinColumn(nullable: false)]
@@ -52,6 +52,11 @@ class SaldoHoras
         return $this;
     }
 
+    public function adicionarHorasTrabalhadasSegundos(int $horasTrabalhadas): static
+    {
+        $this->horasTrabalhadas = $this->horasTrabalhadas->adicionarSegundos($horasTrabalhadas);
+        return $this;
+    }
     public function getHorasTrabalhadasSegundos(): int
     {
         return $this->horasTrabalhadas->getSegundos();
@@ -117,5 +122,14 @@ class SaldoHoras
         $this->funcionario = $funcionario;
 
         return $this;
+    }
+
+    public function jornadaDiariaSegundosFuncionario(): ?int
+    {
+        if ($this->funcionario === null) {
+            throw new \LogicException('Funcionario não atribuído ao saldo de horas.');
+        }
+
+        return $this->funcionario->jornadaDiariaSegundos();
     }
 }

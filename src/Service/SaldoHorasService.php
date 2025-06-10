@@ -29,7 +29,7 @@ class SaldoHorasService
 
         $saldoHoras->atribuirFuncionario($registroPonto->funcionario());
         
-        $jornadaDiariaSegundos = $saldoHoras->funcionario()->jornadaDiariaSegundos();
+        $jornadaDiariaSegundos = $saldoHoras->jornadaDiariaSegundosFuncionario();
         
         //TODO implementar regra de calculo de saldo de horas chain of responsibility
         $saldoHoras->recalcularSaldo($jornadaDiariaSegundos);
