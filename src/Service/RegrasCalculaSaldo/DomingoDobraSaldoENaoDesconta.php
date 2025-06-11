@@ -11,11 +11,11 @@ class DomingoDobraSaldoENaoDesconta extends BaseRegrasCalculoSaldo
     {
         if ($this->podeCalcular()) {
 
-            $saldoHoras->adicionarHorasTrabalhadasSegundos(
-                $saldoHoras->getHorasTrabalhadasSegundos()
-            );
+            $horas = $saldoHoras->getHorasTrabalhadasSegundos();
 
-            $saldoHoras->recalcularSaldo(jornadaDiariaObrigatoria: 0);
+            $saldoHoras->recalcularSaldo(jornadaDiariaObrigatoria: -$horas);
+
+            $saldoHoras->setObeservacao(obeservacao:'Saldo dobrado por ser domingo');
 
             return $saldoHoras;
         }

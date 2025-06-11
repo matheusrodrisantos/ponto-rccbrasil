@@ -10,6 +10,9 @@ class SabadoNaoDesconta extends BaseRegrasCalculoSaldo
     public function calcular(SaldoHoras $saldoHoras): ?SaldoHoras
     {
         if ($this->podeCalcular()) {
+
+            $saldoHoras->setObeservacao(obeservacao: 'Saldo não descontado por ser sábado');
+
             return $saldoHoras->recalcularSaldo(jornadaDiariaObrigatoria: 0);
         }
 

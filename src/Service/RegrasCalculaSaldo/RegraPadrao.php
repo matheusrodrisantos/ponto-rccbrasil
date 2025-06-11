@@ -11,6 +11,10 @@ class RegraPadrao extends BaseRegrasCalculoSaldo
         $saldoHoras->recalcularSaldo(jornadaDiariaObrigatoria: 
             $saldoHoras->jornadaDiariaSegundosFuncionario()
         );
+
+        $saldoHoras->setObeservacao(
+            obeservacao:"Saldo recalculado com base na jornada diária obrigatória do funcionário."
+        );
         return $saldoHoras;
     }
     

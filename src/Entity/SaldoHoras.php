@@ -27,6 +27,9 @@ class SaldoHoras
     #[ORM\Embedded(class: TempoTrabalhado::class, columnPrefix: 'saldo_')]
     private TempoTrabalhado $saldo;
 
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private string $obeservacao = '';
+
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?DateTimeImmutable $data = null;
 
@@ -131,5 +134,16 @@ class SaldoHoras
         }
 
         return $this->funcionario->jornadaDiariaSegundos();
+    }
+
+    public function setObeservacao(string $obeservacao): static
+    {
+        $this->obeservacao = $obeservacao;
+        return $this;
+    }
+    
+    public function obeservacao(): string
+    {
+        return $this->obeservacao;
     }
 }
