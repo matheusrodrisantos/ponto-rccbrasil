@@ -22,11 +22,4 @@ class CalculoSaldoService
         return $this->regraDomingo->calcular($saldoHoras);
     }
 
-    public function verificarRegrasSaldos(SaldoHoras $saldoHoras): SaldoHoras
-    {
-        $this->regraDomingo->proximo($this->regraSabado);
-        $this->regraSabado->proximo($this->regraPadrao);
-        
-        return $this->regraDomingo->calcular($saldoHoras);
-    }
 }
