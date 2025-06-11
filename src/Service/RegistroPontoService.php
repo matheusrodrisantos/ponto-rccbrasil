@@ -11,6 +11,9 @@ use App\Exception\RegraDeNegocioFuncionarioException;
 use App\Factory\RegistroPontoFactory;
 use App\Repository\FuncionarioRepository;
 use App\Repository\RegistroPontoRepository;
+use App\Service\RegrasRegistroPonto\CadeiaRegrasRegistroPonto;
+use App\Service\RegrasRegistroPonto\RegraFuncionarioBloqueadoNaoRegistraPonto;
+use App\Service\RegrasRegistroPonto\RegraFuncionarioEmFeriasNaoRegistraPonto;
 use DateTimeImmutable;
 
 class RegistroPontoService
@@ -24,25 +27,19 @@ class RegistroPontoService
     ) {}
 
     public function registrar(int $funcionarioID): RegistroPontoDTO
-    {    // TODO: Substituir busca por ID direto por busca baseada no usuário autenticado.
-        //uma regra tem que ter um funcionario e ele deve estar ativo
+    {   // TODO: Substituir busca por ID direto por busca baseada no usuário autenticado.
+        //  uma regra tem que ter um funcionario e ele deve estar ativo
         $funcionario = $this->funcionarioRepository->buscarFuncionarioAtivoPorId(id: $funcionarioID);
 
         if ($funcionario == null) {
             throw new RegraDeNegocioFuncionarioException("Funcionario não encontrado");
         }
 
+        $this->aplicarRegrasNegocio(funcionario: $funcionario);
+
         $dataHora = new DateTimeImmutable();
 
-        $registroPonto = $this->registroPontoRepository->procurarPorPontoAberto($dataHora, $funcionario);
-
-        if ($this->primeiroRegistroPontoDoDia($registroPonto)) {
-            $registroPonto = $this->inicializarPonto($funcionario);
-        }
-
-        if ($this->periodoCompleto($registroPonto)) {
-            $registroPonto = $this->inicializarPonto($funcionario);
-        }
+        $registroPonto = $this->pegarOuCriarRegistroPonto(dataHora: $dataHora, funcionario: $funcionario);
 
         $batidaAnterior = $registroPonto->getBatidaPonto();
 
@@ -81,5 +78,25 @@ class RegistroPontoService
     {
         $registroPonto->adicionarEventoDeDominio(new PontoCompletoEvent($registroPonto));
         $this->eventPublisher->publish($registroPonto);
+    }
+
+    public function aplicarRegrasNegocio(Funcionario $funcionario): void
+    {
+        $cadeiaRegras = new CadeiaRegrasRegistroPonto(regras: [
+            new RegraFuncionarioBloqueadoNaoRegistraPonto(),
+            new RegraFuncionarioEmFeriasNaoRegistraPonto()
+        ]);
+
+        $cadeiaRegras->validar($funcionario);
+    }
+
+    private function pegarOuCriarRegistroPonto(DateTimeImmutable $dataHora, Funcionario $funcionario): RegistroPonto
+    {
+        $registroPonto = $this->registroPontoRepository->procurarPorPontoAberto($dataHora, $funcionario);
+
+        if ($this->primeiroRegistroPontoDoDia($registroPonto) || $this->periodoCompleto($registroPonto)) {
+            $registroPonto = $this->inicializarPonto($funcionario);
+        }
+        return $registroPonto;
     }
 }

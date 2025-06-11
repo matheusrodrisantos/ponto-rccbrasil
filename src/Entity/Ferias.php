@@ -80,4 +80,9 @@ class Ferias
     {
         return $this->dataFerias->dataFimFerias();
     }
+
+    public function feriasAtiva(): bool
+    {
+        return $this->dataFerias->verificaFeriasAtiva();
+    }
 }

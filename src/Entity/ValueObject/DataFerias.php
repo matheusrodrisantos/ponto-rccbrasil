@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\ValueObject\DiaSemana;
 
 #[ORM\Embeddable]
 class DataFerias
@@ -55,7 +56,6 @@ class DataFerias
 
     public function validar(?DateTimeInterface $dataInicio, ?DateTimeInterface $dataFim): void
     {
-
         $this->verificarDatasInicioFimMenor($dataInicio, $dataFim);
         $this->verificarDiasCorridos($dataInicio, $dataFim);
         $this->ehDomingo($dataInicio);
@@ -81,10 +81,21 @@ class DataFerias
         }
     }
 
+    public function verificaFeriasAtiva(): bool
+    {
+        if ($this->dataIni && $this->dataFim) {
+            $hoje = new DateTimeImmutable();
+            if ($hoje >= $this->dataIni && $hoje <= $this->dataFim) {
+                return true;
+            }
+        }
+        return false;
+    }
     public function ehDomingo(DateTimeInterface $data): void
     {
-        if ($data->format('w') == 0) {
-            throw new InvalidArgumentException("Férias não pode começar no domingo");
+        $diaSemana = new DiaSemana($data);
+        if ($diaSemana->ehDomingo()) {
+            throw new InvalidArgumentException('Férias não pode iniciar em um domingo');
         }
     }
 }

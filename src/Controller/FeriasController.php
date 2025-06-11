@@ -16,107 +16,98 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class FeriasController extends AbstractController
 {
+    use ResponseTrait;
     public function __construct(
         private SerializerInterface $serializer,
-        private NormalizerInterface $normalizer,
-        private ResponseService $responseService
-    ){}
+        private NormalizerInterface $normalizer
+    ) {}
 
-    #[Route('/ferias', name: 'app_create_ferias',methods:['POST'])]
+    #[Route('/ferias', name: 'app_create_ferias', methods: ['POST'])]
     public function create(
         Request $request,
         FeriasService $feriasService
-    ): ResponseService
-    {
-       try{
+    ): ResponseService {
+        try {
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
                 FeriasDTO::class,
                 'json'
             );
-            
-            $outputFeriasDto = $feriasService->createEntity($inputDto);
-        
-            $dtoArray=$this->normalizer->normalize($outputFeriasDto);
 
-            return $this->responseService->createSuccessResponse(
+            $outputFeriasDto = $feriasService->createEntity($inputDto);
+
+            $dtoArray = $this->normalizer->normalize($outputFeriasDto);
+
+            return $this->createSuccessResponse(
                 $dtoArray,
                 Response::HTTP_CREATED
             );
-
         } catch (\Exception $e) {
-            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
-    #[Route('/ferias/{id}', name: 'app_update_ferias',methods:['PUT'])]
+    #[Route('/ferias/{id}', name: 'app_update_ferias', methods: ['PUT'])]
     public function update(
         Request $request,
         FeriasService $feriasService
-    )//: JsonResponse
+    ) //: JsonResponse
     {
-       try{
+        try {
 
             print_r($request->getContent());
-
- 
-
         } catch (\Exception $e) {
-            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
-    #[Route('/ferias/{id}', name: 'app_delete_ferias',methods:['DELETE'])]
+    #[Route('/ferias/{id}', name: 'app_delete_ferias', methods: ['DELETE'])]
     public function delete(
         Request $request,
         FeriasService $feriasService
-    ): ResponseService
-    {
-       try{
+    ): ResponseService {
+        try {
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
                 FeriasDTO::class,
                 'json'
             );
-            
-            $outputFeriasDto = $feriasService->createEntity($inputDto);
-        
-            $dtoArray=$this->normalizer->normalize($outputFeriasDto);
 
-            return $this->responseService->createSuccessResponse(
+            $outputFeriasDto = $feriasService->createEntity($inputDto);
+
+            $dtoArray = $this->normalizer->normalize($outputFeriasDto);
+
+            return $this->createSuccessResponse(
                 $dtoArray,
                 Response::HTTP_OK
             );
-
         } catch (\Exception $e) {
-            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
-    #[Route('/ferias/{id}', name: 'app_delete_ferias',methods:['DELETE'])]
+    #[Route('/ferias/{id}', name: 'app_delete_ferias', methods: ['DELETE'])]
     public function list(
         Request $request,
         FeriasService $feriasService
-    ): ResponseService
-    {
-       try{
+    ): ResponseService {
+        try {
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
                 FeriasDTO::class,
                 'json'
             );
-            
-            $outputFeriasDto = $feriasService->createEntity($inputDto);
-        
-            $dtoArray=$this->normalizer->normalize($outputFeriasDto);
 
-            return $this->responseService->createSuccessResponse(
+            $outputFeriasDto = $feriasService->createEntity($inputDto);
+
+            $dtoArray = $this->normalizer->normalize($outputFeriasDto);
+
+            return $this->createSuccessResponse(
                 $dtoArray,
                 Response::HTTP_OK
             );
-
         } catch (\Exception $e) {
-            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 }

@@ -16,10 +16,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class FuncionarioController extends AbstractController
 {
+    use ResponseTrait;
     public function __construct(
         private SerializerInterface $serializer,
         private NormalizerInterface $normalizer,
-        private ResponseService $responseService,
         private FuncionarioService $funcionarioService
     ){}
 
@@ -37,13 +37,13 @@ final class FuncionarioController extends AbstractController
 
             $dtoArray=$this->normalizer->normalize($outputFuncionarioDto);
 
-            return $this->responseService->createSuccessResponse(
+            return $this->createSuccessResponse(
                 $dtoArray,
                 Response::HTTP_CREATED
             );
 
         }catch(\Exception $e){
-            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }   
         
     }
@@ -56,10 +56,10 @@ final class FuncionarioController extends AbstractController
         
             $dtoArray=$this->normalizer->normalize($detalheFuncionarioDto);
 
-            return $this->responseService->createSuccessResponse($dtoArray);
+            return $this->createSuccessResponse($dtoArray);
 
         }catch(NotFoundHttpException $n){
-            return $this->responseService->createErrorResponse($n->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->createErrorResponse($n->getMessage(), Response::HTTP_BAD_REQUEST);
         }   
         
     }

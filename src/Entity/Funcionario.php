@@ -196,6 +196,16 @@ class Funcionario
         return $this;
     }
 
+    public function estaDeFerias(): bool
+    {
+        foreach ($this->ferias as $feria) {
+            if ($feria->feriasAtiva()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function removeFeria(Ferias $feria): static
     {
         if ($this->ferias->removeElement($feria)) {

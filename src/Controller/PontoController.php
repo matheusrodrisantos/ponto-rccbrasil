@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Dto\RegistroPontoDTO;
 use App\Service\RegistroPontoService;
-use App\Service\ResponseService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +14,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class PontoController extends AbstractController
 {
+    use ResponseTrait;
     public function __construct(
-        private ResponseService $responseService,
         private SerializerInterface $serializer,
         private NormalizerInterface $normalizer,
         private RegistroPontoService $registroPontoService
@@ -30,7 +30,7 @@ final class PontoController extends AbstractController
     }
 
     #[Route('api/ponto', name: 'app_create_ponto', methods:['POST'])]
-    public function registrar(Request $request):ResponseService
+    public function registrar(Request $request):JsonResponse
     {
         try{
             $pontoDto= $this->serializer->deserialize(
@@ -44,14 +44,14 @@ final class PontoController extends AbstractController
 
             $dtoArray=$this->normalizer->normalize($pontoDto);
 
-            return $this->responseService->createSuccessResponse(
+            return $this->createSuccessResponse(
                 $dtoArray,
                 Response::HTTP_CREATED
             );
 
 
         }catch(\Exception $e){
-            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);   
+            return $this->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);   
         }
     }
 }
