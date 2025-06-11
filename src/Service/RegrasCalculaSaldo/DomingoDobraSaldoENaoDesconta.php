@@ -23,7 +23,7 @@ class DomingoDobraSaldoENaoDesconta extends BaseRegrasCalculoSaldo
     }
     private function podeCalcular(): bool
     {
-        $diaSemana = new DiaSemana($this->data);
+        $diaSemana = new DiaSemana(data: $this->data);
         return $diaSemana->ehDomingo();
     }
 }

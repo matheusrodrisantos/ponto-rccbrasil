@@ -21,14 +21,14 @@ class SaldoHorasService
             $saldoHoras = new SaldoHoras();
         }
 
-        $saldoHoras->adicionarHorasTrabalhadas($registroPonto->saldoPeriodo());
+        $saldoHoras->adicionarHorasTrabalhadas(horasTrabalhadas: $registroPonto->saldoPeriodo());
 
-        $saldoHoras->ajustarData($registroPonto->data());
+        $saldoHoras->ajustarData(data: $registroPonto->data());
 
-        $saldoHoras->atribuirFuncionario($registroPonto->funcionario());
+        $saldoHoras->atribuirFuncionario(funcionario: $registroPonto->funcionario());
 
-        $saldoHoras = $this->calculoSaldoService->calcular($saldoHoras);
+        $saldoHoras = $this->calculoSaldoService->calcular(saldoHoras: $saldoHoras);
 
-        $this->saldoHorasRepository->create($saldoHoras);
+        $this->saldoHorasRepository->create(saldoHoras: $saldoHoras);
     }
 }

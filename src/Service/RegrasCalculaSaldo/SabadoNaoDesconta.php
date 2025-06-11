@@ -16,11 +16,11 @@ class SabadoNaoDesconta extends BaseRegrasCalculoSaldo
             return $saldoHoras->recalcularSaldo(jornadaDiariaObrigatoria: 0);
         }
 
-        return parent::calcular($saldoHoras);
+        return parent::calcular(saldoHoras: $saldoHoras);
     }
     private function podeCalcular(): bool
     {
-        $diaSemana = new DiaSemana($this->data);
+        $diaSemana = new DiaSemana(data: $this->data);
         return $diaSemana->ehSabado();
     }
 }

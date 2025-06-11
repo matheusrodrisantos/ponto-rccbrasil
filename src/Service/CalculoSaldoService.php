@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Service;
 
 use App\Entity\SaldoHoras;
@@ -15,11 +16,10 @@ class CalculoSaldoService
     ) {}
     public function calcular(SaldoHoras $saldoHoras): SaldoHoras
     {
-       
-        $this->regraDomingo->proximo($this->regraSabado);
-        $this->regraSabado->proximo($this->regraPadrao);
-        
-        return $this->regraDomingo->calcular($saldoHoras);
-    }
 
+        $this->regraDomingo->proximo(regrasCalculoSaldo: $this->regraSabado);
+        $this->regraSabado->proximo(regrasCalculoSaldo: $this->regraPadrao);
+
+        return $this->regraDomingo->calcular(saldoHoras: $saldoHoras);
+    }
 }
