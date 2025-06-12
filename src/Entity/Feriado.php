@@ -7,6 +7,7 @@ use App\Exception\RegraDeNegocioFeriadoException;
 use App\Repository\FeriadoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FeriadoRepository::class)]
 class Feriado
@@ -14,21 +15,27 @@ class Feriado
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['feriado:read'])]
     private ?int $id = null;
 
     #[ORM\Column(enumType: FeriadoNivel::class)]
+    #[Groups(['feriado:read'])]
     private ?FeriadoNivel $nivel = null;
 
     #[ORM\Column]
+    #[Groups(['feriado:read'])]
     private ?bool $recorrente = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Groups(['feriado:read'])]
     private ?\DateTimeImmutable $inicio = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Groups(['feriado:read'])]
     private ?\DateTimeImmutable $fim = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['feriado:read'])]
     private ?string $nome = null;
 
     public function getId(): ?int
