@@ -25,11 +25,14 @@ class FeriadoRepository extends ServiceEntityRepository
      */
     public function findByDate(DateTimeImmutable $date): ?Feriado
     {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.inicio = :date') // Assuming 'inicio' is the field that stores the holiday date
-            ->setParameter('date', $date)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(['inicio' => $date]);
+    }
+
+    public function create(Feriado $feriado): void
+    {
+        $em = $this->getEntityManager();
+        $em->persist($feriado);
+        $this->em->flush();
     }
 
     //    /**

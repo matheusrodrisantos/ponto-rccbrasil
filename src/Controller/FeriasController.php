@@ -6,6 +6,7 @@ use App\Dto\FeriasDTO;
 
 use App\Service\FeriasService;
 use App\Service\ResponseService;
+use PHPUnit\Util\Json;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ final class FeriasController extends AbstractController
     public function create(
         Request $request,
         FeriasService $feriasService
-    ): ResponseService {
+    ): JsonResponse {
         try {
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
@@ -90,7 +91,7 @@ final class FeriasController extends AbstractController
     public function list(
         Request $request,
         FeriasService $feriasService
-    ): ResponseService {
+    ): JsonResponse {
         try {
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
