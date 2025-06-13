@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\DepartamentoDTO;
+use App\Exception\RegraDeNegocioDepartamentoException;
 use App\Service\DepartamentoService;
 use App\Service\ResponseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,32 +20,35 @@ final class DepartamentoController extends AbstractController
         private SerializerInterface $serializer,
         private NormalizerInterface $normalizer,
         private ResponseService $responseService
-    ){}
+    ) {}
 
-    #[Route('/departamento', name: 'app_create_departamento', methods:['POST'])]
+    #[Route('/departamento', name: 'app_create_departamento', methods: ['POST'])]
     public function create(
         Request $request,
         DepartamentoService $departamentoService
-    ): JsonResponse
-    {
-        try{
+    ): JsonResponse {
+        try {
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
-                 DepartamentoDTO::class,
+                DepartamentoDTO::class,
                 'json'
             );
-            
-            $outputDepartamentoDto=$departamentoService->createEntity($inputDto);
 
-            $dtoArray=$this->normalizer->normalize($outputDepartamentoDto);
+            $outputDepartamentoDto = $departamentoService->createEntity($inputDto);
+
+            $dtoArray = $this->normalizer->normalize($outputDepartamentoDto);
 
             return $this->responseService->createSuccessResponse(
                 $dtoArray,
                 Response::HTTP_CREATED
             );
-
-        }catch(\Exception $e){
+        } catch (RegraDeNegocioDepartamentoException $e) {
+            return $this->responseService->createErrorResponse(
+                $e->getMessage(),
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
+        } catch (\Exception $e) {
             return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } 
+        }
     }
 }
