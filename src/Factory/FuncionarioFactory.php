@@ -5,6 +5,9 @@ namespace App\Factory;
 use App\Dto\DepartamentoDTO;
 use App\Dto\FeriasDTO;
 use App\Dto\FuncionarioDTO;
+use App\Dto\DepartamentoInputDTO;
+use App\Dto\DepartamentoOutputDTO;
+
 use App\Entity\Funcionario;
 use App\Entity\ValueObject\Cpf;
 use App\Entity\ValueObject\Email;
