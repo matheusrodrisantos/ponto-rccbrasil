@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
-use App\Dto\FeriadoDTO;
+// Updated use statements
+use App\Dto\FeriadoInputDTO;
+use App\Dto\FeriadoOutputDTO;
 use App\Exception\FeriadoNotFoundException;
 use App\Service\FeriadoService;
 use App\Exception\RegraDeNegocioFeriadoException;
@@ -23,11 +25,12 @@ final class FeriadoController extends AbstractController
     use ResponseTrait;
     public function __construct(
         private readonly FeriadoService $feriadoService,
-        private readonly SerializerInterface $serializer, // Inject SerializerInterface
-        private readonly NormalizerInterface $normalizer
+        private readonly SerializerInterface $serializer,
+        private readonly NormalizerInterface $normalizer,
+        private readonly ValidatorInterface $validator // Added validator
     ) {}
 
-    #[Route('/feriado', name: 'app_feriado_list', methods: ['GET'])] // Kept original route for listing, if needed later
+    #[Route('/feriado', name: 'app_feriado_list', methods: ['GET'])]
     public function index(): JsonResponse
     {
         return $this->json([
@@ -38,19 +41,36 @@ final class FeriadoController extends AbstractController
 
     #[Route('/feriado', name: 'app_feriado_create', methods: ['POST'])]
     public function create(
-        Request $request
+        Request $request // Using Request directly for now
     ): JsonResponse {
         try {
+            // Deserialize to FeriadoInputDTO
+            $feriadoInputDto = $this->serializer->deserialize($request->getContent(), FeriadoInputDTO::class, 'json');
 
-            $feriadoDTO = $this->serializer->deserialize($request->getContent(), FeriadoDTO::class, 'json');
-            $feriado = $this->feriadoService->criarFeriado($feriadoDTO);
+            // Validate Input DTO
+            $errors = $this->validator->validate($feriadoInputDto);
+            if (count($errors) > 0) {
+                $errorMessages = [];
+                foreach ($errors as $error) {
+                    $errorMessages[$error->getPropertyPath()][] = $error->getMessage();
+                }
+                return $this->createErrorResponse($errorMessages, Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
 
-            return $this->createSuccessResponse($this->normalizer->normalize($feriado), Response::HTTP_CREATED);
+            // Call service with InputDTO, expect OutputDTO or entity
+            $feriadoOutput = $this->feriadoService->criarFeriado($feriadoInputDto);
+
+            // Normalize the output (OutputDTO or entity)
+            $normalizedData = $this->normalizer->normalize($feriadoOutput);
+            return $this->createSuccessResponse($normalizedData, Response::HTTP_CREATED);
+
         } catch (RegraDeNegocioFeriadoException $e) {
-            return $this->createErrorResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            // Business logic errors: 400
+            return $this->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         } catch (NotEncodableValueException $e) {
-            return $this->createErrorResponse('JSON malformatado: ' . $e->getMessage(),  Response::HTTP_BAD_REQUEST);
+            return $this->createErrorResponse('JSON malformatado: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
+            // Other errors: 500
             return $this->createErrorResponse('Erro ao processar a requisição: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -61,11 +81,16 @@ final class FeriadoController extends AbstractController
     ): JsonResponse {
         try {
             $dataFeriado = new \DateTimeImmutable($data);
+            // Assuming buscarFeriadoPorData returns an entity or FeriadoOutputDTO
             $feriado = $this->feriadoService->buscarFeriadoPorData($dataFeriado);
 
-            return $this->createSuccessResponse($this->normalizer->normalize(data: $feriado));
+            // Normalize the output for consistency
+            $normalizedData = $this->normalizer->normalize($feriado);
+            return $this->createSuccessResponse($normalizedData);
+
         } catch (FeriadoNotFoundException $e) {
-            return $this->createErrorResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            // Specific not found exception: 404 would be more appropriate
+            return $this->createErrorResponse($e->getMessage(), Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             return $this->createErrorResponse('Erro ao processar a requisição: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

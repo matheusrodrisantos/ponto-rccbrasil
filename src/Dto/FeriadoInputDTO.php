@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Dto;
+
+use App\Entity\Enum\FeriadoNivel;
+use Symfony\Component\Validator\Constraints as Assert;
+
+class FeriadoInputDTO
+{
+    #[Assert\NotBlank(message: "O nome do feriado não pode estar em branco.")]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: "O nome do feriado deve ter pelo menos {{ limit }} caracteres.",
+        maxMessage: "O nome do feriado não pode ter mais de {{ limit }} caracteres."
+    )]
+    public ?string $nome = null;
+
+    #[Assert\NotBlank(message: "A data do feriado não pode estar em branco.")]
+    #[Assert\Date(message: "A data do feriado deve estar no formato YYYY-MM-DD.")] // Assumes 'YYYY-MM-DD'
+    public ?string $data = null;
+
+    #[Assert\NotNull(message: "O nível do feriado não pode ser nulo.")]
+    // The choice validation will implicitly handle if the value is a valid FeriadoNivel case
+    #[Assert\Choice(callback: [FeriadoNivel::class, 'values'], message: "Nível do feriado inválido.")]
+    public ?FeriadoNivel $nivel = null;
+
+    #[Assert\NotNull(message: "O campo 'recorrente' deve ser definido (true ou false).")]
+    #[Assert\Type(type: "bool", message: "O campo 'recorrente' deve ser um booleano.")]
+    public ?bool $recorrente = null;
+
+    public function __construct(
+        ?string $nome = null,
+        ?string $data = null,
+        ?FeriadoNivel $nivel = null,
+        ?bool $recorrente = null
+    ) {
+        $this->nome = $nome;
+        $this->data = $data;
+        $this->nivel = $nivel;
+        $this->recorrente = $recorrente;
+    }
+}
