@@ -63,7 +63,7 @@ final class FuncionarioControllerTest extends WebTestCase
     public function test_erro_listar_detalhes_funcionario()
     {
 
-        $id = 2; // sei que esse login está desativado no banco
+        $id = 4; // sei que esse login está desativado no banco
 
         $this->client->request(
             method: 'GET',

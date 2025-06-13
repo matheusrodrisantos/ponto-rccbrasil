@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Dto\FeriadoDTO;
 use App\Entity\Feriado;
+use App\Exception\FeriadoNotFoundException;
 use App\Exception\RegraDeNegocioFeriadoException;
 use App\Factory\FeriadoFactory;
 use App\Repository\FeriadoRepository;
@@ -33,5 +34,23 @@ final class FeriadoService
         $this->feriadoRepository->create($feriado);
 
         return $feriado;
+    }
+
+    public function buscarFeriadoPorData(DateTimeImmutable $data): ?Feriado
+    {
+        $feriado = $this->feriadoRepository->findByDate($data);
+        if ($feriado === null) {
+            throw new FeriadoNotFoundException('Feriado não encontrado para a data informada.');
+        }
+
+        return $feriado;
+    }
+    public function buscarTodosFeriados(): array
+    {
+        return $this->feriadoRepository->findAll();
+    }
+    public function excluirFeriado(Feriado $feriado): void
+    {
+        $this->feriadoRepository->delete($feriado);
     }
 }

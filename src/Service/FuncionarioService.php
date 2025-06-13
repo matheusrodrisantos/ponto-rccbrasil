@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Dto\FuncionarioDTO;
 use App\Entity\Funcionario;
+use App\Exception\FuncionarioNotFoundException;
 use App\Factory\FuncionarioFactory;
 use App\Repository\FuncionarioRepository;
 use App\Service\RegrasFuncionario\ExecutorRegrasFuncionario;
@@ -48,7 +49,7 @@ class FuncionarioService
         $this->funcionario = $this->funcionarioRepository->buscarFuncionarioAtivoPorId($id);
 
         if (!$this->funcionario) {
-            throw new NotFoundHttpException("Funcionário não encontrado ou inativo.");
+            throw new FuncionarioNotFoundException("Funcionário não encontrado ou inativo.");
         }
 
         return $this->funcionarioFactory->createDtoFromEntity($this->funcionario);

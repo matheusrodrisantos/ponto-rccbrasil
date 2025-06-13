@@ -7,6 +7,7 @@ use App\Entity\Funcionario;
 use App\Entity\RegistroPonto;
 use App\Entity\ValueObject\BatidaPonto;
 use App\Event\{EventPublisher, PontoCompletoEvent};
+use App\Exception\FuncionarioNotFoundException;
 use App\Exception\RegraDeNegocioFuncionarioException;
 use App\Factory\RegistroPontoFactory;
 use App\Repository\FuncionarioRepository;
@@ -32,7 +33,7 @@ class RegistroPontoService
         $funcionario = $this->funcionarioRepository->buscarFuncionarioAtivoPorId(id: $funcionarioID);
 
         if ($funcionario == null) {
-            throw new RegraDeNegocioFuncionarioException("Funcionario não encontrado");
+            throw new FuncionarioNotFoundException();
         }
 
         $this->aplicarRegrasNegocio(funcionario: $funcionario);
