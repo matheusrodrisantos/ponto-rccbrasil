@@ -5,7 +5,7 @@ namespace App\Dto;
 use App\Entity\Enum\FeriadoNivel;
 
 
-final class FeriadoDTO implements DtoInteface
+final class FeriadoOutputDTO implements DtoInteface
 {
 
     public ?string $nome = null;

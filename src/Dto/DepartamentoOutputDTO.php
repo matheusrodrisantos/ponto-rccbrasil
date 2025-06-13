@@ -2,7 +2,7 @@
 
 namespace App\Dto;
 
-class DepartamentoDTO
+class DepartamentoOutputDTO
 {
     public ?int $id = null;
     public ?string $nome = null;
