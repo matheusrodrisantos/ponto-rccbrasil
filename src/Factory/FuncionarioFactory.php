@@ -68,7 +68,7 @@ class FuncionarioFactory
             );
         }
 
-        $dto->departamento = new DepartamentoDTO(
+        $dto->departamento = new DepartamentoOutputDTO(
             nome: $funcionario->getDepartamentoNome(),
             descricao: $funcionario->getDepartamentoDescricao()
         );

@@ -26,6 +26,6 @@ class FuncionarioDTO
         public ?array $ferias = null,
         public ?array $registrosPonto = null,
         public ?array $saldoHoras = null,
-        public ?DepartamentoDTO $departamento = null
+        public ?DepartamentoOutputDTO $departamento = null
     ) {}
 }
