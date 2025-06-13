@@ -9,7 +9,7 @@ class RegraFuncionarioBloqueadoNaoRegistraPonto
 {
     public function validar(Funcionario $funcionario): void
     {
-        if ($funcionario->isAtivo()) {
+        if (!$funcionario->isAtivo()) {
             throw new Exception('Funcionário está bloqueado e não pode registrar ponto');
         }
     }
