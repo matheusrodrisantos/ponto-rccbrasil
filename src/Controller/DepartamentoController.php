@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\DepartamentoInputDTO; // Changed
 use App\Dto\DepartamentoOutputDTO; // Added
+use App\Dto\DepartamentoUpdateDTO;
 use App\Exception\RegraDeNegocioDepartamentoException;
 use App\Service\DepartamentoService;
 use App\Service\ResponseService;
@@ -41,26 +42,17 @@ final class DepartamentoController extends AbstractController
             if (count($errors) > 0) {
                 $errorMessages = [];
                 foreach ($errors as $error) {
-                    // Use getPropertyPath() for field name, getMessage() for the error
                     $errorMessages[$error->getPropertyPath()][] = $error->getMessage();
                 }
                 return $this->responseService->createErrorResponse(
-                    $errorMessages, // Pass structured messages
+                    json_encode($errorMessages), // Pass structured messages
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
 
-            // Assuming $departamentoService->createEntity will now accept DepartamentoInputDTO
-            // and return either a Departamento entity or a DepartamentoOutputDTO.
             $outputDto = $departamentoService->createEntity($inputDto);
 
-            // If $outputDto is an entity, it needs to be mapped to DepartamentoOutputDTO
-            // or the service should return DepartamentoOutputDTO directly.
-            // For now, let's assume the service returns an entity and we normalize it.
-            // If the service is updated to return DepartamentoOutputDTO, this normalization
-            // will also work. The key is that the structure matches what the frontend expects.
-
-            $dtoArray = $this->normalizer->normalize($outputDto); // Normalizing the output
+            $dtoArray = $this->normalizer->normalize($outputDto);
 
             return $this->responseService->createSuccessResponse(
                 $dtoArray,
@@ -69,12 +61,31 @@ final class DepartamentoController extends AbstractController
         } catch (RegraDeNegocioDepartamentoException $e) {
             return $this->responseService->createErrorResponse(
                 $e->getMessage(),
-                Response::HTTP_BAD_REQUEST // Changed to BAD_REQUEST for business logic errors as per original,
-                                          // to differentiate from validation's UNPROCESSABLE_ENTITY
+                Response::HTTP_BAD_REQUEST
             );
         } catch (\Exception $e) {
-            // Catching generic \Exception should be more specific if possible,
-            // but for now, keeping it as is.
+            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    #[Route('api/departamento/{departamentoId}/supervisor/{supervisorId}', name: 'app_definir_supervisor_departamento', methods: ['PUT'])]
+    public function definirSupervisor(
+        int $departamentoId,
+        int $supervisorId,
+        DepartamentoService $departamentoService
+    ): JsonResponse {
+        try {
+
+            $updateDto = new DepartamentoUpdateDTO(id: $departamentoId, supervisorId: $supervisorId);
+
+            $departamentoService->definirSupervisor($updateDto);
+
+            return $this->responseService->createSuccessResponse([], Response::HTTP_NO_CONTENT);
+        
+        } catch (RegraDeNegocioDepartamentoException $e) {
+            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
             return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

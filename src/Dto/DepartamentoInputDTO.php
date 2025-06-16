@@ -4,8 +4,10 @@ namespace App\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class DepartamentoInputDTO
+class DepartamentoInputDTO implements DepartamentoInterfaceDTO
 {
+    public ?int $id = null; 
+    
     #[Assert\NotBlank(message: "O nome do departamento não pode estar em branco.")]
     #[Assert\Length(
         min: 3,
@@ -37,4 +39,26 @@ class DepartamentoInputDTO
         $this->supervisorId = $supervisorId;
         $this->ativo = $ativo;
     }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getNome(): ?string
+    {
+        return $this->nome;
+    }
+    public function getDescricao(): ?string
+    {
+        return $this->descricao;
+    }
+    public function getSupervisorId(): ?int
+    {
+        return $this->supervisorId;
+    }
+    public function getAtivo(): ?bool
+    {
+        return $this->ativo;
+    }
+
 }

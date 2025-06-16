@@ -2,10 +2,10 @@
 
 namespace App\Service\RegrasDepartamento;
 
-use App\Dto\DepartamentoDTO;
-use App\Dto\DepartamentoInputDTO;
+
+use App\Dto\DepartamentoInterfaceDTO;
 
 interface RegrasDepartamentoInterface
 {
-    public function validar(DepartamentoInputDTO $departamentoDTO): void;
+    public function validar(DepartamentoInterfaceDTO $departamentoDTO): void;
 }

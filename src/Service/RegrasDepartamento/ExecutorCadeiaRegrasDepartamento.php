@@ -4,6 +4,7 @@ namespace App\Service\RegrasDepartamento;
 
 use App\Dto\DepartamentoDTO;
 use App\Dto\DepartamentoInputDTO;
+use App\Dto\DepartamentoInterfaceDTO;
 
 class ExecutorCadeiaRegrasDepartamento
 {
@@ -25,7 +26,7 @@ class ExecutorCadeiaRegrasDepartamento
         $this->regras[] = $regra;
     }
 
-    public function validar(DepartamentoInputDTO $dto): void
+    public function validar(DepartamentoInterfaceDTO $dto): void
     {
         foreach ($this->regras as $regra) {
             $regra->validar($dto);

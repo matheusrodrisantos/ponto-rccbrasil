@@ -2,8 +2,7 @@
 
 namespace App\Service\RegrasDepartamento;
 
-use App\Dto\DepartamentoDTO;
-use App\Dto\DepartamentoInputDTO;
+use App\Dto\DepartamentoInterfaceDTO;
 use App\Repository\DepartamentoRepository;
 use App\Exception\RegraDeNegocioDepartamentoException;
 use InvalidArgumentException;
@@ -13,7 +12,7 @@ class DepartamentoRegraNomeUnico implements RegrasDepartamentoInterface
 
     public function __construct(private DepartamentoRepository $departamentoRepository) {}
 
-    public function validar(DepartamentoInputDTO $departamentoDTO): void
+    public function validar(DepartamentoInterfaceDTO $departamentoDTO): void
     {
         $departamento = $this->departamentoRepository->findOneBy(['nome' => $departamentoDTO->nome]);
         if ($departamento) {
