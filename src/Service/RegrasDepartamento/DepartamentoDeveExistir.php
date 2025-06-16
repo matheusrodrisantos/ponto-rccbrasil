@@ -2,9 +2,9 @@
 
 namespace App\Service\RegrasDepartamento;
 
-use App\Dto\DepartamentoInputDTO;
-use App\Dto\DepartamentoInterfaceDTO;
-use App\Dto\DepartamentoUpdateDTO;
+use App\Dto\Departamento\DepartamentoInputDTO;
+use App\Dto\Departamento\DepartamentoInterfaceDTO;
+use App\Dto\Departamento\DepartamentoUpdateDTO;
 use App\Exception\RegraDeNegocioDepartamentoException;
 use App\Repository\DepartamentoRepository;
 

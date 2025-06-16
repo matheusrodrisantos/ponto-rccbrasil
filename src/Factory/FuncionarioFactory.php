@@ -5,9 +5,8 @@ namespace App\Factory;
 use App\Dto\DepartamentoDTO;
 use App\Dto\FeriasDTO;
 use App\Dto\FuncionarioDTO;
-use App\Dto\DepartamentoInputDTO;
-use App\Dto\DepartamentoOutputDTO;
-
+use App\Dto\Departamento\DepartamentoInputDTO;
+use App\Dto\Departamento\DepartamentoOutputDTO;
 use App\Entity\Funcionario;
 use App\Entity\ValueObject\Cpf;
 use App\Entity\ValueObject\Email;
@@ -72,7 +71,6 @@ class FuncionarioFactory
             nome: $funcionario->getDepartamentoNome(),
             descricao: $funcionario->getDepartamentoDescricao()
         );
-
 
 
         return $dto;

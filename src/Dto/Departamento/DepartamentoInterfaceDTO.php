@@ -1,5 +1,6 @@
 <?php
-namespace App\Dto;
+
+namespace App\Dto\Departamento;
 
 interface DepartamentoInterfaceDTO
 {

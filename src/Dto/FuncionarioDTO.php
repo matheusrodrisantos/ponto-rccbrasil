@@ -2,6 +2,7 @@
 
 namespace App\Dto;
 
+use App\Dto\Departamento\DepartamentoOutputDTO;
 use App\Entity\Enum\Funcao;
 use App\Entity\Enum\Regime;
 

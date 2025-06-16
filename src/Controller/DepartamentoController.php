@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Dto\DepartamentoInputDTO; // Changed
-use App\Dto\DepartamentoOutputDTO; // Added
-use App\Dto\DepartamentoUpdateDTO;
+use App\Dto\Departamento\DepartamentoInputDTO; 
+use App\Dto\Departamento\DepartamentoOutputDTO;
+use App\Dto\Departamento\DepartamentoUpdateDTO;
+
 use App\Exception\RegraDeNegocioDepartamentoException;
 use App\Service\DepartamentoService;
 use App\Service\ResponseService;
@@ -34,7 +35,7 @@ final class DepartamentoController extends AbstractController
         try {
             $inputDto = $this->serializer->deserialize(
                 $request->getContent(),
-                DepartamentoInputDTO::class, // Changed
+                DepartamentoInputDTO::class, 
                 'json'
             );
 

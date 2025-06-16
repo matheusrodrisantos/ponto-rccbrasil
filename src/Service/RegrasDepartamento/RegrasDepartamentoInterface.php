@@ -3,7 +3,7 @@
 namespace App\Service\RegrasDepartamento;
 
 
-use App\Dto\DepartamentoInterfaceDTO;
+use App\Dto\Departamento\DepartamentoInterfaceDTO;
 
 interface RegrasDepartamentoInterface
 {

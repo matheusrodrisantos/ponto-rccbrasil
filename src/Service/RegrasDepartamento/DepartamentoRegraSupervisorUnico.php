@@ -3,8 +3,8 @@
 namespace App\Service\RegrasDepartamento;
 
 use App\Dto\DepartamentoDTO;
-use App\Dto\DepartamentoInputDTO;
-use App\Dto\DepartamentoInterfaceDTO;
+use App\Dto\Departamento\DepartamentoInputDTO;
+use App\Dto\Departamento\DepartamentoInterfaceDTO;
 use App\Repository\DepartamentoRepository;
 use App\Exception\RegraDeNegocioDepartamentoException;
 

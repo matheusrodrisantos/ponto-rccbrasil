@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto;
+namespace App\Dto\Departamento;
 
-class DepartamentoOutputDTO implements DepartamentoInterfaceDTO
+class DepartamentoUpdateDTO implements DepartamentoInterfaceDTO
 {
     public ?int $id = null;
     public ?string $nome = null;
@@ -44,6 +44,4 @@ class DepartamentoOutputDTO implements DepartamentoInterfaceDTO
     {
         return $this->ativo;
     }
- 
-               
 }

@@ -2,21 +2,20 @@
 
 namespace App\Service;
 
-use App\Dto\DepartamentoInputDTO; // Changed
-use App\Dto\DepartamentoOutputDTO; // Added
-use App\Dto\DepartamentoUpdateDTO;
+use App\Dto\Departamento\DepartamentoInputDTO; 
+use App\Dto\Departamento\DepartamentoOutputDTO;
+use App\Dto\Departamento\DepartamentoUpdateDTO;
 use App\Entity\Departamento;
-use App\Exception\RegraDeNegocioDepartamentoException;
+
 use App\Factory\DepartamentoFactory;
 use App\Repository\DepartamentoRepository;
 use App\Repository\FuncionarioRepository;
 use App\Service\RegrasDepartamento\DepartamentoDeveExistir;
 use App\Service\RegrasDepartamento\DepartamentoRegraNomeUnico;
-// Ensure this namespace is correct if it was App\Service\RegrasDepartamento\DepartamentoRegra;
-// use App\Service\RegrasDepartamento\DepartamentoRegra;
 use App\Service\RegrasDepartamento\DepartamentoRegraSupervisorUnico;
 use App\Service\RegrasDepartamento\ExecutorCadeiaRegrasDepartamento;
 
+use App\Exception\RegraDeNegocioDepartamentoException;
 class DepartamentoService
 {
     private Departamento $dpto; // Property name could be more generic if service handles more than one entity instance over time
