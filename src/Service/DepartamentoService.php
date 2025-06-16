@@ -68,4 +68,32 @@ class DepartamentoService
 
         return $this->departamentoFactory->createOutputDTOFromEntity($departamento);
     }
+
+    public function removerSupervisor(
+        DepartamentoUpdateDTO $dptoUpdateDTO
+    ): DepartamentoOutputDTO {
+
+        $executorValidar = new ExecutorCadeiaRegrasDepartamento([
+            (new DepartamentoDeveExistir($this->departamentoRepository))
+        ]);
+
+        $executorValidar->validar($dptoUpdateDTO);
+
+        $departamento = $this->departamentoRepository->find($dptoUpdateDTO->getId());
+
+        $departamento->setSupervisor(null);
+
+        $this->departamentoRepository->update($departamento);
+
+        return $this->departamentoFactory->createOutputDTOFromEntity($departamento);
+    }
+
+    public function listarDepartamentos(): array
+    {
+        $departamentos = $this->departamentoRepository->findAll();
+        return array_map(
+            callback: fn(Departamento $dpto): DepartamentoOutputDTO => $this->departamentoFactory->createOutputDTOFromEntity($dpto),
+            array: $departamentos
+        );
+    }
 }

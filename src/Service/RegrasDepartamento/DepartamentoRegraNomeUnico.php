@@ -14,7 +14,7 @@ class DepartamentoRegraNomeUnico implements RegrasDepartamentoInterface
 
     public function validar(DepartamentoInterfaceDTO $departamentoDTO): void
     {
-        $departamento = $this->departamentoRepository->findOneBy(['nome' => $departamentoDTO->nome]);
+        $departamento = $this->departamentoRepository->findOneBy(['nome' => $departamentoDTO->getNome()]);
         if ($departamento) {
             throw new RegraDeNegocioDepartamentoException(message: "Já
                  existe um departamento cadastrado com esse nome  

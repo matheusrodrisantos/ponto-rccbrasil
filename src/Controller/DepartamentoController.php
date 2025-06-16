@@ -82,11 +82,44 @@ final class DepartamentoController extends AbstractController
             $departamentoService->definirSupervisor($updateDto);
 
             return $this->responseService->createSuccessResponse([], Response::HTTP_NO_CONTENT);
-        
         } catch (RegraDeNegocioDepartamentoException $e) {
             return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
             return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('api/departamento/{departamentoId}', name: 'app_get_departamento', methods: ['DELETE'])]
+    public function removerSupervisor(
+        int $departamentoId,
+        DepartamentoService $departamentoService
+    ): JsonResponse {
+        try {
+            $updateDto = new DepartamentoUpdateDTO(id: $departamentoId);
+
+            $departamentoService->removerSupervisor($updateDto);
+
+            return $this->responseService->createSuccessResponse([], Response::HTTP_NO_CONTENT);
+        } catch (RegraDeNegocioDepartamentoException $e) {
+            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[Route('api/departamento', name: 'app_list_departamentos', methods: ['GET'])]
+    public function listDepartamentos(
+        DepartamentoService $departamentoService
+    ): JsonResponse {
+        try {
+            $departamentos = $departamentoService->listarDepartamentos();
+
+            $dtoArray = $this->normalizer->normalize($departamentos);
+
+            return $this->responseService->createSuccessResponse($dtoArray, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return $this->responseService->createErrorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
