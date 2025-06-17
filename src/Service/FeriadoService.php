@@ -2,14 +2,14 @@
 
 namespace App\Service;
 
-use App\Dto\FeriadoInputDTO;  // Changed
-use App\Dto\FeriadoOutputDTO; // Added
+use App\Dto\Feriado\FeriadoInputDTO;  
+use App\Dto\Feriado\FeriadoOutputDTO; 
 use App\Entity\Feriado;
 use App\Exception\FeriadoNotFoundException;
 use App\Exception\RegraDeNegocioFeriadoException;
 use App\Factory\FeriadoFactory;
 use App\Repository\FeriadoRepository;
-// Removed unused DateTime, Date constraint, EntityManagerInterface
+
 use DateTimeImmutable;
 
 final class FeriadoService
@@ -19,10 +19,10 @@ final class FeriadoService
         private readonly FeriadoFactory $feriadoFactory
     ) {}
 
-    // Updated parameter and return type
+    
     public function criarFeriado(FeriadoInputDTO $feriadoInputDto): FeriadoOutputDTO
     {
-        // InputDTO data property is string, needs conversion for comparison
+        
         $dataFeriado = new DateTimeImmutable($feriadoInputDto->data);
 
         $existingFeriado = $this->feriadoRepository->findByDate($dataFeriado);
@@ -33,10 +33,10 @@ final class FeriadoService
         $feriado = $this->feriadoFactory->createEntityFromInputDTO($feriadoInputDto);
         $this->feriadoRepository->create($feriado);
 
-        return $this->feriadoFactory->createOutputDTOFromEntity($feriado); // Return OutputDTO
+        return $this->feriadoFactory->createOutputDTOFromEntity($feriado); 
     }
 
-    // Updated return type
+    
     public function buscarFeriadoPorData(DateTimeImmutable $data): ?FeriadoOutputDTO
     {
         $feriado = $this->feriadoRepository->findByDate($data);
@@ -44,7 +44,7 @@ final class FeriadoService
             throw new FeriadoNotFoundException('Feriado não encontrado para a data informada.');
         }
 
-        return $this->feriadoFactory->createOutputDTOFromEntity($feriado); // Return OutputDTO
+        return $this->feriadoFactory->createOutputDTOFromEntity($feriado); 
     }
 
     /**
@@ -57,12 +57,12 @@ final class FeriadoService
         foreach ($feriados as $feriado) {
             $dtos[] = $this->feriadoFactory->createOutputDTOFromEntity($feriado);
         }
-        return $dtos; // Return array of OutputDTOs
+        return $dtos; 
     }
 
-    // This method still expects an entity. If it's called externally,
-    // the caller would need to fetch the entity first.
-    // For now, its signature remains unchanged as it's not directly part of create/read DTO flow.
+    
+    
+    
     public function excluirFeriado(Feriado $feriado): void
     {
         $this->feriadoRepository->delete($feriado);

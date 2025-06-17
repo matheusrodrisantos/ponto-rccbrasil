@@ -28,12 +28,19 @@ class FeriadoRepository extends ServiceEntityRepository
         return $this->findOneBy(['inicio' => $date]);
     }
 
-    public function create(Feriado $feriado): void
+    public function create(Feriado $feriado): ?Feriado
     {
         $em = $this->getEntityManager();
-        $em->persist($feriado);
-        $this->em->flush();
+        try {
+            $em->persist($feriado);
+            $em->flush();
+            return $feriado;
+        } catch (\Exception $e) {
+            // Handle exception, e.g., log it or rethrow it
+            throw new \Exception('Erro ao criar feriado: ' . $e->getMessage());
+        }
     }
+    
 
     //    /**
     //     * @return Feriado[] Returns an array of Feriado objects

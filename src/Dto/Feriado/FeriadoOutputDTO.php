@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Dto;
+namespace App\Dto\Feriado;
 
 use App\Entity\Enum\FeriadoNivel;
 
 
-final class FeriadoOutputDTO implements DtoInteface
+final class FeriadoOutputDTO implements FeriadoInterfaceDTO
 {
 
     public ?string $nome = null;
@@ -46,5 +46,25 @@ final class FeriadoOutputDTO implements DtoInteface
             'nivel' => $this->nivel?->value,
             'recorrente' => $this->recorrente,
         ];
+    }
+
+    public function getNome(): ?string
+    {
+        return $this->nome;
+    }
+
+    public function getData(): ?string
+    {
+        return $this->data;
+    }
+
+    public function getNivel(): ?FeriadoNivel
+    {
+        return $this->nivel;
+    }
+
+    public function isRecorrente(): ?bool
+    {
+        return $this->recorrente;
     }
 }

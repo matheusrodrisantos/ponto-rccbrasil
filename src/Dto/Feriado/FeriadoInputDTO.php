@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto;
+namespace App\Dto\Feriado;
 
 use App\Entity\Enum\FeriadoNivel;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,12 +17,10 @@ class FeriadoInputDTO
     public ?string $nome = null;
 
     #[Assert\NotBlank(message: "A data do feriado não pode estar em branco.")]
-    #[Assert\Date(message: "A data do feriado deve estar no formato YYYY-MM-DD.")] // Assumes 'YYYY-MM-DD'
+    #[Assert\Date(message: "A data do feriado deve estar no formato YYYY-MM-DD.")]
     public ?string $data = null;
 
     #[Assert\NotNull(message: "O nível do feriado não pode ser nulo.")]
-    // The choice validation will implicitly handle if the value is a valid FeriadoNivel case
-    #[Assert\Choice(callback: [FeriadoNivel::class, 'values'], message: "Nível do feriado inválido.")]
     public ?FeriadoNivel $nivel = null;
 
     #[Assert\NotNull(message: "O campo 'recorrente' deve ser definido (true ou false).")]
