@@ -14,18 +14,16 @@ final class FeriadoOutputDTO implements FeriadoInterfaceDTO
 
     public ?FeriadoNivel $nivel = null;
 
-    public ?bool $recorrente = null;
 
     public function __construct(
         ?string $nome,
         ?string $data,
         ?FeriadoNivel $nivel,
-        ?bool $recorrente
+
     ) {
         $this->nome = $nome;
         $this->data = $data;
         $this->nivel = $nivel;
-        $this->recorrente = $recorrente;
     }
 
     public static function fromArray(array $data): self
@@ -34,7 +32,6 @@ final class FeriadoOutputDTO implements FeriadoInterfaceDTO
             nome: $data['nome'] ?? null,
             data: $data['data'] ?? null,
             nivel: isset($data['nivel']) ? FeriadoNivel::tryFrom($data['nivel']) : null,
-            recorrente: $data['recorrente'] ?? null
         );
     }
 
@@ -43,8 +40,7 @@ final class FeriadoOutputDTO implements FeriadoInterfaceDTO
         return [
             'nome' => $this->nome,
             'data' => $this->data,
-            'nivel' => $this->nivel?->value,
-            'recorrente' => $this->recorrente,
+            'nivel' => $this->nivel?->value
         ];
     }
 
@@ -61,10 +57,5 @@ final class FeriadoOutputDTO implements FeriadoInterfaceDTO
     public function getNivel(): ?FeriadoNivel
     {
         return $this->nivel;
-    }
-
-    public function isRecorrente(): ?bool
-    {
-        return $this->recorrente;
     }
 }

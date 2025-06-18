@@ -23,19 +23,15 @@ class FeriadoInputDTO
     #[Assert\NotNull(message: "O nível do feriado não pode ser nulo.")]
     public ?FeriadoNivel $nivel = null;
 
-    #[Assert\NotNull(message: "O campo 'recorrente' deve ser definido (true ou false).")]
-    #[Assert\Type(type: "bool", message: "O campo 'recorrente' deve ser um booleano.")]
-    public ?bool $recorrente = null;
 
     public function __construct(
         ?string $nome = null,
         ?string $data = null,
-        ?FeriadoNivel $nivel = null,
-        ?bool $recorrente = null
+        ?FeriadoNivel $nivel = null
+
     ) {
         $this->nome = $nome;
         $this->data = $data;
         $this->nivel = $nivel;
-        $this->recorrente = $recorrente;
     }
 }

@@ -7,6 +7,7 @@ use App\Entity\trait\TimestampableTrait;
 use App\Entity\ValueObject\DataFeriado;
 use App\Repository\FeriadoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 #[ORM\Entity(repositoryClass: FeriadoRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -25,8 +26,13 @@ class Feriado
     #[ORM\Column(length: 255)]
     private ?string $nome = null;
 
-    #[ORM\Embedded(DataFeriado::class, false)]
+    #[ORM\Embedded(DataFeriado::class, 'data_')]
     private ?DataFeriado $data = null;
+
+    public function __construct(DataFeriado $data)
+    {
+        $this->data = $data;
+    }
 
     public function getId(): ?int
     {

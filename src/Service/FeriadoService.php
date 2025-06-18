@@ -23,13 +23,6 @@ final class FeriadoService
     public function criarFeriado(FeriadoInputDTO $feriadoInputDto): FeriadoOutputDTO
     {
         
-        $dataFeriado = new DateTimeImmutable($feriadoInputDto->data);
-
-        $existingFeriado = $this->feriadoRepository->findByDate($dataFeriado);
-        if ($existingFeriado) {
-            throw new RegraDeNegocioFeriadoException('Já existe um feriado cadastrado para esta data.');
-        }
-
         $feriado = $this->feriadoFactory->createEntityFromInputDTO($feriadoInputDto);
         $this->feriadoRepository->create($feriado);
 

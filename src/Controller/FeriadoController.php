@@ -56,15 +56,10 @@ final class FeriadoController extends AbstractController
                 return $this->createErrorResponse(json_encode($errorMessages), Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            return $this->createSuccessResponse([
-                
-                $feriadoInputDto
-            ], Response::HTTP_CREATED);
-            //$feriadoOutput = $this->feriadoService->criarFeriado($feriadoInputDto);
+            $feriadoOutput = $this->feriadoService->criarFeriado($feriadoInputDto);
 
-
-            //$normalizedData = $this->normalizer->normalize($feriadoOutput);
-            //return $this->createSuccessResponse($normalizedData, Response::HTTP_CREATED);
+            $normalizedData = $this->normalizer->normalize($feriadoOutput);
+            return $this->createSuccessResponse($normalizedData, Response::HTTP_CREATED);
         } catch (RegraDeNegocioFeriadoException $e) {
 
             return $this->createErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);

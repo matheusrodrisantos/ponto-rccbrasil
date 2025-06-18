@@ -8,10 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Embeddable]
 final class DataFeriado
 {
-    #[ORM\Column(name: 'dia', type: 'int')]
+    #[ORM\Column(name: 'dia', type: 'integer')]
     public readonly int $dia;
 
-    #[ORM\Column(name: 'mes', type: 'int')]
+    #[ORM\Column(name: 'mes', type: 'integer')]
     public readonly int $mes;
 
     public function __construct(\DateTimeImmutable $data)
@@ -42,7 +42,11 @@ final class DataFeriado
 
     public function __toString(): string
     {
-        return sprintf('%02d/%02d', $this->dia, $this->mes);
+        $data = \DateTimeImmutable::createFromFormat('!d-m', $this->dia . '-' . $this->mes);
+        $formatter = new \IntlDateFormatter('pt_BR', \IntlDateFormatter::LONG, \IntlDateFormatter::NONE);
+        $formatter->setPattern('d \'de\' MMMM');
+
+        return $formatter->format($data);
     }
 
     public function equalsDateTime(\DateTimeImmutable $data): bool
