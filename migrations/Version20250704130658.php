@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250613194707 extends AbstractMigration
+final class Version20250704130658 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -29,9 +29,9 @@ final class Version20250613194707 extends AbstractMigration
             CREATE UNIQUE INDEX UNIQ_40E497EB19E9AC5F ON departamento (supervisor_id)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE feriado (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, nivel VARCHAR(255) NOT NULL, recorrente BOOLEAN NOT NULL, inicio DATE NOT NULL --(DC2Type:date_immutable)
-            , fim DATE NOT NULL --(DC2Type:date_immutable)
-            , nome VARCHAR(255) NOT NULL)
+            CREATE TABLE feriado (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, nivel VARCHAR(255) NOT NULL, nome VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
+            , updated_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
+            , data_dia INTEGER NOT NULL, data_mes INTEGER NOT NULL)
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE ferias (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, funcionario_id INTEGER NOT NULL, responsavel_pela_inclusao_id INTEGER NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)

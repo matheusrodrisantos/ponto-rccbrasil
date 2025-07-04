@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Feriado;
+use App\Entity\ValueObject\DataFeriado;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use DateTimeImmutable;
@@ -20,27 +21,43 @@ class FeriadoRepository extends ServiceEntityRepository
     /**
      * Finds a holiday by its start date.
      *
-     * @param DateTimeImmutable $date The date to search for.
+     * @param DataFeriado $date The date to search for.
      * @return Feriado|null Returns a Feriado object if found, otherwise null.
      */
-    public function findByDate(DateTimeImmutable $date): ?Feriado
+    public function findByDate(DataFeriado $date): ?Feriado
     {
-        return $this->findOneBy(['inicio' => $date]);
+        return $this->findOneBy([
+            'data.dia' => $date->getDia(),
+            'data.mes' => $date->getMes(),
+        ]);
     }
 
     public function create(Feriado $feriado): ?Feriado
     {
+        if($this->findFeriado($feriado)){
+            return $feriado;
+        }
+        
         $em = $this->getEntityManager();
+        
         try {
             $em->persist($feriado);
             $em->flush();
+
             return $feriado;
         } catch (\Exception $e) {
-            // Handle exception, e.g., log it or rethrow it
             throw new \Exception('Erro ao criar feriado: ' . $e->getMessage());
         }
     }
-    
+
+    public function findFeriado(Feriado $feriado): ?Feriado
+    {
+        return $this->findOneBy([
+            'data.dia' => $feriado->getData()->getDia(),
+            'data.mes' => $feriado->getData()->getMes()
+        ]);
+    }
+
 
     //    /**
     //     * @return Feriado[] Returns an array of Feriado objects
