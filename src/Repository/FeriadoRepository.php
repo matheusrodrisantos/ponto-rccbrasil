@@ -34,12 +34,12 @@ class FeriadoRepository extends ServiceEntityRepository
 
     public function create(Feriado $feriado): ?Feriado
     {
-        if($this->findFeriado($feriado)){
+        if ($this->findFeriado($feriado)) {
             return $feriado;
         }
-        
+
         $em = $this->getEntityManager();
-        
+
         try {
             $em->persist($feriado);
             $em->flush();
@@ -56,6 +56,19 @@ class FeriadoRepository extends ServiceEntityRepository
             'data.dia' => $feriado->getData()->getDia(),
             'data.mes' => $feriado->getData()->getMes()
         ]);
+    }
+
+    public function disableFeriado(Feriado $feriado)
+    {
+        try {
+            $em = $this->getEntityManager();
+            $em->persist($feriado);
+            $em->flush();
+
+            return $feriado;
+        } catch (\Exception $e) {
+            throw new \Exception('Erro ao desabilitar feriado: ' . $e->getMessage());
+        }
     }
 
 

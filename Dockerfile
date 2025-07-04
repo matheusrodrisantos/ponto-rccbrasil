@@ -57,4 +57,4 @@ RUN chown -R ${APP_USER}:${APP_USER} /var/www/html
 EXPOSE 9000
 
 # O container vai subir com root por padrão
-USER root
+USER appuser
