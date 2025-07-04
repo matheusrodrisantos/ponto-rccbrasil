@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-
 use App\Dto\Feriado\FeriadoInputDTO;
-use App\Dto\Feriado\FeriadoOutputDTO;
 use App\Exception\FeriadoNotFoundException;
 use App\Service\FeriadoService;
 use App\Exception\RegraDeNegocioFeriadoException;
@@ -16,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 #[Route('/api')]
@@ -30,7 +28,11 @@ final class FeriadoController extends AbstractController
         private readonly ValidatorInterface $validator
     ) {}
 
-    #[Route('/feriado', name: 'app_feriado_list', methods: ['GET'])]
+    #[Route(
+        path: '/feriado',
+        name: 'app_feriado_list',
+        methods: ['GET']
+    )]
     public function index(): JsonResponse
     {
         return $this->json([
@@ -39,13 +41,21 @@ final class FeriadoController extends AbstractController
         ]);
     }
 
-    #[Route('/feriado', name: 'app_feriado_create', methods: ['POST'])]
+    #[Route(
+        path: '/feriado',
+        name: 'app_feriado_create',
+        methods: ['POST']
+    )]
     public function create(
         Request $request
     ): JsonResponse {
         try {
 
-            $feriadoInputDto = $this->serializer->deserialize($request->getContent(), FeriadoInputDTO::class, 'json');
+            $feriadoInputDto = $this->serializer->deserialize(
+                data: $request->getContent(),
+                type: FeriadoInputDTO::class,
+                format: 'json'
+            );
 
             $errors = $this->validator->validate($feriadoInputDto);
             if (count($errors) > 0) {
@@ -53,7 +63,10 @@ final class FeriadoController extends AbstractController
                 foreach ($errors as $error) {
                     $errorMessages[$error->getPropertyPath()][] = $error->getMessage();
                 }
-                return $this->createErrorResponse(json_encode($errorMessages), Response::HTTP_UNPROCESSABLE_ENTITY);
+                return $this->createErrorResponse(
+                    message: json_encode($errorMessages),
+                    statusCode: Response::HTTP_UNPROCESSABLE_ENTITY
+                );
             }
 
             $feriadoOutput = $this->feriadoService->criarFeriado($feriadoInputDto);
@@ -71,7 +84,12 @@ final class FeriadoController extends AbstractController
         }
     }
 
-    #[Route('/feriado/{data}', name: 'app_feriado_get', methods: ['GET'])]
+    #[Route(
+        path: '/feriado/{data}',
+        name: 'app_feriado_get',
+        methods: ['GET'],
+        requirements: ['data' => '\d{4}-\d{2}-\d{2}']
+    )]
     public function getFeriado(
         string $data
     ): JsonResponse {
@@ -81,12 +99,51 @@ final class FeriadoController extends AbstractController
             $feriado = $this->feriadoService->buscarFeriadoPorData($dataFeriado);
 
             $normalizedData = $this->normalizer->normalize($feriado);
+
             return $this->createSuccessResponse($normalizedData);
         } catch (FeriadoNotFoundException $e) {
 
-            return $this->createErrorResponse($e->getMessage(), Response::HTTP_NOT_FOUND);
+            return $this->createErrorResponse(
+                message: $e->getMessage(),
+                statusCode: Response::HTTP_NOT_FOUND
+            );
         } catch (\Exception $e) {
-            return $this->createErrorResponse('Erro ao processar a requisição: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->createErrorResponse(
+                message: 'Erro ao processar a requisição: ' . $e->getMessage(),
+                statusCode: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    #[Route(
+        path: '/feriado/{data}',
+        name: 'app_feriado_delete',
+        methods: ['PUT'],
+        requirements: ['data' => '\d{4}-\d{2}-\d{2}']
+    )]
+    public function disableFeriado(string $data): JsonResponse
+    {
+        try {
+            $dataFeriado = new \DateTimeImmutable($data);
+
+            $status = $this->feriadoService->desabilitarFeriado($dataFeriado);
+
+            if ($status) {
+                return $this->createSuccessResponse(
+                    message: 'Feriado ativado',
+                    statusCode: Response::HTTP_OK
+                );
+            }
+
+            return $this->createSuccessResponse(
+                message: 'Feriado desativado',
+                statusCode: Response::HTTP_OK
+            );
+        } catch (\Exception $e) {
+            return $this->createErrorResponse(
+                '' . $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

@@ -28,10 +28,18 @@ class FeriadoRepository extends ServiceEntityRepository
     {
         return $this->findOneBy([
             'data.dia' => $date->getDia(),
-            'data.mes' => $date->getMes(),
+            'data.mes' => $date->getMes()
         ]);
     }
 
+    public function findByDateActive(DataFeriado $date): ?Feriado
+    {
+        return $this->findOneBy([
+            'data.dia' => $date->getDia(),
+            'data.mes' => $date->getMes(),
+            'status' => true
+        ]);
+    }
     public function create(Feriado $feriado): ?Feriado
     {
         if ($this->findFeriado($feriado)) {
@@ -58,7 +66,8 @@ class FeriadoRepository extends ServiceEntityRepository
         ]);
     }
 
-    public function disableFeriado(Feriado $feriado)
+
+    public function update(Feriado $feriado): ?Feriado
     {
         try {
             $em = $this->getEntityManager();
@@ -67,33 +76,7 @@ class FeriadoRepository extends ServiceEntityRepository
 
             return $feriado;
         } catch (\Exception $e) {
-            throw new \Exception('Erro ao desabilitar feriado: ' . $e->getMessage());
+            throw new \Exception('Erro ao atualizar feriado: ' . $e->getMessage());
         }
     }
-
-
-    //    /**
-    //     * @return Feriado[] Returns an array of Feriado objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Feriado
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

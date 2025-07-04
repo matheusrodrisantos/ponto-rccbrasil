@@ -14,10 +14,14 @@ trait ResponseTrait
         ], $statusCode);
     }
 
-    protected function createSuccessResponse(array $data, int $statusCode = 200): JsonResponse
-    {
+    protected function createSuccessResponse(
+        array $data = [],
+        int $statusCode = 200,
+        string $message = 'Operação realizada com sucesso'
+    ): JsonResponse {
         return new JsonResponse([
             'status' => 'success',
+            'message' => $message,
             'data' => $data,
         ], $statusCode);
     }

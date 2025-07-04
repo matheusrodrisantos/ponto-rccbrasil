@@ -23,7 +23,6 @@ final class FeriadoService
 
     public function criarFeriado(FeriadoInputDTO $feriadoInputDto): FeriadoOutputDTO
     {
-
         $feriado = $this->feriadoFactory->createEntityFromInputDTO($feriadoInputDto);
         $this->feriadoRepository->create($feriado);
 
@@ -34,8 +33,8 @@ final class FeriadoService
     public function buscarFeriadoPorData(DateTimeImmutable $data): ?FeriadoOutputDTO
     {
         $dataFeriado = new DataFeriado($data);
-        
-        $feriado = $this->feriadoRepository->findByDate($dataFeriado);
+
+        $feriado = $this->feriadoRepository->findByDateActive($dataFeriado);
 
         if ($feriado === null) {
             throw new FeriadoNotFoundException('Feriado não encontrado para a data informada.');
@@ -57,6 +56,22 @@ final class FeriadoService
         return $dtos;
     }
 
+    public function desabilitarFeriado($data):bool
+    {
+        $dataFeriado = new DataFeriado($data);
+
+        $feriado = $this->feriadoRepository->findByDate($dataFeriado);
+
+        if ($feriado === null) {
+            throw new FeriadoNotFoundException('Feriado na data informada não encontrado');
+        }
+
+        $feriado->changeStatus();
+
+        $this->feriadoRepository->update($feriado);
+
+        return $feriado->isStatus();
+    }
 
     public function excluirFeriado(Feriado $feriado): void
     {

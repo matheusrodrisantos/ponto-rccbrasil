@@ -77,15 +77,10 @@ class Feriado
         return $this->status;
     }
 
-    public function activeStatus(): static
+    public function changeStatus(): static
     {
-        $this->status = true;
+        $this->status = !$this->status;
         return $this;
     }
 
-    public function disableStatus(): static
-    {
-        $this->status = false;
-        return $this;
-    }
 }
