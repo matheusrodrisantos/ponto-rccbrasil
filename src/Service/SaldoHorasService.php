@@ -15,7 +15,10 @@ class SaldoHorasService
 
     public function calcular(RegistroPonto $registroPonto): void
     {
-        $saldoHoras  = $this->saldoHorasRepository->findOneBy(['data' => $registroPonto->data()]);
+        $saldoHoras  = $this->saldoHorasRepository->findOneBy([
+            'data' => $registroPonto->data(),
+            'funcionario'=>$registroPonto->funcionario()
+        ]);
 
         if ($saldoHoras == null) {
             $saldoHoras = new SaldoHoras();
