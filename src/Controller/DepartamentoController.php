@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface; // Added
 
+#[Route('/api')]
 final class DepartamentoController extends AbstractController
 {
     public function __construct(
@@ -70,7 +71,7 @@ final class DepartamentoController extends AbstractController
     }
 
 
-    #[Route('api/departamento/{departamentoId}/supervisor/{supervisorId}', name: 'app_definir_supervisor_departamento', methods: ['PUT'])]
+    #[Route('departamento/{departamentoId}/supervisor/{supervisorId}', name: 'app_definir_supervisor_departamento', methods: ['PUT'])]
     public function definirSupervisor(
         int $departamentoId,
         int $supervisorId,
@@ -90,7 +91,7 @@ final class DepartamentoController extends AbstractController
         }
     }
 
-    #[Route('api/departamento/{departamentoId}', name: 'app_get_departamento', methods: ['DELETE'])]
+    #[Route('departamento/{departamentoId}', name: 'app_get_departamento', methods: ['DELETE'])]
     public function removerSupervisor(
         int $departamentoId,
         DepartamentoService $departamentoService
@@ -108,7 +109,7 @@ final class DepartamentoController extends AbstractController
         }
     }
 
-    #[Route('api/departamento', name: 'app_list_departamentos', methods: ['GET'])]
+    #[Route('departamento', name: 'app_list_departamentos', methods: ['GET'])]
     public function listDepartamentos(
         DepartamentoService $departamentoService
     ): JsonResponse {
