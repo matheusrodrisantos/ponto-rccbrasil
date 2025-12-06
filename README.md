@@ -1,10 +1,10 @@
-# Ponto RCC Brasil
+# Ponto-git
 
-Sistema de gerenciamento de ponto eletrônico para a Renovação Carismática Católica do Brasil.
+Sistema de gerenciamento de ponto eletrônico de código aberto
 
 ## Descrição
 
-Este projeto é uma API REST de sistema de controle de ponto eletrônico desenvolvido especificamente para atender às necessidades da RCC Brasil, permitindo o registro e gerenciamento de horários de trabalho dos colaboradores.
+Este projeto é uma API REST open-source para controle de ponto eletrônico, desenvolvida com foco em boas práticas de programação e arquitetura. É um sistema real, robusto e escalável, que pode ser utilizado, estudado e adaptado livremente por empresas e desenvolvedores.
 
 ## Funcionalidades
 
