@@ -2,11 +2,33 @@ FROM dunglas/frankenphp:php8.3
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    iputils-ping \
+    tzdata \
+    passwd \
+    && ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
+    && echo "America/Sao_Paulo" > /etc/timezone \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN install-php-extensions \
+    pdo \
+    pdo_pgsql \
+    pdo_mysql \
+    intl \
+    xml \
+    zip \
+    opcache
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction
 
 RUN php bin/console cache:clear --env=prod
 
