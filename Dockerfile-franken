@@ -1,0 +1,15 @@
+FROM dunglas/frankenphp:php8.3
+
+WORKDIR /app
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+COPY . .
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+RUN php bin/console cache:clear --env=prod
+
+EXPOSE 80
+
+CMD ["frankenphp", "php-server", "--root=public"]
